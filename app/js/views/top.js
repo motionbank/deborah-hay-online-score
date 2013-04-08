@@ -24,7 +24,7 @@ var $top = null, $topContent = null, $topContentWrapper = null;
  +
  L + + + + + + + + + + + + + + + + + + + + + + + + */
 
-var showContent = function ( id, andOpen ) {
+var showContent = function ( id, isOpen ) {
 
 	var $viewContent = views[id].$el;
 	var viewContentPosition = $viewContent.position();
@@ -33,15 +33,16 @@ var showContent = function ( id, andOpen ) {
 	var tcCss = {
 		marginLeft: (36-viewContentPosition.left+topContentWrapperMarginLeft) + 'px'
 	};
-	if ( !andOpen ) {
-		$topContent.css(tcCss);
-	} else {
+
+	if ( isOpen ) {
 		$topContent.animate(
 		tcCss, 
 		{
 			duration : 300,
 			queue: true
 		});
+	} else {
+		$topContent.css(tcCss);
 	}
 
 	$topContentWrapper.animate({ 
@@ -96,7 +97,7 @@ var TopView = module.exports = Backbone.View.extend({
 							item.route, 
 							'page-'+item.id, 
 							function(){
-								self.changeTo(item.id);
+								self.changeTo( item.id, true );
 							}
 						);
 
@@ -137,12 +138,23 @@ var TopView = module.exports = Backbone.View.extend({
 			e = jQuery(e);
 			var eTrigger = function(evt){
 				if ( e.hasClass('active') === false ) {
-					app.getRouter().navigate( menuTreeHash[e.data('id')].route, {trigger:true} );
+					if ( $top.hasClass('open') ) {
+						self.changeTo(e.data('id'),false);
+						app.getRouter().navigate( menuTreeHash[e.data('id')].route );
+					}
 				}
 				return false;
 			};
 			e.hover(eTrigger);
-			e.click(eTrigger);
+			e.click(function(){
+				if ( $top.hasClass('open') ) {
+					hideContent();
+				} else {
+					showContent( e.data('id'), false );
+					app.getRouter().navigate( menuTreeHash[e.data('id')].route );
+				}
+				return false;
+			});
 		});
 
 		// add hover / open behaviour to top
@@ -155,7 +167,11 @@ var TopView = module.exports = Backbone.View.extend({
 		});
 	},
 
-	changeTo : function ( id ) {
+	changeTo : function ( id, andOpen ) {
+
+		if ( andOpen ) {
+			$top.addClass('open');
+		}
 
 		//app.debug( id );
 
@@ -166,7 +182,7 @@ var TopView = module.exports = Backbone.View.extend({
 
 		if ( $top.hasClass('open') ) {
 			showContent( id, true );
-		} else {
+		} else if ( andOpen ) {
 			showContent( id, false );
 		}
 

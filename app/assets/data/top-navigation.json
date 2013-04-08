@@ -12,11 +12,11 @@
 	{
 		"title" : "Performances<br /><small>Juliette Mapp</small>",
 		"id" : "performances",
-		"route" : "performances"
+		"route" : "material/performances"
 	},
 	{
 		"title" : "Views<br /><small>Heatmap</small>",
 		"id" : "views",
-		"route" : "views"
+		"route" : "material/views"
 	}
 ]

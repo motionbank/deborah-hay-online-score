@@ -1,6 +1,10 @@
 /*
  *	specific styles for parts of the top content pages
  */
+ 
+header.open {
+  box-shadow: 0 0 15px rgba(0,0,0,0.25);
+}
 
 #top-content-views ul {
 	margin: 0px; padding: 0px;
@@ -33,7 +37,8 @@
 }
 
 #top-content {
-  border-bottom: 1px solid black;
+  font-size: 13px;
+  margin-top: 36px;
 }
 
 #top-navigation ul li{
@@ -43,12 +48,6 @@
 
 #top-navigation ul li:last-child .arr{
   display: none;
-}
-
-.arr {
-  position: absolute;
-  top: 0px;
-  right: 50px;
 }
 
 .top-nav-preview-container li{
@@ -64,4 +63,34 @@
   width: 120px;
   height: 120px;
   border: 1px solid black;
+}
+
+#top-content .row{
+  margin-left: -36px;
+  margin-bottom: 36px;
+  display: inline-block;
+}
+
+#top-content .row:last-child {
+  margin-bottom: 0px;
+}
+
+#top-content .w1,
+#top-content .w2,
+#top-content .w3,
+#top-content .w4{
+  display: block;
+  float: left;
+  margin-left: 36px;
+}
+
+
+#top-content .w2{
+  width: 382px;
+  line-height: 18px;
+}
+
+#top-content dt {
+  font-size: 18px;
+  font-weight: bold;
 }

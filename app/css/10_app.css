@@ -35,6 +35,7 @@
 	/* reset ul */
 	margin: 0px;
 	padding: 0px;
+	padding-bottom: 36px;
 	list-style: none;
 
 	width: 800px;

@@ -1,6 +1,7 @@
 body {
 	background-color: rgb(200,199,198);
 	color: black;
+	font-family: "Source Sans Pro";
 }
 
 a,
@@ -49,3 +50,20 @@ a:active {
 .text a {
 	text-decoration: underline;
 }
+
+.clearfix:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.clearfix {
+  display: inline-block;
+}
+
+/* Hides from IE-mac \*/ 
+  * html .clearfix { height: 1%; }
+  .clearfix { display: block; }
+/* End hide from IE-mac */

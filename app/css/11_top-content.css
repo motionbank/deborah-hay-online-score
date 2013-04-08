@@ -26,3 +26,42 @@
 	font-weight: bold;
 	background-color: rgb(220,219,218);
 }
+
+#top-navigation .nav-selection {
+  font-size: 13px;
+  text-transform: lowercase;
+}
+
+#top-content {
+  border-bottom: 1px solid black;
+}
+
+#top-navigation ul li{
+  position: relative;
+  font-size: 17px;
+}
+
+#top-navigation ul li:last-child .arr{
+  display: none;
+}
+
+.arr {
+  position: absolute;
+  top: 0px;
+  right: 50px;
+}
+
+.top-nav-preview-container li{
+  float: left;
+  margin-right: 36px;
+}
+
+.top-nav-preview-container li:last-child{
+  margin-right: 0px;
+}
+
+.top-nav-preview-container .content-preview {
+  width: 120px;
+  height: 120px;
+  border: 1px solid black;
+}

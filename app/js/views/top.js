@@ -141,15 +141,15 @@ var TopView = module.exports = Backbone.View.extend({
 				}
 				return false;
 			};
-			//e.hover(eTrigger);
+			e.hover(eTrigger);
 			e.click(eTrigger);
 		});
 
 		// add hover / open behaviour to top
 		$top.hover(function(){
-			if ( activeMenuId ) {
-				showContent( activeMenuId, false );
-			}
+			// if ( activeMenuId ) {
+			// 	showContent( activeMenuId, false );
+			// }
 		},function(){
 			hideContent();
 		});

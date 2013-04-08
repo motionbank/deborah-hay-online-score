@@ -1,5 +1,5 @@
 /**
- *	Simple helper to allow asyncronous code to run in sequence
+ *	Simple helper to allow asynchronous code to run in sequence
  */
 
 var Initializer = module.exports = (function(){

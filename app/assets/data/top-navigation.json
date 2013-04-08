@@ -1,21 +1,21 @@
 [
 	{
-		"title" : "Motion Bank",
+		"title" : "[ L O G O ]",
 		"id" : "global",
 		"route" : "pages"
 	},
 	{
-		"title" : "Deborah Hay<br/>No Time To Fly",
+		"title" : "Deborah Hay<br/>No Time To Fly<br /><small>Material</small>",
 		"id" : "score",
 		"route" : "score"
 	},
 	{
-		"title" : "Performances",
+		"title" : "Performances<br /><small>Juliette Mapp</small>",
 		"id" : "performances",
 		"route" : "performances"
 	},
 	{
-		"title" : "Views",
+		"title" : "Views<br /><small>Heatmap</small>",
 		"id" : "views",
 		"route" : "views"
 	}

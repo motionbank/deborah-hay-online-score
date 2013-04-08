@@ -1,7 +1,12 @@
-Motion Bank Deborah Hay online score for No Time To Fly, prototype
-==================================================================
+Deborah Hay "No Time To Fly" online score
+=========================================
 
-This directory contains the files needed to build the online score. We are using Brunch (brunch.io) for the building as it's watch feature is insanly useful.
+This directory contains the files needed to build the (soon to be) online score for the Deborah Hay piece "No Time To Fly" as part of the Motion Bank research project. 
+
+http://motionbank.org/
+http://theforsythecompany.com/
+
+We are using Brunch (brunch.io) for the frontend build process as it's watch feature is insanly useful.
 
 Install brunch:
 
@@ -13,12 +18,17 @@ Then install needed node modules (see package.json)
 
 Ready!
 
-The important directories are app / public / vendor. App & vendor are compiled into public which is the final website. Inside app everything inside assets is just copied over to public and all other files are compiled as it's set up in config.coffee.
+The important directories are app / public / vendor. App & vendor are compiled into public which is the final website. Inside app everything inside "assets" is just copied over to "public" and all other files are compiled as it's set up in config.coffee.
 
-Build:
-brunch build
+Build once:
 
-Watch:
-brunch watch
+    brunch build
 
-fjenett - 2013-04
+Continuously build (watch):
+
+    brunch watch
+
+Continuously build and serve:
+
+    brunch watch --server
+

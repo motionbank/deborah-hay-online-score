@@ -1,0 +1,130 @@
+/*
+ *	HEADER, FOOTER
+ */
+
+#top,
+#sub {
+	width: 800px;
+	padding: 36px;
+	position: absolute;
+	top: 0px;
+	left: 50%;
+	margin-left: -436px;
+}
+
+#sub {
+	top: auto; bottom: 0px;
+}
+
+#top:hover, 
+#sub:hover,
+#top.open, 
+#sub.open {
+	background-color: white;
+}
+
+/*
+ *	TOP, SUB NAVIGATION
+ */
+
+#top-navigation li a.active {
+	font-weight: bold;
+}
+
+#top-navigation ul {
+	/* reset ul */
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+
+	width: 800px;
+	display: block;
+}
+
+#top-navigation li {
+	float: left;
+}
+
+#top-navigation li a {
+	display: block;
+	width: 200px;
+	text-transform: uppercase;
+}
+
+/*
+ *	TOP CONTENT
+ */
+
+#top-content-wrapper {
+	height: 0px;
+	width: 800px;
+	overflow: hidden;
+}
+
+#top-content {
+	width: 10000px;
+	padding-top: 36px;
+}
+
+#top-content .top-content-page {
+	width: 800px;
+	float: left;
+}
+
+/*
+ *	SUB NAVIGATION
+ */
+
+#sub-navigation {
+	overflow: auto;
+	margin-top: 18px;
+}
+
+#sub-navigation ul {
+	/* reset ul */
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+
+	width: 800px;
+	display: block;
+}
+
+#sub-navigation li {
+	float: left;
+	margin-right: 36px;
+}
+
+#sub-navigation li a {
+	display: block;
+	text-transform: uppercase;
+}
+
+/*
+ *	SUB TIMELINE
+ */
+
+#sub-timeline {
+	height: 10px;
+	margin-top: 18px;
+}
+
+#sub-timeline-container div {
+	float: left;
+	margin-right: 2px;
+}
+
+#sub-timeline a.timeline-item {
+	display: block;
+	height: 10px;
+	background-color: #999999;
+}
+
+#sub-timeline a.active {
+	background-color: #444444;
+}
+
+#sub-timeline-container {
+	height: 10px;
+	overflow: inside;
+}

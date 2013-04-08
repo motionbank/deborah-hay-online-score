@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+	<head>
+		<title>IFrame color click test</title>
+		<script src="javascripts/vendor.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			
+			var appWindow = null;
+			var messenger = null;
+			var performances = {};
+			var scenes = [];
+
+			var api = null;
+			var piece = null;
+
+			jQuery(function () {
+
+				// window.addEventListener('message',function(){
+				// 	console.log( arguments );
+				// });
+
+				messenger = new PostMessenger(window);
+
+				messenger.on('connect',function(req,resp){
+					if ( !appWindow ) {
+						appWindow = req.source;
+						messenger.to( appWindow );
+						
+						api = new PieceMakerApi( this, "faux-api-key", "http://notimetofly.herokuapp.com" );
+						api.useProxy( appWindow, req.origin );
+						api.loadPiece( 3, function( p ){
+							piece = p;
+						});
+
+						resp.send('getPerformances');
+						resp.send('getScenes');
+					}
+				});
+
+				messenger.on('setPerformances',function(req,resp){
+					var videoIds = req.data.ids;
+					_.each( performances, function(v,k){
+						if ( videoIds.indexOf(k) == -1 ) {
+							delete performances[k];
+						}
+					});
+					_.each( videoIds, function(e,i) {
+						if ( !performances[e] ) {
+							api.loadVideo( e, function (v) {
+								performances[v.id] = v;
+								changeText();
+							});
+						}
+					});
+					changeText();
+				});
+
+				messenger.on('setScenes',function(req,resp){
+					scenes = req.data.scenes;
+					changeText();
+				});
+
+			});
+
+			var changeText = function () {
+				$('#content').html( _.template(
+						'<p><b>Performances:</b><br /><% _.each( performances, function (p) { %>'+
+							'<%= p.id %> <%= p.title %><br />'+
+						'<% } ) %></p>', { performances: performances } ) +
+									_.template( 
+						'<p><b>Scenes:</b><br/><% _.each( scenes, function (s) { %>'+
+							'<%= s %><br/>'+
+						'<% } ) %></p>', { scenes: scenes } ) );
+			}
+		</script>
+	</head>
+	<body>
+		<div id="page" style="width:800px;margin:200px auto">
+			<center>
+				<div id="content" style="font-size:16px;padding:"></div>
+			</center>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,59 @@
+/*
+ *	SUB
+ */
+
+#sub #sub-content {
+	height: 0px;
+	overflow: hidden;
+}
+
+#sub.open #sub-content {
+	height: 200px;
+}
+
+/*
+ *	SUB TEXT CONTENT
+ */
+
+#sub-content .content-wrapper {
+	width: 800px;
+	overflow: hidden;
+}
+
+#sub-content .content {
+	height: 200px;
+}
+
+#sub-content .content .nav {
+	width: 30px;
+	display: block;
+	height: 200px;
+}
+
+#sub-content .content .nav:hover {
+	background-color: #eeeeee;
+}
+
+#sub-content .pages-wrapper {
+	width: 720px;
+	overflow: hidden;
+}
+
+#sub-content .pages {
+	width: 100000px;
+}
+
+#sub-content .pages .page {
+	width: 351px;
+	height: 200px;
+	float: left;
+	padding-right: 18px;
+}
+
+/*
+ *	SUB NAVIGATION
+ */
+
+#sub-navigation li a.active {
+	font-weight: bold;
+}

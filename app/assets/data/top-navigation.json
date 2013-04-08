@@ -1,0 +1,22 @@
+[
+	{
+		"title" : "Motion Bank",
+		"id" : "global",
+		"route" : "pages"
+	},
+	{
+		"title" : "Deborah Hay<br/>No Time To Fly",
+		"id" : "score",
+		"route" : "score"
+	},
+	{
+		"title" : "Performances",
+		"id" : "performances",
+		"route" : "performances"
+	},
+	{
+		"title" : "Views",
+		"id" : "views",
+		"route" : "views"
+	}
+]

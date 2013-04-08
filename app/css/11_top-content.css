@@ -1,0 +1,28 @@
+/*
+ *	specific styles for parts of the top content pages
+ */
+
+#top-content-views ul {
+	margin: 0px; padding: 0px;
+	list-style: none;
+	display: block;
+}
+
+#top-content-views li {
+	float: left;
+}
+
+#top-content-views li a {
+	display: block;
+	width: 120px;
+	margin-right: 36px;
+}
+
+#top-content-views li a.active {
+	background-color: #eeff99;
+}
+
+#top-content-performances a.active {
+	font-weight: bold;
+	background-color: rgb(220,219,218);
+}

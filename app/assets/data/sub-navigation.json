@@ -1,0 +1,17 @@
+[
+	{
+		"title" : "Written score",
+		"id" : "text",
+		"route" : "text"
+	},
+	{
+		"title" : "Insights",
+		"id" : "insights",
+		"route" : "insights"
+	},
+	{
+		"title" : "Comments",
+		"id" : "comments",
+		"route" : "comments"
+	}
+]

@@ -150,8 +150,11 @@ var TopView = module.exports = Backbone.View.extend({
 				if ( $top.hasClass('open') ) {
 					hideContent();
 				} else {
-					showContent( e.data('id'), false );
-					app.getRouter().navigate( menuTreeHash[e.data('id')].route );
+					var id = e.data('id');
+					showContent( id, false );
+					jQuery('a.active', this.$el).removeClass('active');
+					jQuery('a[data-id="'+id+'"]', this.$el).addClass( 'active' );
+					app.getRouter().navigate( menuTreeHash[id].route );
 				}
 				return false;
 			});

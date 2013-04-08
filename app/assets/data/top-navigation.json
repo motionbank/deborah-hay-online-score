@@ -1,21 +1,25 @@
 [
 	{
 		"title" : "[ L O G O ]",
+		"selection" : "",
 		"id" : "global",
 		"route" : "pages"
 	},
 	{
-		"title" : "Deborah Hay<br/>No Time To Fly<br /><small>Material</small>",
+		"title" : "Deborah Hay<br/>No Time To Fly",
+		"selection" : "Material",
 		"id" : "score",
 		"route" : "score"
 	},
 	{
-		"title" : "Performances<br /><small>Juliette Mapp</small>",
+		"title" : "Performances<br/><br/>",
+		"selection" : "Juliette Mapp",
 		"id" : "performances",
 		"route" : "performances"
 	},
 	{
-		"title" : "Views<br /><small>Heatmap</small>",
+		"title" : "Views<br/><br/>",
+		"selection" : "Heatmap",
 		"id" : "views",
 		"route" : "views"
 	}

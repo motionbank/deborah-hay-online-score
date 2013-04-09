@@ -54,6 +54,10 @@
  *	SUB NAVIGATION
  */
 
+#sub-navigation {
+	overflow: hidden;
+}
+
 #sub-navigation li a.active {
 	font-weight: bold;
 }

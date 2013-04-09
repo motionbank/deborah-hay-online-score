@@ -1,7 +1,5 @@
 /**
  *	This view mainly takes care of the top content display.
- *
- *	
  */
 
 /*
@@ -54,6 +52,8 @@ var showContent = function ( id, isOpen ) {
 		},
 		queue: true
 	});
+
+	activeMenuId = id;
 }
 
 var hideContent = function () {
@@ -93,13 +93,13 @@ var TopView = module.exports = Backbone.View.extend({
 					
 					_.each( menuTree, function (item) {
 
-						router.route( 
-							item.route, 
-							'page-'+item.id, 
-							function(){
-								self.changeTo( item.id, true );
-							}
-						);
+						// router.route( 
+						// 	item.route, 
+						// 	'page-'+item.id, 
+						// 	function(){
+						// 		self.changeTo( item.id, $top.hasClass('open') );
+						// 	}
+						// );
 
 						menuTreeHash[item.id] = item;
 					});
@@ -136,25 +136,19 @@ var TopView = module.exports = Backbone.View.extend({
 		// add action to links, are sent to router
 		jQuery( 'a', this.$el ).each(function(i,e){
 			e = jQuery(e);
-			var eTrigger = function(evt){
-				if ( e.hasClass('active') === false ) {
-					if ( $top.hasClass('open') ) {
-						self.changeTo(e.data('id'),false);
-						app.getRouter().navigate( menuTreeHash[e.data('id')].route );
-					}
+			e.hover(function(evt){
+				var id = e.data('id');
+				if ( activeMenuId !== id ) {
+					self.changeTo( id, false );
 				}
 				return false;
-			};
-			e.hover(eTrigger);
+			});
 			e.click(function(){
-				if ( $top.hasClass('open') ) {
+				var id = e.data('id');
+				if ( activeMenuId === id && $top.hasClass('open') ) {
 					hideContent();
 				} else {
-					var id = e.data('id');
 					showContent( id, false );
-					jQuery('a.active', this.$el).removeClass('active');
-					jQuery('a[data-id="'+id+'"]', this.$el).addClass( 'active' );
-					app.getRouter().navigate( menuTreeHash[id].route );
 				}
 				return false;
 			});
@@ -162,9 +156,6 @@ var TopView = module.exports = Backbone.View.extend({
 
 		// add hover / open behaviour to top
 		$top.hover(function(){
-			// if ( activeMenuId ) {
-			// 	showContent( activeMenuId, false );
-			// }
 		},function(){
 			hideContent();
 		});

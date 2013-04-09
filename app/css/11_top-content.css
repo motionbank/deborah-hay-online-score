@@ -2,9 +2,9 @@
  *	specific styles for parts of the top content pages
  */
  
-header.open {
+/*header.open {
   box-shadow: 0 0 15px rgba(0,0,0,0.25);
-}
+}*/
 
 #top-content-views ul {
 	margin: 0px; padding: 0px;
@@ -40,21 +40,21 @@ header.open {
   border-top: 1px solid #ddd;
 }
 
-#top-navigation ul li{
+#top-navigation ul li {
   position: relative;
   font-size: 17px;
 }
 
-.top-nav-preview-container li{
+.top-nav-preview-container li {
   float: left;
   margin-right: 36px;
 }
 
-.top-nav-preview-container li:last-child{
+.top-nav-preview-container li:last-child {
   margin-right: 0px;
 }
 
-#top-content .row{
+#top-content .row {
   margin-left: -36px;
   margin-bottom: 36px;
   display: inline-block;
@@ -67,22 +67,22 @@ header.open {
 #top-content .w1,
 #top-content .w2,
 #top-content .w3,
-#top-content .w4{
+#top-content .w4 {
   display: block;
   float: left;
   line-height: 18px;
   margin-left: 36px;
 }
 
-#top-content .w3{
+#top-content .w3 {
   width: 591px;
 }
 
-#top-content .w2{
+#top-content .w2 {
   width: 382px;
 }
 
-#top-content .w1{
+#top-content .w1 {
   width: 173px;
 }
 

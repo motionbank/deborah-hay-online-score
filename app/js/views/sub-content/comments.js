@@ -1,5 +1,5 @@
 
-var InsightsView = module.exports = require('js/views/sub-content/paged-content').extend({
+var CommentsView = module.exports = require('js/views/sub-content/paged-content').extend({
 
 	elementId : '#comments-content',
 

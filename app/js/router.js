@@ -11,19 +11,19 @@ var Router = module.exports = Backbone.Router.extend({
 	},
 
 	routes : {
-		"views/tester" : function () {
-			jQuery('#content iframe').attr('src','iframe.html');
-		},
-		"performances/:performer(/:id)" : function ( key, id ) {
-			if ( id ) {
-				app.setPerformancesById( id.split("-") );
-			} else {
-				app.setPerformancesByKey( key );
-			}
-		},
-		"text/:scene(/:page)" : function ( scene, page ) {
-			app.setScenes( scene, page );
-		}
+		// "views/tester" : function () {
+		// 	jQuery('#content iframe').attr('src','iframe.html');
+		// },
+		// "performances/:performer(/:id)" : function ( key, id ) {
+		// 	if ( id ) {
+		// 		app.setPerformancesById( id.split("-") );
+		// 	} else {
+		// 		app.setPerformancesByKey( key );
+		// 	}
+		// },
+		// "text/:scene(/:page)" : function ( scene, page ) {
+		// 	app.setScenes( scene, page );
+		// }
 	}
 	
 });

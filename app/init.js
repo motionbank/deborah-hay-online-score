@@ -24,7 +24,7 @@
 
 jQuery(function(){
 
-	var initializer = new (require('initializer'))();
+	var initializer = new Initializer();
 
 	initializer.add( function(next){
 		var app = new (require('js/app'))( initializer );

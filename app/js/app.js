@@ -1,3 +1,11 @@
+/**
+ *	App is a thin layer on top of the main view "appView".
+ *
+ *	It handles the current app state, the communication with
+ *	the PieceMaker API and iframes. 
+ */
+
+
 var App = module.exports = (function(){
 
 	/*
@@ -5,7 +13,7 @@ var App = module.exports = (function(){
 	 +
 	 L + + + + + + + + + + + + + + + + + + + + + + + + + + */
 
-	var app = null;
+	var app = null, appView = null;
 	
 	var views = {};
 
@@ -52,7 +60,7 @@ var App = module.exports = (function(){
 
 		initializer.add(function ( next ) {
 			jQuery.ajax({
-				url: 'data/top-content/performances.json',
+				url: 'data/performances.json',
 				dataType: 'json',
 				success: function (data) {
 					recordings = data.recordings;
@@ -132,8 +140,12 @@ var App = module.exports = (function(){
 		router = new (require('js/router'))( app );
 
 		initializer.add( function ( next ) {
-			views.top = new (require('js/views/top'))( initializer, app );
-			views.sub = new (require('js/views/sub'))( initializer, app );
+			appView = new (require('js/views/app'))( initializer, app );
+			
+			appView.on( 'change:branch', 	this.branchChanged );
+			appView.on( 'change:recording', this.recordingChanged );
+			appView.on( 'change:scene', 	this.sceneChanged );
+
 			next();
 		}, this);
 
@@ -148,50 +160,50 @@ var App = module.exports = (function(){
 			messenger.send('connect',{},iframeWindow);
 		},
 
-		setPerformancesById : function ( ids ) {
-			currentRecordings = ids;
-			messenger.send('setPerformances',{
-				ids : currentRecordings
-			}, iframeWindow);
-		},
+		// setPerformancesById : function ( ids ) {
+		// 	currentRecordings = ids;
+		// 	messenger.send('setPerformances',{
+		// 		ids : currentRecordings
+		// 	}, iframeWindow);
+		// },
 
-		setPerformancesByKey : function ( key ) {
-			if ( recordings ) {
-				var ids = [];
-				for ( var i = 0; i < recordings.length; i++ ) {
-					var name = recordings[i].name.replace(' ','-').toLowerCase();
-					if ( key === 'all' || key === name ) {
-						ids = ids.concat( recordings[i].ids );
-					}
-				}
-				if ( ids.length > 0 ) {
-					currentRecordings = ids;
-					messenger.send('setPerformances',{
-						ids : currentRecordings
-					}, iframeWindow);
-				}
-			}
-		},
+		// setPerformancesByKey : function ( key ) {
+		// 	if ( recordings ) {
+		// 		var ids = [];
+		// 		for ( var i = 0; i < recordings.length; i++ ) {
+		// 			var name = recordings[i].name.replace(' ','-').toLowerCase();
+		// 			if ( key === 'all' || key === name ) {
+		// 				ids = ids.concat( recordings[i].ids );
+		// 			}
+		// 		}
+		// 		if ( ids.length > 0 ) {
+		// 			currentRecordings = ids;
+		// 			messenger.send('setPerformances',{
+		// 				ids : currentRecordings
+		// 			}, iframeWindow);
+		// 		}
+		// 	}
+		// },
 
-		setScenes : function ( key, page ) {
-			for ( var i = 0; i < scenes.length; i++ ) {
-				if ( key === scenes[i].scene ) {
-					currentScenes = [scenes[i].marker];
-					messenger.send('setScenes',{
-						scenes : currentScenes
-					}, iframeWindow);
-					views.sub.trigger( 'change:scene', key, page );
-					return;
-				}
-			}
-		},
+		// setScenes : function ( key, page ) {
+		// 	for ( var i = 0; i < scenes.length; i++ ) {
+		// 		if ( key === scenes[i].scene ) {
+		// 			currentScenes = [scenes[i].marker];
+		// 			messenger.send('setScenes',{
+		// 				scenes : currentScenes
+		// 			}, iframeWindow);
+		// 			views.sub.trigger( 'change:scene', key, page );
+		// 			return;
+		// 		}
+		// 	}
+		// },
 
-		setBranch : function ( branch ) {
-			if ( branch !== currentBranch ) {
+		// setBranch : function ( branch ) {
+		// 	if ( branch !== currentBranch ) {
 
-				currentBranch = branch;
-			}
-		},
+		// 		currentBranch = branch;
+		// 	}
+		// },
 
 		// getter for router
 		getRouter : function () {

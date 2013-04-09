@@ -88,6 +88,17 @@ var Initializer = module.exports = (function(){
 		start : function () {
 			this.started = true;
 			this.next();
+		},
+		toString : function () {
+			var s = '';
+			for ( var i = 0, k = this.phases.length; i < k; i++ ) {
+				var phase = this.phases[i];
+				s += phase + "\n";
+				for ( var n = 0, m = this.queue[phase].length; n < m; n++ ) {
+					s += '    ' + this.queue[phase][n][2] + "\n";
+				}
+			}
+			return s;
 		}
 	}
 	return Initializer;

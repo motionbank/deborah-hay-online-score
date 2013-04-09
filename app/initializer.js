@@ -35,11 +35,22 @@ var Initializer = module.exports = (function(){
 			// 	throw( 'Initializer: can not add after start' );
 			// 	return;
 			// }
+
 			var phase = 'middle';
 			var callback = function(){};
 			var context = null;
+			var note = '<no note>';
+
 			if ( arguments ) {
-				if ( arguments[0] && typeof arguments[0] === 'string' ) {
+				if ( arguments[0] && typeof arguments[0] === 'object' ) {
+					
+					var opts = arguments[0];
+					if ( 'phase' in opts && opts.phase && typeof opts.phase === 'string' ) phase = opts.phase;
+					if ( 'callback' in opts && opts.callback && typeof opts.callback === 'function' ) callback = opts.callback;
+					if ( 'context' in opts && opts.context ) context = opts.context;
+					if ( 'note' in opts && opts.note && typeof opts.note === 'string' ) note = opts.note;
+
+				} else if ( arguments[0] && typeof arguments[0] === 'string' ) {
 					phase = arguments[0];
 					if ( arguments[1] && typeof arguments[1] === 'function' ) {
 						callback = arguments[1];
@@ -53,9 +64,11 @@ var Initializer = module.exports = (function(){
 						context = arguments[1];
 					}
 				}
+			} else {
+				return;
 			}
 			if ( phase in this.queue && this.queue[phase] ) {
-				this.queue[phase].push([callback, context]);
+				this.queue[phase].push([callback, context, note]);
 			} else {
 				throw( 'Initializer: that phase does not exist -> '+phase );
 			}

@@ -15,10 +15,13 @@ var App = module.exports = (function(){
 	var iframeWindow = null;
 
 	var api = null;
-	var apiCache = {
-	};
+	var apiCache = {};
+
 	var recordings = [], scenes = [];
 	var currentRecordings = [], currentScenes = [];
+
+	var branches = [];
+	var currentBranch = '';
 
 
 	/*
@@ -47,7 +50,7 @@ var App = module.exports = (function(){
 
 		app = this;
 
-		var loadRecordings = function ( next ) {
+		initializer.add(function ( next ) {
 			jQuery.ajax({
 				url: 'data/top-content/performances.json',
 				dataType: 'json',
@@ -59,10 +62,9 @@ var App = module.exports = (function(){
 					throw(err);
 				}
 			});
-		}
-		initializer.add(loadRecordings, this);
+		}, this);
 
-		var loadScenes = function ( next ) {
+		initializer.add(function ( next ) {
 			jQuery.ajax({
 				url: 'data/scenes.json',
 				dataType: 'json',
@@ -74,18 +76,16 @@ var App = module.exports = (function(){
 					throw(err);
 				}
 			});
-		}
-		initializer.add(loadScenes, this);
+		}, this);
 
-		var startApi = function(next){
+		initializer.add('last', function(next){
 			api = new PieceMakerApi( this, "a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe", 
 									 (false ? "http://localhost:3000" : "http://notimetofly.herokuapp.com") );
 	    	api.loadPiece( 3, function(){
 	    		apiPieceLoaded.apply(this,arguments);
 	    		next();
 	    	});
-		}
-		initializer.add('last',startApi,this);
+		}, this);
 
 		messenger = new PostMessenger(window);
 
@@ -131,12 +131,11 @@ var App = module.exports = (function(){
 
 		router = new (require('js/router'))( app );
 
-		var initViews = function ( next ) {
+		initializer.add( function ( next ) {
 			views.top = new (require('js/views/top'))( initializer, app );
 			views.sub = new (require('js/views/sub'))( initializer, app );
 			next();
-		}
-		initializer.add(initViews, this);
+		}, this);
 
 		appState = new (require('js/models/appstate'))({id:1});
 	}
@@ -184,6 +183,13 @@ var App = module.exports = (function(){
 					views.sub.trigger( 'change:scene', key, page );
 					return;
 				}
+			}
+		},
+
+		setBranch : function ( branch ) {
+			if ( branch !== currentBranch ) {
+
+				currentBranch = branch;
 			}
 		},
 

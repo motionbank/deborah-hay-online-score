@@ -1,14 +1,22 @@
 [
 	{
-		"title" : "[ L O G O ]",
-		"selection" : "",
-		"id" : "global",
-		"route" : "pages"
+		"title" : "Context",
+		"id" : "context",
+		"route" : "context"
 	},
 	{
-		"title" : "Deborah Hay<br/>No Time To Fly",
-		"selection" : "Material",
-		"id" : "score",
-		"route" : "score"
+		"title" : "Material",
+		"id" : "material",
+		"route" : "material"
+	},
+	{
+		"title" : "Adaptations",
+		"id" : "adaptations",
+		"route" : "adaptations"
+	},
+	{
+		"title" : "Create",
+		"id" : "create",
+		"route" : "create"
 	}
 ]

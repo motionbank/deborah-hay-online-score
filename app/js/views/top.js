@@ -104,12 +104,12 @@ var TopView = module.exports = Backbone.View.extend({
 						menuTreeHash[item.id] = item;
 					});
 
-					// add content pages
-					// TODO: add these later, they will cause lot's of loading if added here at once!
-					var TopContent = require('js/views/top-content');
-					for ( var i = 0; i < menuTree.length; i++ ) {
-						views[menuTree[i].id] = new TopContent( initializer, app, this, menuTree[i].id );
-					}
+					// // add content pages
+					// // TODO: add these later, they will cause lot's of loading if added here at once!
+					// var TopContent = require('js/views/top-content');
+					// for ( var i = 0; i < menuTree.length; i++ ) {
+					// 	views[menuTree[i].id] = new TopContent( initializer, app, this, menuTree[i].id );
+					// }
 
 					self.render();
 					next();
@@ -120,6 +120,14 @@ var TopView = module.exports = Backbone.View.extend({
 			});
 		}
 		initializer.add(loadTopNavigation, this);
+
+		initializer.add(function(next){
+			views.context = new (require('js/views/top-content/context'))(this);
+			views.material = new (require('js/views/top-content/material'))(this);
+			views.adaptations = new (require('js/views/top-content/adaptations'))(this);
+			views.create = new (require('js/views/top-content/create'))(this);
+			next();
+		},this);
 
 		$top = jQuery('#top');
 		$topContentWrapper = jQuery( '#top-content-wrapper', $top );

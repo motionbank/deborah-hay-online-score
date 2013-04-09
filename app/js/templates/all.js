@@ -1,6 +1,6 @@
 var Templates = module.exports = {
 	
-	'top-navigation' : '<ul>'+
+	'top-navigation' : '<ul class="clearfix">'+
 		'<% _.each( items, function (item) { %>'+
 			'<li><a href="#" data-id="<%= item.id %>">'+
 				'<div><%= item.title %></div><div class="nav-selection"><%= item.selection %></div>'+

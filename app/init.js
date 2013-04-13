@@ -53,7 +53,8 @@ jQuery(function(){
 	initializer.start();
 
 	jQuery('#grid-view article.cell').each(function(i,e){
-		var c = 'rgb('+parseInt(180 + Math.random()*20)+','+parseInt(80 + Math.random()*50)+','+parseInt(Math.random()*50)+')';
+		var g = parseInt(130 + Math.random()*50);
+		var c = 'rgb('+g+','+g+','+g+')';
 		jQuery(e).css({
 			backgroundColor: c
 		});

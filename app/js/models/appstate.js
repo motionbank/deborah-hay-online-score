@@ -1,3 +1,7 @@
+/**
+ *	
+ */
+
 var AppStateModel = module.exports = Backbone.Model.extend({
 
 	localStorage: new Backbone.LocalStorage("AppStateModel"),
@@ -5,9 +9,7 @@ var AppStateModel = module.exports = Backbone.Model.extend({
 	defaults : {
 		performances : [],
 		scenes : [],
-		camera : {},
-		view : ''
+		tiles : [] // a 2D array
 	},
 
-	
 });

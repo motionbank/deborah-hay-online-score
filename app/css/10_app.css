@@ -23,6 +23,20 @@
 	background-color: white;
 }
 
+#top #top-menu {
+	display: none;
+}
+
+#top:hover #top-menu,
+#top.open #top-menu {
+	display: block;
+}
+
+#top:hover #top-title,
+#top.open #top-title {
+	display: none;
+}
+
 /*
  *	TOP, SUB NAVIGATION
  */

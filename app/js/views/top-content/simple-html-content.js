@@ -11,7 +11,8 @@ var SimpleHTMLContentPage = module.exports = Backbone.View.extend({
 	},
 
 	render : function () {
-		var el = jQuery( '<div id="'+this.elementId+'" class="top-content-page"></div>' );
+		var el = jQuery('#tpl-top-content-page').text();
+		el = jQuery( el );
 		jQuery( '#top-content' ).append( el );
 		this.setElement( el );
 		var html = _.template( this.htmlTemplate, this.htmlTemplateArgs );

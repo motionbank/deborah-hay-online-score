@@ -1,27 +1,160 @@
 <!doctype html>
-<html class="no-js" lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		
-		<title>TODO: title? Motion Bank - Deborah Hay - No Time To Fly</title>
-		
-		<meta name="viewport" content="width=device-width">
-		<meta name="description" content="TODO: add description here">
 
-        <!-- TODO: facebook og:image, ... other meta data -->
+<!--[if lt IE 7 ]> <html class="ie ie6 ie-lt10 ie-lt9 ie-lt8 ie-lt7 no-js" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 ie-lt10 ie-lt9 ie-lt8 no-js" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 ie-lt10 ie-lt9 no-js" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 ie-lt10 no-js" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<!-- the "no-js" class is for Modernizr. --> 
 
-		<link rel="stylesheet" type="text/css" href="stylesheets/app.css">
-        <!-- TODO: check all these variants needed? -->
-		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+<head id="scores-motionbank-org" data-template-set="html5-reset"><!-- https://github.com/murtaugh/HTML5-Reset -->
 
-	</head>
-	<body>
+	<meta charset="utf-8">
+	
+	<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<title>TODO: title? Motion Bank - Deborah Hay - No Time To Fly</title>
+	
+	<meta name="title" content="TODO" />
+	<meta name="description" content="TODO" />
+	<meta name="author" content="TODO" />
+	<!-- Google will often use this as its description of your page/site. Make it good. -->
+	
+	<meta name="google-site-verification" content="TODO" />
+	<!-- Speaking of Google, don't forget to set your site up: http://google.com/webmasters -->
+	
+	<meta name="author" content="TODO" />
+	<meta name="Copyright" content="TODO: Copyright Your Name Here 2013. All Rights Reserved." />
+	
+	<!--  Mobile Viewport Fix
+	j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag 
+	device-width : Occupy full width of the screen in its current orientation
+	initial-scale = 1.0 retains dimensions instead of zooming out if page height > device height
+	maximum-scale = 1.0 retains dimensions instead of zooming in if page width < device width
+	-->
+	<!-- Uncomment to use; use thoughtfully!
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	-->
 
-		<script src="javascripts/vendor.js" defer></script>
-        <script src="javascripts/app.js" defer onload="require('init');"></script>
+	<link rel="shortcut icon" href="imgs/favicon.ico" />
+	<!-- This is the traditional favicon.
+		 - size: 16x16 or 32x32
+		 - transparency is OK
+		 - see wikipedia for info on browser support: http://mky.be/favicon/ -->
+		 
+	<link rel="apple-touch-icon" href="imgs/apple-touch-icon.png" />
+	<!-- The is the icon for iOS's Web Clip.
+		 - size: 57x57 for older iPhones, 72x72 for iPads, 114x114 for iPhone4's retina display (IMHO, just go ahead and use the biggest one)
+		 - To prevent iOS from applying its styles to the icon name it thusly: apple-touch-icon-precomposed.png
+		 - Transparency is not recommended (iOS will put a black BG behind the icon) -->
+	
+	<!-- concatenate and minify for production -->
+	<link rel="stylesheet" href="stylesheets/app.css" />
+	
+    <!-- TODO: -->
+	<!-- This is an un-minified, complete version of Modernizr. 
+		 Before you move to production, you should generate a custom build that only has the detects you need. -->
+	
+	<!-- Application-specific meta tags -->
+	<!-- Windows 8 -->
+	<meta name="application-name" content="TODO" /> 
+	<meta name="msapplication-TileColor" content="TODO" /> 
+	<meta name="msapplication-TileImage" content="TODO" />
+	<!-- Twitter -->
+	<meta name="twitter:card" content="TODO">
+	<meta name="twitter:site" content="TODO">
+	<meta name="twitter:title" content="TODO">
+	<meta name="twitter:description" content="TODO">
+	<meta name="twitter:url" content="TODO">
+	<!-- Facebook -->
+	<meta property="og:title" content="TODO" />
+	<meta property="og:description" content="TODO" />
+	<meta property="og:url" content="TODO" />
+	<meta property="og:image" content="TODO" />        
 
-        <section id="app"></section>
+    <!-- compiled stylesheet -->
+    <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
+    
+    <!-- TODO: check if all these variants are really needed? -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
 
-	</body>
-<html/>
+</head>
+
+<body>
+
+    <script src="javascripts/vendor.js" defer></script>
+    <script src="javascripts/app.js" defer onload="require('init');"></script>
+
+    <div id="main-wrapper">
+        <nostript>
+            <!-- TODO: add meaningful noscript content here!! -->
+        </noscript>
+        <div id="tool-container">
+            <section id="tool">
+            </section>
+        </div>
+        <section id="app">
+
+            <header id="main-menu-container">
+
+                <h1 class="element-hidden">TODO: main title? Motion Bank digital score - Deborah Hay "No Time To Fly"</h1>
+
+                <nav id="main-menu">
+                    <ul>
+                        <li><a href="#">CONTEXT</a></li>
+                        <li><a href="#">RECORD</a></li>
+                        <li><a href="#">ANALYZE</a></li>
+                        <li><a href="#">ADAPT</a></li>
+                        <li><a href="#">CREATE</a></li>
+                    </ul>
+                </nav>
+
+                <nav id="secondary-menu" class="right">
+                    <ul>
+                        <li><a href="#">SAVE</a></li>
+                        <li><a href="#">LINK</a></li>
+                    </ul>
+                </nav>
+
+            </header>
+
+            <section id="grid-view">
+
+                <article>
+                    <h1></h1>
+                </article>
+
+            </section>
+
+            <footer class="element-hidden">
+                <!-- TODO: inprint, copyrights, sitemap, partners & sponsors, ... -->
+            </footer>
+
+        </section>
+    </div>
+
+<!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
+		 chromium.org/developers/how-tos/chrome-frame-getting-started -->
+<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+
+<!-- Asynchronous google analytics; this is the official snippet.
+	 Replace UA-XXXXXX-XX with your site's ID and uncomment to enable.
+	 
+<script>
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-XXXXXX-XX']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+-->
+  
+</body>
+</html>

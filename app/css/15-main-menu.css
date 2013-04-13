@@ -50,11 +50,14 @@
 	position: absolute;
 	bottom: -1.5px;
 
-	width: 30px;
-	height: 20px;
 	padding: 0px;
 
 	border-bottom: 3px solid black;
+}
+
+#main-menu li.slider a {
+	height: 30px;
+	width: 30px;
 }
 
 #secondary-menu li {

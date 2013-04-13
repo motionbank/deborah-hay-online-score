@@ -81,11 +81,16 @@ var App = module.exports = (function(){
 			}
 		});
 
+		gridView = new (require('js/views/grid-view'))();
+
 		router = new (require('js/router'))( app );
 
 		appState = new (require('js/models/appstate'))({id:1});
 	}
 	App.prototype = {
+		setRatio : function (r) {
+			gridView.setRatio(r);
+		}
 	}
 	return App;
 })();

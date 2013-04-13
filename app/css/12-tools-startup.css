@@ -1,16 +1,16 @@
 #tool-container {
-	
+
 	/* http://gradients.glrzad.com/ */
-	background-image: linear-gradient(bottom, #DBDBDB 11%, #307575 77%);
-	background-image: -o-linear-gradient(bottom, #DBDBDB 11%, #307575 77%);
-	background-image: -moz-linear-gradient(bottom, #DBDBDB 11%, #307575 77%);
-	background-image: -webkit-linear-gradient(bottom, #DBDBDB 11%, #307575 77%);
-	background-image: -ms-linear-gradient(bottom, #DBDBDB 11%, #307575 77%);
+	background-image: linear-gradient(bottom, rgb(238, 238, 238) 11%, #307575 77%);
+	background-image: -o-linear-gradient(bottom, rgb(238, 238, 238) 11%, #307575 77%);
+	background-image: -moz-linear-gradient(bottom, rgb(238, 238, 238) 11%, #307575 77%);
+	background-image: -webkit-linear-gradient(bottom, rgb(238, 238, 238) 11%, #307575 77%);
+	background-image: -ms-linear-gradient(bottom, rgb(238, 238, 238) 11%, #307575 77%);
 	background-image: -webkit-gradient(
 		linear,
 		left bottom,
 		left top,
-		color-stop(0.11, #DBDBDB),
+		color-stop(0.11, rgb(238, 238, 238)),
 		color-stop(0.77, #307575)
 	);
 
@@ -19,11 +19,23 @@
 	width: 100%;
 
 	color: white;
-	font-size: 32px;
 
-	padding-left: 25%;
-	padding-top: 12.5%;
+	padding-top: 10%;
+	padding-right: 5%;
+	padding-left: 5%;
 }
 
-#tool-container {
+#tool-container h1 {
+	width: 100%;
+	text-align: center;
+	font-weight: 400;
+	font-size: 34px;
+	letter-spacing: 0.3em;
+	padding-bottom: 2em;
+}
+
+#tool-container p {
+	width: 100%;
+	text-align: center;
+	font-size: 28px;
 }

@@ -1,11 +1,55 @@
+
 #main-menu-container {
-	height: 74px;
+	height: 72px;
+	background-color: rgb(238, 238, 238); /* make this the stop color of the start page gradient bottom */
+	border-bottom: 1px solid black;
+
+	font-family: 'Open Sans';
+	font-weight: 300; /* book */
+	letter-spacing: 0.3em;
+}
+
+#main-menu-container .menu {
+	padding-top: 26px;
+}
+
+#main-menu-container .menu li {
+	display: inline-block;
+}
+
+#main-menu-container .menu li a {
+	display: block;
 }
 
 #main-menu li {
-	float: left;
+	padding-right: 36px;
 }
 
-#main-menu li a {
+#main-menu li:last-child {
+	padding-right: 0px;
+}
+
+#main-menu {
+	width: 100%;
+}
+
+#main-menu ul {
+	width: 550px;
 	display: block;
+	margin: 0px auto;
+	text-align: center;
+}
+
+#main-menu ul {
+	border-bottom: 1px solid black;
+	padding-bottom: 8px;
+}
+
+#secondary-menu li {
+	padding-right: 14px;
+}
+
+#secondary-menu {
+	float: right;
+	padding-right: 8px;
 }

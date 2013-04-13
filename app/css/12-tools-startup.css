@@ -1,0 +1,29 @@
+#tool-container {
+	
+	/* http://gradients.glrzad.com/ */
+	background-image: linear-gradient(bottom, #DBDBDB 11%, #307575 77%);
+	background-image: -o-linear-gradient(bottom, #DBDBDB 11%, #307575 77%);
+	background-image: -moz-linear-gradient(bottom, #DBDBDB 11%, #307575 77%);
+	background-image: -webkit-linear-gradient(bottom, #DBDBDB 11%, #307575 77%);
+	background-image: -ms-linear-gradient(bottom, #DBDBDB 11%, #307575 77%);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.11, #DBDBDB),
+		color-stop(0.77, #307575)
+	);
+
+	display: block;
+	height: 100%;
+	width: 100%;
+
+	color: white;
+	font-size: 32px;
+
+	padding-left: 25%;
+	padding-top: 12.5%;
+}
+
+#tool-container {
+}

@@ -1,0 +1,11 @@
+#main-menu-container {
+	height: 74px;
+}
+
+#main-menu li {
+	float: left;
+}
+
+#main-menu li a {
+	display: block;
+}

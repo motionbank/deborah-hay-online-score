@@ -43,6 +43,18 @@
 #main-menu ul {
 	border-bottom: 1px solid black;
 	padding-bottom: 8px;
+	position: relative; /* allow for slider to be positioned */
+}
+
+#main-menu li.slider {
+	position: absolute;
+	bottom: -1.5px;
+
+	width: 30px;
+	height: 20px;
+	padding: 0px;
+
+	border-bottom: 3px solid black;
 }
 
 #secondary-menu li {

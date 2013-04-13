@@ -15,9 +15,41 @@
 }
 
 #grid-view .w4 {
+	width: 100%;
+}
+
+#grid-view .w2 {
+	width: 50%;
+}
+
+#grid-view .w3 {
+	width: 33.33333333333333%;
+}
+
+#grid-view .w4 {
 	width: 25%;
+}
+
+#grid-view .w5 {
+	width: 20%;
+}
+
+#grid-view .h1 {
+	height: 100%;
+}
+
+#grid-view .h2 {
+	height: 50%;
 }
 
 #grid-view .h3 {
 	height: 33.33333333333333%;
+}
+
+#grid-view .h4 {
+	height: 25%;
+}
+
+#grid-view .h2 {
+	height: 20%;
 }

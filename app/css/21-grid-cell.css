@@ -9,7 +9,18 @@
 #grid-view article.cell h1.title {
 	color: white;
 	text-transform: uppercase;
-	font-size: 16px;
+	font-size: 20px;
+	font-weight: 400;
+	letter-spacing: 0.1em;
+}
+
+#grid-view article.cell h1.title {
+	display: none;
+}
+
+#grid-view article.cell:hover h1.title {
+	display: block;
+	background-color: rgba( 0, 0, 0, 0.25 );
 }
 
 #grid-view article.cell.context {
@@ -30,4 +41,14 @@
 
 #grid-view article.cell.create {
 	background-color: #557733;
+}
+
+#grid-view article.cell {
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: fixed;
+	-webkit-background-size : cover;
+	-moz-background-size : cover;
+	-o-background-size : cover;
+	background-size : cover;
 }

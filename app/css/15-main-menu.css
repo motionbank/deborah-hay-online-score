@@ -1,8 +1,22 @@
 
 #main-menu-container {
 	height: 72px;
+
 	background-color: rgb(238, 238, 238); /* make this the stop color of the start page gradient bottom */
-	border-bottom: 1px solid black;
+	background-image: linear-gradient(bottom, rgb(238, 238, 238) 77%, rgb(210, 210, 210) 11%);
+	background-image: -o-linear-gradient(bottom, rgb(238, 238, 238) 77%, rgb(210, 210, 210) 11%);
+	background-image: -moz-linear-gradient(bottom, rgb(238, 238, 238) 77%, rgb(210, 210, 210) 11%);
+	background-image: -webkit-linear-gradient(bottom, rgb(238, 238, 238) 77%, rgb(210, 210, 210) 11%);
+	background-image: -ms-linear-gradient(bottom, rgb(238, 238, 238) 77%, rgb(210, 210, 210) 11%);
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0.77, rgb(238, 238, 238)),
+		color-stop(0.11, rgb(210, 210, 210))
+	);
+
+	border-bottom: 1px solid #555555;
 
 	font-family: 'Open Sans';
 	font-weight: 300; /* book */

@@ -18,7 +18,7 @@ var GridView = module.exports = Backbone.View.extend({
 			for ( var i = 0; i < area.length; i++ ) {
 				var opts = area[i];
 				opts['type'] = k;
-				opts['title'] += ' '+opts['type']+' '+i;
+				opts['preview'] = opts['preview'] === 'missing.jpg' ? opts['type']+'-'+i+'.jpg' : opts['preview'];
 				//cellViews[k] = cellViews[k] || [];
 				//cellViews[k].push( new CellView( opts, this ) );
 				cellViews.push( new CellView( opts, this ) );
@@ -35,8 +35,7 @@ var GridView = module.exports = Backbone.View.extend({
 		// 	_.each( cellViews[categories[cat]], function(cv){ cv.show() });
 		// }
 
-		var iFrom = parseInt( ratio * cellViews.length ) - 12;
-		iFrom = iFrom < 0 ? 0 : iFrom;
+		var iFrom = parseInt( ratio * (cellViews.length-12) );
 		var iTo = iFrom + 12;
 		_.each( cellViews, function(cv, i){ cv.hide() });
 		for ( var i = iFrom; i < iTo; i++ ) {

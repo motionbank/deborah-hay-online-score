@@ -17,16 +17,16 @@ var gridHitTest = function (evt, elm) {
 		return Math.abs( a - b ) <= m;
 	}
 
-	var xHit = distTest( eX, cellWidth, 5 );
-	while ( !xHit && cellWidth < gridWidth ) {
-		cellWidth += cellWidth;
+	var xHit = distTest( eX, 0, 5 );
+	while ( !xHit && cellWidth <= gridWidth ) {
 		xHit = distTest( eX, cellWidth, 5 );
+		cellWidth += cellWidth;
 	}
 
-	var yHit = distTest( eY, cellHeight, 5 );
-	while ( !yHit && cellHeight < gridHeight ) {
-		cellHeight += cellHeight;
+	var yHit = distTest( eY, 0, 5 );
+	while ( !yHit && cellHeight <= gridHeight ) {
 		yHit = distTest( eY, cellHeight, 5 );
+		cellHeight += cellHeight;
 	}
 
 	//console.log( xHit, yHit );

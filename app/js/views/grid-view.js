@@ -64,80 +64,80 @@ var GridView = module.exports = Backbone.View.extend({
 		var self = this;	
 		var selfEl = this.$el;
 		var dragging = false;
-		this.$el.mousedown(function(evt){
-			var hit = gridHitTest( evt, selfEl );
-			dragging = false;
-			if ( hit[0] || hit[1] ) {
-				dragging = hit;
-				evt.preventDefault();
-				return false;
-			}
-		});
-		this.$el.mousemove(function(evt){
-			if ( dragging ) {
-				evt.preventDefault();
-				if ( dragging[0] ) {
-					var xDist = evt.pageX - dragging[2];
-					if ( xDist < -20 ) {
-						//console.log( 'Add column' );
-						selfEl.css({cursor:'w-resize'});
-					} else if ( xDist > 20 ) {
-						//console.log( 'Remove column' );
-						selfEl.css({cursor:'e-resize'});
-					}
-				} else if ( dragging[1] ) {
-					var yDist = evt.pageY - dragging[4];
-					if ( yDist < -20 ) {
-						//console.log( 'Add row' );
-						selfEl.css({cursor:'n-resize'});
-					} else if ( yDist > 20 ) {
-						//console.log( 'Remove row' );
-						selfEl.css({cursor:'s-resize'});
-					}
-				}
-			} else {
-				var hit = gridHitTest( evt, selfEl );
-				if ( hit[0] || hit[1] ) {
-					selfEl.css({cursor:'move'});
-				} else {
-					selfEl.css({cursor:'default'});
-				}
-			}
-		});
-		this.$el.mouseup(function(evt){
-			if ( dragging ) {
-				evt.preventDefault();
-				if ( dragging[0] ) {
-					var xDist = evt.pageX - dragging[2];
-					if ( xDist < -20 ) {
-						jQuery( '.cell', selfEl ).removeClass( 'w'+gridX );
-						gridX += 1;
-						jQuery( '.cell', selfEl ).addClass( 'w'+gridX );
-						self.setRatio( lastRatio );
-					} else if ( xDist > 20 ) {
-						jQuery( '.cell', selfEl ).removeClass( 'w'+gridX );
-						gridX -= 1;
-						jQuery( '.cell', selfEl ).addClass( 'w'+gridX );
-						self.setRatio( lastRatio );
-					}
-				} else if ( dragging[1] ) {
-					var yDist = evt.pageY - dragging[4];
-					if ( yDist < -20 ) {
-						jQuery( '.cell', selfEl ).removeClass( 'h'+gridY );
-						gridY += 1;
-						jQuery( '.cell', selfEl ).addClass( 'h'+gridY );
-						self.setRatio( lastRatio );
-					} else if ( yDist > 20 ) {
-						jQuery( '.cell', selfEl ).removeClass( 'h'+gridY );
-						gridY -= 1;
-						jQuery( '.cell', selfEl ).addClass( 'h'+gridY );
-						self.setRatio( lastRatio );
-					}
-				}
-				dragging = false;
-				selfEl.css({cursor:'default'});
-			}
-		});
+		// this.$el.mousedown(function(evt){
+		// 	var hit = gridHitTest( evt, selfEl );
+		// 	dragging = false;
+		// 	if ( hit[0] || hit[1] ) {
+		// 		dragging = hit;
+		// 		evt.preventDefault();
+		// 		return false;
+		// 	}
+		// });
+		// this.$el.mousemove(function(evt){
+		// 	if ( dragging ) {
+		// 		evt.preventDefault();
+		// 		if ( dragging[0] ) {
+		// 			var xDist = evt.pageX - dragging[2];
+		// 			if ( xDist < -20 ) {
+		// 				//console.log( 'Add column' );
+		// 				selfEl.css({cursor:'w-resize'});
+		// 			} else if ( xDist > 20 ) {
+		// 				//console.log( 'Remove column' );
+		// 				selfEl.css({cursor:'e-resize'});
+		// 			}
+		// 		} else if ( dragging[1] ) {
+		// 			var yDist = evt.pageY - dragging[4];
+		// 			if ( yDist < -20 ) {
+		// 				//console.log( 'Add row' );
+		// 				selfEl.css({cursor:'n-resize'});
+		// 			} else if ( yDist > 20 ) {
+		// 				//console.log( 'Remove row' );
+		// 				selfEl.css({cursor:'s-resize'});
+		// 			}
+		// 		}
+		// 	} else {
+		// 		var hit = gridHitTest( evt, selfEl );
+		// 		if ( hit[0] || hit[1] ) {
+		// 			selfEl.css({cursor:'move'});
+		// 		} else {
+		// 			selfEl.css({cursor:'default'});
+		// 		}
+		// 	}
+		// });
+		// this.$el.mouseup(function(evt){
+		// 	if ( dragging ) {
+		// 		evt.preventDefault();
+		// 		if ( dragging[0] ) {
+		// 			var xDist = evt.pageX - dragging[2];
+		// 			if ( xDist < -20 ) {
+		// 				jQuery( '.cell', selfEl ).removeClass( 'w'+gridX );
+		// 				gridX += 1;
+		// 				jQuery( '.cell', selfEl ).addClass( 'w'+gridX );
+		// 				self.setRatio( lastRatio );
+		// 			} else if ( xDist > 20 ) {
+		// 				jQuery( '.cell', selfEl ).removeClass( 'w'+gridX );
+		// 				gridX -= 1;
+		// 				jQuery( '.cell', selfEl ).addClass( 'w'+gridX );
+		// 				self.setRatio( lastRatio );
+		// 			}
+		// 		} else if ( dragging[1] ) {
+		// 			var yDist = evt.pageY - dragging[4];
+		// 			if ( yDist < -20 ) {
+		// 				jQuery( '.cell', selfEl ).removeClass( 'h'+gridY );
+		// 				gridY += 1;
+		// 				jQuery( '.cell', selfEl ).addClass( 'h'+gridY );
+		// 				self.setRatio( lastRatio );
+		// 			} else if ( yDist > 20 ) {
+		// 				jQuery( '.cell', selfEl ).removeClass( 'h'+gridY );
+		// 				gridY -= 1;
+		// 				jQuery( '.cell', selfEl ).addClass( 'h'+gridY );
+		// 				self.setRatio( lastRatio );
+		// 			}
+		// 		}
+		// 		dragging = false;
+		// 		selfEl.css({cursor:'default'});
+		// 	}
+		// });
 	},
 
 	setRatio : function ( ratio ) {
@@ -150,19 +150,19 @@ var GridView = module.exports = Backbone.View.extend({
 
 		var tiles = gridX * gridY;
 
-		var iFrom = Math.max( 0, parseInt( ratioFrag * (cellViews[cat].length-tiles) ) );
-		var iTo = Math.min( iFrom + tiles, cellViews[cat].length-1 );
-		_.each( cellViews, function(cvCat){ _.each( cvCat, function(cv){ cv.hide() } ) });
-		for ( var i = iFrom; i < iTo; i++ ) {
-			cellViews[cat][i].show();
-		}
-
-		// var iFrom = parseInt( ratio * (cellViewsArr.length-tiles) );
-		// var iTo = iFrom + tiles;
-		// _.each( cellViewsArr, function(cv, i){ cv.hide() });
+		// var iFrom = Math.max( 0, parseInt( ratioFrag * (cellViews[cat].length-tiles) ) );
+		// var iTo = Math.min( iFrom + tiles, cellViews[cat].length-1 );
+		// _.each( cellViews, function(cvCat){ _.each( cvCat, function(cv){ cv.hide() } ) });
 		// for ( var i = iFrom; i < iTo; i++ ) {
-		// 	cellViewsArr[i].show();
+		// 	cellViews[cat][i].show();
 		// }
+
+		var iFrom = parseInt( ratio * (cellViewsArr.length-tiles) );
+		var iTo = iFrom + tiles;
+		_.each( cellViewsArr, function(cv, i){ cv.hide() });
+		for ( var i = iFrom; i < iTo; i++ ) {
+			cellViewsArr[i].show();
+		}
 
 		lastRatio = ratio;
 	}

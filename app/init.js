@@ -23,7 +23,9 @@ jQuery(function(){
 		},{
 			duration: dur, query: false,
 			complete: function () {
-				
+				setTimeout(function(){
+					$mainMenuSliderLink.animate({height:'8px'},{duration:100});
+				},200);
 			}
 		});
 
@@ -44,46 +46,38 @@ jQuery(function(){
 	 +
 	 L + + + + + + + + + + + + + + + + + + + + + */
 
-	var $mainMenuUl = jQuery('#main-menu ul');
-	var $mainMenuSlider = jQuery( 'li.slider', $mainMenuUl ); // TODO: safari insists on the line being inside ul
-	var dragAreaWidth = $mainMenuUl.width();
+	var $mainMenuContainer = jQuery('#main-menu-container');
+	var $mainMenuSlider = jQuery( '#slider', $mainMenuContainer ); // TODO: safari insists on the line being inside ul
+	var $mainMenuSliderLink = jQuery( 'a', $mainMenuSlider );
+	var dragAreaWidth = $mainMenuContainer.width();
+	var sliderIsDragging = false;
 	$mainMenuSlider.draggable({
 		axis: 'x',
-		containment: $mainMenuUl,
+		containment: $mainMenuContainer,
 		cursor : 'pointer',
 		start : function () {
-			dragAreaWidth = $mainMenuUl.width() - $mainMenuSlider.width();
+			dragAreaWidth = $mainMenuContainer.width() - $mainMenuSlider.width();
+			sliderIsDragging = true;
 		},
 		drag : function (evt, drag) {
 			app.setRatio( drag.position.left / dragAreaWidth );
 		},
 		stop: function (evt, drag) {
-
+			sliderIsDragging = false;
 		}
 	});
-	jQuery( 'li a', $mainMenuUl ).click(function(evt){
-		evt.preventDefault();
-		var $mainMenuLink = jQuery(this);
-		var newLeft = ( ( $mainMenuLink.offset().left-$mainMenuUl.offset().left + $mainMenuLink.width()/2 ) 
-					    - $mainMenuSlider.width()/2 );
-		$mainMenuSlider.animate({
-			left: newLeft + 'px'
-		},{
-			duration: 300,
-			start : function () {
-				dragAreaWidth = $mainMenuUl.width() - $mainMenuSlider.width();
-			},
-			step : function ( val ) {
-				app.setRatio( val / dragAreaWidth );
-			},
-			complete : function ( val ) {
-				app.setRatio( newLeft / dragAreaWidth );
-			}
-		});
+	$mainMenuSlider.hover(function(evt){
+		$mainMenuSliderLink.animate({height: '72px'},{duration:100});
+		$mainMenuSliderLink.css({cursor:'move'});
+	},function(evt){
+		if ( !sliderIsDragging ) {
+			$mainMenuSliderLink.animate({height: '8px'},{duration:100});
+			$mainMenuSliderLink.css({cursor:'default'});
+		}
 	});
 	var setRatio = function (r) {
 		$mainMenuSlider.css({
-			left: (r * ($mainMenuUl.width() - $mainMenuSlider.width())) + 'px'
+			left: (r * ($mainMenuContainer.width() - $mainMenuSlider.width())) + 'px'
 		});
 		app.setRatio( r );
 	}
@@ -102,7 +96,7 @@ jQuery(function(){
 		/* called from "enter" link on tool/splash screen */
 		jQuery('#link-enter-app').click(enterApp);
 		initializer.add( 'last', function (next) {
-			setRatio( Math.random() );
+			setRatio( 0.25 + Math.random() * 0.5 );
 			//enterApp();
 			next();
 		});

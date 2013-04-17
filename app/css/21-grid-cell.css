@@ -18,10 +18,10 @@
 	display: none;
 }
 
-#grid-view article.cell:hover h1.title {
+/*#grid-view article.cell:hover h1.title {
 	display: block;
 	background-color: rgba( 0, 0, 0, 0.25 );
-}
+}*/
 
 #grid-view article.cell.context {
 	background-color: #335577;

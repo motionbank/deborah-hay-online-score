@@ -1,5 +1,8 @@
 
 #main-menu-container {
+
+	position: relative;
+
 	height: 72px;
 
 	background-color: rgb(238, 238, 238); /* make this the stop color of the start page gradient bottom */
@@ -16,7 +19,7 @@
 		color-stop(0.11, rgb(210, 210, 210))
 	);
 
-	border-bottom: 1px solid #555555;
+	border-bottom: 1px solid black;
 
 	font-family: 'Open Sans';
 	font-weight: 300; /* book */
@@ -60,18 +63,17 @@
 	position: relative; /* allow for slider to be positioned */
 }
 
-#main-menu li.slider {
+#slider {
 	position: absolute;
-	bottom: -1.5px;
-
-	padding: 0px;
-
-	border-bottom: 3px solid black;
+	bottom: 0px;
+	padding-top: 20px;
 }
 
-#main-menu li.slider a {
-	height: 30px;
-	width: 30px;
+#slider a {
+	display: block;
+	background-color: rgba(0,0,0,0.3);
+	width: 100px;
+	height: 24px;
 }
 
 #secondary-menu li {

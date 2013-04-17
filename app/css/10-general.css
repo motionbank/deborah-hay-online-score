@@ -30,6 +30,7 @@ a, a:hover, a:active, a:link, a:visited {
 
 #logo {
 	position: absolute;
+	z-index: 1000;
 	left: 22px;
 	top: 14px;
 	background-repeat: no-repeat;

@@ -42,53 +42,12 @@ jQuery(function(){
 	};
 
 	/*
-	 +	make the li draggable, add clicks to menu
-	 +
-	 L + + + + + + + + + + + + + + + + + + + + + */
-
-	var $mainMenuContainer = jQuery('#main-menu-container');
-	var $mainMenuSlider = jQuery( '#slider', $mainMenuContainer ); // TODO: safari insists on the line being inside ul
-	var $mainMenuSliderLink = jQuery( 'a', $mainMenuSlider );
-	var dragAreaWidth = $mainMenuContainer.width();
-	var sliderIsDragging = false;
-	$mainMenuSlider.draggable({
-		axis: 'x',
-		containment: $mainMenuContainer,
-		cursor : 'pointer',
-		start : function () {
-			dragAreaWidth = $mainMenuContainer.width() - $mainMenuSlider.width();
-			sliderIsDragging = true;
-		},
-		drag : function (evt, drag) {
-			app.setRatio( drag.position.left / dragAreaWidth );
-		},
-		stop: function (evt, drag) {
-			sliderIsDragging = false;
-		}
-	});
-	$mainMenuSlider.hover(function(evt){
-		$mainMenuSliderLink.animate({height: '72px'},{duration:100});
-		$mainMenuSliderLink.css({cursor:'move'});
-	},function(evt){
-		if ( !sliderIsDragging ) {
-			$mainMenuSliderLink.animate({height: '8px'},{duration:100});
-			$mainMenuSliderLink.css({cursor:'default'});
-		}
-	});
-	var setRatio = function (r) {
-		$mainMenuSlider.css({
-			left: (r * ($mainMenuContainer.width() - $mainMenuSlider.width())) + 'px'
-		});
-		app.setRatio( r );
-	}
-
-	/*
 	 + 	initializations begin here
 	 +
 	 L + + + + + + + + + + + + + + + + + + + + + */
 
 	initializer.add( function(next){
-		app = new (require('js/app'))( initializer );
+		app = new (require('js/app'))( initializer, slider );
 		next();
 	});
 
@@ -96,7 +55,7 @@ jQuery(function(){
 		/* called from "enter" link on tool/splash screen */
 		jQuery('#link-enter-app').click(enterApp);
 		initializer.add( 'last', function (next) {
-			setRatio( 0.25 + Math.random() * 0.5 );
+			app.getSlider().setRatio( 0.25 + Math.random() * 0.5 );
 			//enterApp();
 			next();
 		});

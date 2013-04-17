@@ -1,0 +1,25 @@
+
+#select-set-view {
+	padding: 36px;
+	padding-top: 24px;
+}
+
+#select-set-view h1 {
+	font-family: 'Open Sans';
+	font-weight: 300;
+	font-size: 16px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+}
+
+#select-set-view #sets {
+	display: block;
+	overflow: auto;
+	width: 100%;
+	padding-top: 1em;
+}
+
+#select-set-view #sets .set {
+	padding-right: 24px;
+	padding-bottom: 24px;
+}

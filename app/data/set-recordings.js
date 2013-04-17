@@ -1,5 +1,7 @@
 module.exports = {
 	title : 'All April 2011 recordings',
+	thumbs : { medium : 'thumb_x100_april-recordings.jpg' },
+	grid : { x: 4, y: 3 },
 	cells : [
 		
 		{ type: 'recording', title: 'D01T01_Ros_sync_AJA_1', preview: 'record-0a.jpg' },

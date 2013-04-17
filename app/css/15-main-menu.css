@@ -46,6 +46,15 @@
 	padding-right: 0px;
 }
 
+#main-title {
+	font-weight: 300;
+	padding-top: 25px;
+	padding-right: 26px;
+	float: right;
+	text-transform: uppercase;
+	font-size: 15px;
+}
+
 #main-menu {
 	width: 100%;
 }
@@ -77,10 +86,9 @@
 }
 
 #secondary-menu li {
-	padding-right: 14px;
 }
 
 #secondary-menu {
 	float: right;
-	padding-right: 8px;
+	padding-right: 26px;
 }

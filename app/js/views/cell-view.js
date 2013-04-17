@@ -5,7 +5,7 @@ var CellView = module.exports = Backbone.View.extend({
 
 	tagName : 'article',
 	attributes : {
-		'class' : 'w4 h3 cell'
+		'class' : 'cell'
 	},
 
 	cell : null,
@@ -19,9 +19,9 @@ var CellView = module.exports = Backbone.View.extend({
 		this.cell = new CellModel( opts );
 		gridView.$el.append( this.render() );
 
-		gridView.on('change:grid', function () {
-
-		});
+		opts.grid = opts.grid || {x:4,y:3};
+		this.$el.addClass( 'w'+opts.grid.x );
+		this.$el.addClass( 'h'+opts.grid.y );
 
 		this.hide();
 	},

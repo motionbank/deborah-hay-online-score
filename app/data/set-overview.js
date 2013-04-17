@@ -1,5 +1,7 @@
 module.exports = {
 	title : 'Learn, Record, Analyze, Adapt, Share',
+	thumbs : { medium : 'thumb_x100-overview.jpg' },
+	grid : { x: 5, y: 4 },
 	cells : [
 		{ type: 'context', title: 'Interview', preview: 'missing.jpg' },
 		{ type: 'context', title: 'Interview', preview: 'missing.jpg' },

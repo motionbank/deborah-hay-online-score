@@ -13,7 +13,7 @@ var App = module.exports = (function(){
 	var app = null;
 	var appState = null;
 
-	var router = null;
+	var router = slider = null;
 
 	var api = null;
 
@@ -81,18 +81,36 @@ var App = module.exports = (function(){
 			}
 		});
 
+		slider = new (require('js/slider'))();
+
 		router = new (require('js/router'))( app );
 
 		gridView = new (require('js/views/grid-view'))( app );
 
+		jQuery( '#change-set-item a' ).click(function(evt){
+			evt.preventDefault();
+			gridView.showSetSelector();
+		});
+		jQuery( '#link-to-set-item a' ).click(function(evt){
+			evt.preventDefault();
+			gridView.showLink();
+		});
+		jQuery( '#edit-set-item a' ).click(function(evt){
+			evt.preventDefault();
+			gridView.showSetEditor();
+		});
+
 		appState = new (require('js/models/appstate'))({id:1});
 	}
 	App.prototype = {
-		setRatio : function (r) {
-			gridView.setRatio(r);
-		},
+		// setRatio : function (r) {
+		// 	gridView.setRatio(r);
+		// },
 		getRouter : function () {
 			return router;
+		},
+		getSlider : function () {
+			return slider;
 		}
 	}
 	return App;

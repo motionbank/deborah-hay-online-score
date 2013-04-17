@@ -10,6 +10,7 @@ var Router = module.exports = Backbone.Router.extend({
 	},
 
 	routes : {
+		'set/:setname' : 'changeset'
 	}
 	
 });

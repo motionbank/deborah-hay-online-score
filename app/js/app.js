@@ -81,15 +81,18 @@ var App = module.exports = (function(){
 			}
 		});
 
-		gridView = new (require('js/views/grid-view'))();
-
 		router = new (require('js/router'))( app );
+
+		gridView = new (require('js/views/grid-view'))( app );
 
 		appState = new (require('js/models/appstate'))({id:1});
 	}
 	App.prototype = {
 		setRatio : function (r) {
 			gridView.setRatio(r);
+		},
+		getRouter : function () {
+			return router;
 		}
 	}
 	return App;

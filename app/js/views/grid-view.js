@@ -2,6 +2,7 @@
 var cellData = {}, cellViews = {}, cellViewsArr = [];
 var categories = [];
 
+var cellBorderHandle = 5;
 var gridX = 4, gridY = 3;
 var lastRatio = 0.0;
 
@@ -17,15 +18,15 @@ var gridHitTest = function (evt, elm) {
 		return Math.abs( a - b ) <= m;
 	}
 
-	var xHit = distTest( eX, 0, 5 );
+	var xHit = distTest( eX, 0, cellBorderHandle );
 	while ( !xHit && cellWidth <= gridWidth ) {
-		xHit = distTest( eX, cellWidth, 5 );
+		xHit = distTest( eX, cellWidth, cellBorderHandle );
 		cellWidth += cellWidth;
 	}
 
-	var yHit = distTest( eY, 0, 5 );
+	var yHit = distTest( eY, 0, cellBorderHandle );
 	while ( !yHit && cellHeight <= gridHeight ) {
-		yHit = distTest( eY, cellHeight, 5 );
+		yHit = distTest( eY, cellHeight, cellBorderHandle );
 		cellHeight += cellHeight;
 	}
 

@@ -11,7 +11,7 @@ var SelectSetView = module.exports = Backbone.View.extend({
 	setGridView : function ( gv ) {
 
 		gridView = gv;
-		this.render();
+		this.render(); // TODO: load later?
 	},
 
 	render : function () {
@@ -24,7 +24,10 @@ var SelectSetView = module.exports = Backbone.View.extend({
 			if ( k === '<front>' ) continue;
 			var set = require('data/'+setUrls[k]);
 			var $setContainer = jQuery( '<div class="set left" />' );
-			var $setLink = jQuery( '<a href="#set/'+k+'">'+'<img src="imgs/thumbs/'+set.thumbs.medium+'" /><br/>'+set.title+'</a>' );
+			var $setLink = jQuery( '<a href="#set/'+k+'">'+
+										'<div class="title">'+set.title+'</div>'+
+										'<img src="imgs/thumbs/'+set.thumbs.medium+'" />'+
+									'</a>' );
 			$setContainer.append( $setLink );
 			$setLink.click(function(evt){
 				self.hide();
@@ -35,7 +38,6 @@ var SelectSetView = module.exports = Backbone.View.extend({
 	},
 
 	show : function () {
-		console.log( this );
 		this.$el.show();
 	},
 

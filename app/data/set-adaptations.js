@@ -6,7 +6,7 @@
 module.exports = {
 	title : 'Adaptations of No Time To Fly',
 	thumbs : { medium : 'thumb_x100-adaptations.jpg' },
-	grid : { x: 2, y: 2 },
+	grid : { x: 1, y: 1 },
 	fullContentUrl : '',
 	cells : [
 		{ type: 'adaptation', title: 'No Strings Attached', preview: 'adapt-0.jpg' },

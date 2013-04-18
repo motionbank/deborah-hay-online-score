@@ -1,7 +1,10 @@
 
 #select-set-view {
-	padding: 36px;
+	padding: 18px;
 	padding-top: 24px;
+	background-color: #eeeeee;
+	width: 100%;
+	min-height: 100%;
 }
 
 #select-set-view h1 {
@@ -10,16 +13,28 @@
 	font-size: 16px;
 	letter-spacing: 0.2em;
 	text-transform: uppercase;
+
+	padding-top: 18px;
+	padding-left: 18px;
 }
 
 #select-set-view #sets {
 	display: block;
 	overflow: auto;
 	width: 100%;
-	padding-top: 1em;
+	padding-top: 30px;
 }
 
 #select-set-view #sets .set {
-	padding-right: 24px;
-	padding-bottom: 24px;
+	padding: 18px;
+	padding-top: 16px;
+}
+
+#select-set-view #sets .set:hover {
+	background-color: white;
+}
+
+#select-set-view #sets .set .title {
+	letter-spacing: 0.2em;
+	margin-bottom: 1em;
 }

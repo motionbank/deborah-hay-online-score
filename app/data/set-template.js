@@ -1,3 +1,4 @@
+
 /*
  +	Template for set data sets.
  +
@@ -5,6 +6,8 @@
 
 module.exports = {
 	title : '',
+	description : '',
+	author : '',
 	link : '',
 	thumbs : {
 		small : '', medium : '', large : '',

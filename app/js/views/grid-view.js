@@ -114,7 +114,9 @@ var GridView = module.exports = Backbone.View.extend({
 		_.each( cellViewsArr, function(cv, i){ cv.hide() });
 
 		var gridWidth = Math.ceil( cellViewsArr.length / gridY );
-		var iFrom = Math.round( ratio * gridWidth );
+		var iFrom = Math.round( ratio * (gridWidth-gridX) );
+
+		console.log( gridWidth, iFrom, cellViewsArr.length );
 
 		for ( var n = 0; n < gridY; n++ ) {
 			for ( var i = 0; i < gridX; i++ ) {

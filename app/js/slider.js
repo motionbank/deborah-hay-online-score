@@ -87,7 +87,7 @@ SliderController.prototype = {
 		// TODO: reset ratio
 	},
 	forwards : function () {
-		var step = $mainMenuSliderLink.width() / $mainMenuContainer.width();
+		var step = $mainMenuSliderLink.width() / ($mainMenuContainer.width() - $mainMenuSliderLink.width());
 		var nextRatio = currentRatio + step;
 		if ( nextRatio <= 1 ) {
 			this.setRatio( nextRatio );
@@ -96,7 +96,7 @@ SliderController.prototype = {
 		}
 	},
 	backwards : function () {
-		var step = $mainMenuSliderLink.width() / $mainMenuContainer.width();
+		var step = $mainMenuSliderLink.width() / ($mainMenuContainer.width() - $mainMenuSliderLink.width());
 		var nextRatio = currentRatio - step;
 		if ( nextRatio >= 0 ) {
 			this.setRatio( nextRatio );

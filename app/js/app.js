@@ -89,15 +89,15 @@ var App = module.exports = (function(){
 
 		jQuery( '#change-set-item a' ).click(function(evt){
 			evt.preventDefault();
-			gridView.showSetSelector();
+			gridView.toggleSetSelector();
 		});
 		jQuery( '#link-to-set-item a' ).click(function(evt){
 			evt.preventDefault();
-			gridView.showLink();
+			gridView.toggleLink();
 		});
 		jQuery( '#edit-set-item a' ).click(function(evt){
 			evt.preventDefault();
-			gridView.showSetEditor();
+			gridView.toggleSetEditor();
 		});
 
 		appState = new (require('js/models/appstate'))({id:1});

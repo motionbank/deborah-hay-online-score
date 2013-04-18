@@ -8,7 +8,7 @@ module.exports = {
 	link : '',
 	thumbs : {
 		small : '', 
-		medium : 'thumb_x100_viz.jpg', 
+		medium : 'thumb_x100-viz.jpg', 
 		large : '',
 		square : ''
 	},

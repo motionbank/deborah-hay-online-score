@@ -17,16 +17,16 @@ var SelectSetView = module.exports = Backbone.View.extend({
 	render : function () {
 
 		var $sets = jQuery('#sets');
-		var setUrls = gridView.getSetUrls();
+		var setUrls = gridView.getCollection();
 		var self = this;
 
 		for ( var k in setUrls ) {
 			if ( k === '<front>' ) continue;
-			var set = require('data/'+setUrls[k]);
+			var set = require('data/sets/'+setUrls[k]);
 			var $setContainer = jQuery( '<div class="set left" />' );
 			var $setLink = jQuery( '<a href="#set/'+k+'">'+
 										'<div class="title">'+set.title+'</div>'+
-										'<img src="imgs/thumbs/'+set.thumbs.medium+'" />'+
+										'<img src="imgs/sets/thumbs/medium/'+set.thumbs.medium+'" />'+
 									'</a>' );
 			$setContainer.append( $setLink );
 			$setLink.click(function(evt){

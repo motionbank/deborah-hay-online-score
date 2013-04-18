@@ -4,7 +4,8 @@ var CellModel = module.exports = Backbone.Model.extend({
 	defaults : {
 		title : 'Missing Title Here',
 		type : 'missing-type',
-		preview : null
+		preview : null,
+		contentUrl : ''
 	},
 
 	initialize : function ( opts ) {

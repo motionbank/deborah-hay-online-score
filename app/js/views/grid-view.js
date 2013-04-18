@@ -3,7 +3,7 @@ var cellData = {}, cellViews = {}, cellViewsArr = [];
 var categories = [];
 
 var views = {};
-var setUrls = [];
+var currentCollection = [];
 
 var cellBorderHandle = 5;
 var gridX = 4, gridY = 3;
@@ -11,6 +11,8 @@ var lastRatio = 0.0;
 
 var app = null, setSelector = null;
 $mainTitleLink = null;
+
+var currentSet = null;
 
 var GridView = module.exports = Backbone.View.extend({
 
@@ -23,7 +25,7 @@ var GridView = module.exports = Backbone.View.extend({
 
 		$mainTitleLink = jQuery('#main-title a');
 
-		setUrls = require('data/set-urls');
+		currentCollection = require('data/collections/motionbank');
 		
 		app.getSlider().on('change:slider',function(val){
 			self.setRatio( val );
@@ -41,12 +43,15 @@ var GridView = module.exports = Backbone.View.extend({
 
 	loadSet : function ( setUrl ) {
 
-		if ( !setUrls || !setUrls[setUrl] ) {
+		if ( !currentCollection || !currentCollection[setUrl] ) {
 			throw( 'Set could not be loaded: ' + setUrl );
 			return;
 		}
 
-		cellData = require( 'data/'+setUrls[setUrl] );
+		if ( currentSet === currentCollection[setUrl] ) return;
+
+		cellData = require( 'data/sets/'+currentCollection[setUrl] );
+		currentSet = currentCollection[setUrl];
 
 		if ( !cellData ) {
 			throw( 'Set could not be loaded: ' + setUrl );
@@ -116,8 +121,6 @@ var GridView = module.exports = Backbone.View.extend({
 		var gridWidth = Math.ceil( cellViewsArr.length / gridY );
 		var iFrom = Math.round( ratio * (gridWidth-gridX) );
 
-		console.log( gridWidth, iFrom, cellViewsArr.length );
-
 		for ( var n = 0; n < gridY; n++ ) {
 			for ( var i = 0; i < gridX; i++ ) {
 				var m = n * gridWidth + i + iFrom;
@@ -128,26 +131,43 @@ var GridView = module.exports = Backbone.View.extend({
 		lastRatio = ratio;
 	},
 
-	getSetUrls : function () {
-		return setUrls;
+	getCollection : function () {
+		return currentCollection;
 	},
 
-	showSetSelector : function () {
-		jQuery('#grid-view').hide();
-		app.getSlider().hide();
-		setSelector.show();
+	toggleSetSelector : function () {
+		if ( jQuery('#grid-view').css('display') === 'block' ) {
+			jQuery('#grid-view').hide();
+			app.getSlider().hide();
+			setSelector.show();
+		} else {
+			jQuery('#grid-view').show();
+			app.getSlider().show();
+			setSelector.hide();
+		}
 	},
 
-	showSetEditor : function () {
+	toggleSetEditor : function () {
 
 	},
 
-	showLink : function () {
+	toggleLink : function () {
 
 	},
 
 	show : function () {
 		this.$el.show();
+		if ( cellData.cells.length > (gridX * gridY) ) { // if returning to same as before
+			app.getSlider().show();
+		}
+	},
+
+	deactivateAll : function () {
+		if ( cellData && cellViewsArr ) {
+			for ( var i = 0; i < cellViewsArr.length; i++ ) {
+				cellViewsArr[i].deactivate();
+			}
+		}
 	}
 
 });

@@ -142,7 +142,7 @@ module.exports = {
 		{ type: 'text', title: 'Dancer insights' },
 		{ type: 'text', title: 'Score text' },
 
-		{ type: 'adaptation', title: 'No Strings Attached', preview: 'adapt-0.jpg' },
+		{ type: 'adaptation', title: 'No Strings Attached', preview: 'adapt-0.jpg', contentUrl : 'http://player.vimeo.com/video/58014544' },
 		{ type: 'adaptation', title: 'Google similarity search', preview: 'adapt-1.jpg' },
 		{ type: 'adaptation', title: 'Ros as Ros', preview: 'adapt-2.jpg' },
 		{ type: 'adaptation', title: 'Ros sorted', preview: 'adapt-3.jpg' },

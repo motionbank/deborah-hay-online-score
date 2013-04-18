@@ -1,5 +1,6 @@
 
 var CellModel = null;
+var gridView = null;
 
 var CellView = module.exports = Backbone.View.extend({
 
@@ -12,8 +13,12 @@ var CellView = module.exports = Backbone.View.extend({
 	isVisible : false,
 	isActive : false,
 
-	initialize : function ( opts, gridView ) {
+	$h1Title : null, 
+	$container : null,
 
+	initialize : function ( opts, gv ) {
+
+		gridView = gv;
 		CellModel = CellModel || require('js/models/cell-model');
 
 		this.cell = new CellModel( opts );
@@ -30,39 +35,57 @@ var CellView = module.exports = Backbone.View.extend({
 
 		this.$el.addClass( this.cell.get('type') );
 		
-		// var v = parseInt( 120 + Math.random() * 100 );
-		// this.$el.css({
-		// 	backgroundColor: 'rgb('+v+','+v+','+v+')'
-		// });
+		var elHtml = _.template( require('js/templates/cell-view-tmpl'), {
+			title : this.cell.get('title'),
+			content : ''
+		});
 
-		var $h1Title = jQuery( '<h1 class="title">'+this.cell.get('title')+'</h1>' );
-		this.$el.html( $h1Title );
+		this.$el.html( elHtml );
+		this.$container = jQuery( '.content', this.$el );
 
 		var previewImg = this.cell.get('preview');
 		if ( previewImg ) {
 			this.$el.css({
 				'background-image' : 'url(imgs/cells/'+previewImg+')'
 			});
-			//$h1Title.hide();
 		} else {
-			this.$el.css({
-				'background-image' : 'none',
-				'background-color' : 'white'
-			});
-			$h1Title.css({
-				'color' : 'black',
-				'display' : 'block'
-			});
+			this.$el.addClass( 'no-img' );
 		}
+
+		var self = this;
+
+		this.$el.click(function(evt){
+			if ( self.isActive ) return;
+			evt.preventDefault();
+			gridView.deactivateAll();
+			self.activate();
+		});
 
 		return this.$el;
 	},
 
 	show : function () {
 		this.$el.show();
+		this.isVisible = true;
 	},
 
 	hide : function () {
 		this.$el.hide();
+		this.isVisible = false;
+	},
+
+	activate : function () {
+
+		this.$el.addClass( 'active' );
+		this.isActive = true;
+
+		this.$container.html( '<iframe src="'+this.cell.get('contentUrl')+'" frameborder="0" allowtransparency allowfullscreen ></iframe>' );
+	},
+
+	deactivate : function () {
+		this.$el.removeClass( 'active' );
+		this.isActive = false;
+
+		this.$container.html('');
 	}
 });

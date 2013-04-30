@@ -1,5 +1,3 @@
-
-
 // -----------------------------------------------
 //  class PieceMakerApi
 // -----------------------------------------------
@@ -37,7 +35,7 @@ var PieceMakerApi = (function(){
 			 && typeof context['piecemakerError'] == 'function' )
 			context['piecemakerError']( resp );
 		else
-			console.log( resp );
+			throw( resp );
     }
 
 	/*
@@ -150,10 +148,10 @@ var PieceMakerApi = (function(){
     	(function(opt,rid){
     		return {
 	        	name: 'piecemakerapi',
-	        	data: {
+	        	data: JSON.stringify({
 	        		options: opt,
 	        		requestId: rid
-	        	}
+	        	})
     		};
         })(xhrOptions,requestId), 
         connector.targetOrigin);
@@ -508,7 +506,8 @@ var PieceMakerApi = (function(){
 			if ( connector instanceof RemoteConnector && 
 				 msg.origin === connector.targetOrigin && 
 			     msg.data.name === 'piecemakerapi' ) {
-				connector.handle( msg.data.data );
+				var json = JSON.parse( msg.data );
+				connector.handle( json.data );
 			}
 		}, true );
 	}

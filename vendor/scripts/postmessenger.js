@@ -1,5 +1,3 @@
-
-
 /* NOTE ALL COMMENTS ARE REMOVED FROM SRC, PUT INTO resources/js-header.js */
 
 // TODO:
@@ -27,7 +25,11 @@ var PostMessenger = module.exports = (function(win){
 	}
 
 	var isRegex = function ( rgx ) {
-		return (Object.prototype.toString.call( arr ) === '[object RegExp]');
+		return (Object.prototype.toString.call( rgx ) === '[object RegExp]');
+	}
+
+	var debug = function () {
+		console.log( arguments );
 	}
 
 	/*
@@ -38,7 +40,8 @@ var PostMessenger = module.exports = (function(win){
 	 +
 	 L + + + + + + + + + + + + + + + + + + + */
 
-	 var Matcher = function ( id, matcherFn, callback, context ) {
+	 var Matcher = function ( id, matcherFn, callback, context, nameAlias, dataAlias ) {
+
 	 	this.id = id;
 	 	var self = this;
 	 	this.test = function ( other ) {
@@ -47,14 +50,21 @@ var PostMessenger = module.exports = (function(win){
 	 	}
 	 	this.callback = callback;
 	 	this.context = context;
+	 	this.nameAlias = nameAlias;
+	 	this.dataAlias = dataAlias;
 	 }
 	 Matcher.prototype = {
 	 	handle : function ( winMessage ) {
-	 		if ( 'name' in winMessage.data && 
-	 			  this.test( winMessage.data.name ) ) {
+	 		if ( typeof winMessage.data !== 'string' ) {
+	 			debug( 'Ignored message because it\'s not a json string' );
+	 			return;
+	 		}
+	 		var data = winMessage.dataParsed = JSON.parse( winMessage.data );
+	 		if ( this.nameAlias in data && 
+	 			  this.test( data[this.nameAlias] ) ) {
 	 			var response = new PostMessenger();
 	 			response.to( winMessage.source );
-	 			this.callback.apply( this.context, [ new Request(winMessage), response ] );
+	 			this.callback.apply( this.context, [ new Request(this, winMessage), response ] );
 	 			return true;
 	 		}
 	 		return false;
@@ -66,11 +76,12 @@ var PostMessenger = module.exports = (function(win){
 	 +
 	 L + + + + + + + + + + + + + + + + + + + */
 
-	 var Request = function ( winMessage ) {
-	 	this.name = winMessage.data.name;
-	 	this.data = winMessage.data.data;
+	 var Request = function ( matcher, winMessage ) {
+	 	this.name = winMessage.dataParsed[matcher.nameAlias];
+	 	this.data = winMessage.dataParsed[matcher.dataAlias];
 	 	this.source = winMessage.source;
 	 	this.origin = winMessage.origin;
+	 	this.message = winMessage;
 	 	this.params = {};
 	 }
 
@@ -136,41 +147,49 @@ var PostMessenger = module.exports = (function(win){
 		 *	TODO:
 		 *		allow for matcher to be a function that returns true/false?
 		 */
-		on : function ( matcher, callback, context ) {
+		on : function ( matcherOrOpts, callback, context ) {
+
+			var opts = !(arguments.length === 1 && typeof matcherOrOpts === 'object') ? {
+				matcher: matcherOrOpts, callback: callback, context: context
+			} : matcherOrOpts;
+			opts.nameAlias = opts.nameAlias || 'name';
+			opts.dataAlias = opts.dataAlias || 'data';
 
 			var matcherFn = function () { return false; }
 			
-			if ( typeof matcher === 'string' ) {
-				matcherFn = function ( other ) { return other === matcher };
-			} else if ( isRegex(matcher) ) {
-				matcherFn = function ( other ) { return other.match( matcher ) };
+			if ( typeof opts.matcher === 'string' ) {
+				matcherFn = function ( other ) { return other === opts.matcher };
+			} else if ( isRegex( opts.matcher ) ) {
+				matcherFn = function ( other ) { return other.match( opts.matcher ) };
 			} else {
 				throw( 'Matcher can only be a string or regex' );
 			}
 
-			if ( typeof callback !== 'function' ) {
+			if ( typeof opts.callback !== 'function' ) {
 				throw( 'Callback needs to be a function' );
 			}
 
-			if ( !context ) context = null;
+			if ( !opts.context ) opts.context = null;
 
-			var m = new Matcher( matcher, matcherFn, callback, context );
+			var m = new Matcher( opts.matcher, matcherFn, opts.callback, opts.context, opts.nameAlias, opts.dataAlias );
 			this.matchers.push(m);
 		},
 		/**
 		 *
 		 */
 		connect : function () {
-			this.win.addEventListener( 'message', (function(pm){return function(msg){
+			this.win.addEventListener( 'message', (function connectIIFE (pm){return function connectCurry (msg){
 				if ( pm.connected ) {
-					(function( winMessage ) {
+					(function connectHandleReceiveMessage ( winMessage ) {
 						if ( this.allowedOrigins.indexOf( winMessage.origin ) !== -1 ) {
 							var didMatch = false;
 							for ( var i = 0, k = this.matchers.length; i < k; i++ ) {
 								didMatch = didMatch || this.matchers[i].handle( winMessage );
 							}
 							if ( !didMatch ) {
-								console.log( 'Did not match and was ignored: ', winMessage, this.matchers );
+								console.log( 'Did not match and was ignored: ' );
+								try { console.log( winMessage.data, winMessage.origin ); } catch ( e ) {}
+								console.log( this.matchers );
 							}
 						} else {
 							console.log( 'Origin did not match: ', winMessage.origin, this.allowedOrigins );
@@ -184,20 +203,36 @@ var PostMessenger = module.exports = (function(win){
 			this.connected = false;
 		},
 		/**
-		 *	myMessanger.add( otherWindow );
+		 *	myMessenger.add( otherWindow );
 		 */
 		to : function ( receiver ) {
 			if ( receiver && typeof receiver === 'object' && 'postMessage' in receiver ) {
 				this.receivers.push( receiver );
 			}
 		},
-		send : function ( name, data, receiver, receiverOrigin ) {
-			var message = {name: name, data: data};
-			if ( receiver ) {
-				receiver.postMessage( message, receiverOrigin || this.winOrigin );
+		/**
+		 *	This should become : 
+		 *		- send( name, data, receiver, receiverOrigin )
+		 *		- send({ name: ..., data: ..., receiver: ..., receiverOrigin: ..., nameAlias: ..., dataAlias, ... })
+		 */
+		send : function ( nameOrOpts, data, receiver, receiverOrigin ) {
+
+			var opts = !(arguments.length === 1 && typeof nameOrOpts === 'object') ? {
+					name: nameOrOpts, data: data, receiver: receiver, receiverOrigin: receiverOrigin
+				} : nameOrOpts;
+			opts.receiverOrigin = opts.receiverOrigin || this.winOrigin;
+			opts.nameAlias = opts.nameAlias || 'name';
+			opts.dataAlias = opts.dataAlias || 'data';
+
+			var message = {};
+			message[opts.nameAlias] = opts.name;
+			message[opts.dataAlias] = opts.data;
+
+			if ( opts.receiver ) {
+				opts.receiver.postMessage( JSON.stringify(message), opts.receiverOrigin );
 			} else if ( this.receivers.length > 0 ) {
 				for ( var i = 0, k = this.receivers.length; i < k; i++ ) {
-					this.receivers[0].postMessage( message, this.winOrigin ); // TODO: same origin only?
+					this.receivers[0].postMessage( JSON.stringify(message), opts.receiverOrigin ); // TODO: same origin only?
 				}
 			}
 		}

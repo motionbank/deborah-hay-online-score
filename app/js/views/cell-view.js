@@ -18,6 +18,8 @@ var CellView = module.exports = Backbone.View.extend({
 
 	initialize : function ( opts, gv ) {
 
+		var self = this;
+
 		gridView = gv;
 		CellModel = CellModel || require('js/models/cell-model');
 
@@ -28,15 +30,21 @@ var CellView = module.exports = Backbone.View.extend({
 		this.$el.addClass( 'w'+opts.grid.x );
 		this.$el.addClass( 'h'+opts.grid.y );
 
+		var app = gridView.getApp();
+		app.on('change:scene',function(){
+			self.sceneChanged.apply(self,arguments);
+		});
+
 		this.hide();
 	},
 
 	render : function () {
 
-		this.$el.addClass( this.cell.get('type') );
+		this.$el.addClass( 'type-'+this.cell.get('type') );
 		
 		var elHtml = _.template( require('js/templates/cell-view-tmpl'), {
 			title : this.cell.get('title'),
+			link : this.cell.get('link'),
 			content : ''
 		});
 
@@ -44,28 +52,37 @@ var CellView = module.exports = Backbone.View.extend({
 		this.$container = jQuery( '.content', this.$el );
 
 		var previewImg = this.cell.get('preview');
-		if ( previewImg ) {
-			this.$el.css({
-				'background-image' : 'url(imgs/cells/'+previewImg+')'
-			});
-		} else {
+		if ( !previewImg ) {
 			this.$el.addClass( 'no-img' );
 		}
 
 		var self = this;
 
-		this.$el.click(function(evt){
-			if ( self.isActive ) return;
-			evt.preventDefault();
-			gridView.deactivateAll();
-			self.activate();
-		});
+		if ( this.cell.get('type') !== 'title' ) {
+			this.$el.click(function(evt){
+				if ( self.isActive ) return;
+				gridView.setClicked( self );
+				evt.preventDefault();
+				gridView.deactivateAll();
+				self.activate();
+			});
+		}
 
 		return this.$el;
 	},
 
 	show : function () {
+		if ( this.isVisible ) return;
 		this.$el.show();
+		var imgSrc = this.cell.get('preview');
+		if ( imgSrc ) {
+			imgSrc = 'imgs/cells/'+imgSrc;
+			var img = new Image();
+			img.onload = (function(cellView){return function(){
+				cellView.$el.css({backgroundImage:'url("'+imgSrc/*+'?'+(new Date()).getTime()*/+'")'});
+			}})(this);
+			img.src = imgSrc;
+		}
 		this.isVisible = true;
 	},
 
@@ -76,10 +93,6 @@ var CellView = module.exports = Backbone.View.extend({
 
 	activate : function () {
 
-		this.$el.addClass( 'active' );
-		this.isActive = true;
-
-		this.$container.html( '<iframe src="'+this.cell.get('contentUrl')+'" frameborder="0" allowtransparency allowfullscreen ></iframe>' );
 	},
 
 	deactivate : function () {
@@ -87,5 +100,11 @@ var CellView = module.exports = Backbone.View.extend({
 		this.isActive = false;
 
 		this.$container.html('');
+	},
+
+	sceneChanged : function (newScene) {
+		if ( this.isVisible && !this.isActive ) {
+			console.log( 'scene changed: ' + newScene );
+		}
 	}
 });

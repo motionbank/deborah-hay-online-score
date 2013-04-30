@@ -13,6 +13,7 @@ var app = null, setSelector = null;
 $mainTitleLink = null;
 
 var currentSet = null;
+var clickedCell = null;
 
 var GridView = module.exports = Backbone.View.extend({
 
@@ -39,6 +40,7 @@ var GridView = module.exports = Backbone.View.extend({
 
 		setSelector = new (require('js/views/select-set-view'))();
 		setSelector.setGridView(self);
+
 	},
 
 	loadSet : function ( setUrl ) {
@@ -49,6 +51,8 @@ var GridView = module.exports = Backbone.View.extend({
 		}
 
 		if ( currentSet === currentCollection[setUrl] ) return;
+
+		_.each( cellViewsArr, function(cv, i){ cv.deactivate(); cv.hide(); });
 
 		cellData = require( 'data/sets/'+currentCollection[setUrl] );
 		currentSet = currentCollection[setUrl];
@@ -66,6 +70,7 @@ var GridView = module.exports = Backbone.View.extend({
 
 		cellViews = {};
 		cellViewsArr = [];
+		clickedCell = null;
 
 		gridX = cellData.grid.x;
 		gridY = cellData.grid.y;
@@ -73,15 +78,19 @@ var GridView = module.exports = Backbone.View.extend({
 		var visibleCells = gridX*gridY;
 
 		for ( var i = 0, g = visibleCells; i < cellData.cells.length; i++ ) {
+
+			try {
+				views[opts.type] = views[opts.type] || require('js/views/cell-view-'+opts.type);
+			} catch (e) {}
 			
 			var opts = cellData.cells[i];
 			opts['preview'] = opts['preview'] === 'missing.jpg' ? opts.type+'-'+i+'.jpg' : opts['preview'];
 			opts['grid'] = cellData.grid || null;
 
-			var cv = new views.CellView( opts, this );
+			var cv = new ( views[opts.type] || views.CellView )( opts, this );
 
 			if ( i < g ) {
-				cv.$el.show();
+				cv.show();
 			}
 
 			cellViews[opts.type] = cellViews[opts.type] || [];
@@ -116,17 +125,18 @@ var GridView = module.exports = Backbone.View.extend({
 		// 	cellViews[cat][i].show();
 		// }
 
-		_.each( cellViewsArr, function(cv, i){ cv.hide() });
-
 		var gridWidth = Math.ceil( cellViewsArr.length / gridY );
 		var iFrom = Math.round( ratio * (gridWidth-gridX) );
 
+		var toShow = [];
 		for ( var n = 0; n < gridY; n++ ) {
 			for ( var i = 0; i < gridX; i++ ) {
 				var m = n * gridWidth + i + iFrom;
-				if ( m < cellViewsArr.length ) cellViewsArr[m].show();
+				if ( m < cellViewsArr.length ) toShow.push(m);
 			}
 		}
+
+		_.each( cellViewsArr, function(cv, i){ if ( toShow.indexOf(i) === -1 ) cv.hide(); else cv.show(); });
 
 		lastRatio = ratio;
 	},
@@ -168,6 +178,30 @@ var GridView = module.exports = Backbone.View.extend({
 				cellViewsArr[i].deactivate();
 			}
 		}
+	},
+
+	setClicked : function ( cell ) {
+		clickedCell = cell.cid;
+	},
+
+	playNext : function ( prevCellView ) {
+		var i = cellViewsArr.indexOf( prevCellView );
+		if ( i === -1 ) return;
+		var n = i+1;
+		n %= cellViewsArr.length;
+		if ( cellViewsArr[n].cid === clickedCell ) return;
+		while ( cellViewsArr[n].isVisible === false 
+				|| cellViewsArr[n].$el.hasClass('type-context') !== true ) {
+			n++;
+			n %= cellViewsArr.length;
+			if ( n === i ) return;
+			if ( cellViewsArr[n].cid === clickedCell ) return;
+		}
+		cellViewsArr[n].activate();
+	},
+
+	getApp : function () {
+		return app;
 	}
 
 });

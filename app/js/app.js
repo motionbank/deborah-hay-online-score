@@ -19,6 +19,8 @@ var App = module.exports = (function(){
 
 	var messenger = null;
 
+	var currentScene = '';
+	var currentPerformance = '';
 
 	/*
 	 +	static private helpers
@@ -45,6 +47,7 @@ var App = module.exports = (function(){
 	var App = function ( initializer ) {
 
 		app = this;
+		_.extend( this, Backbone.Events );
 
 		initializer.add( 'last', function(next){
 			api = new PieceMakerApi( this, "a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe", 
@@ -81,6 +84,33 @@ var App = module.exports = (function(){
 			}
 		});
 
+		messenger.on('get-scene',function(req,resp){
+			resp.send('set-scene',currentScene);
+		});
+
+		messenger.on('set-scene',function(req,resp){
+			currentScene = req.data;
+			app.trigger('change:scene',currentScene);
+		});
+
+		messenger.accept( 'http://player.vimeo.com' );
+		messenger.on({
+			matcher: 'finish', 
+			callback: function ( req, resp ) {
+				app.trigger('vimeo:finish', req, resp);
+			},
+			nameAlias: 'event'
+		});
+
+		/*
+		- getperformance ()
+		- performance changed (perf-id)
+		- getscene ()
+		- scene changed (scene-id)
+		- time changed (time)
+		- next in line (line-id)
+		*/
+
 		slider = new (require('js/slider'))();
 
 		router = new (require('js/router'))( app );
@@ -111,6 +141,9 @@ var App = module.exports = (function(){
 		},
 		getSlider : function () {
 			return slider;
+		},
+		getPostMessenger : function () {
+			return messenger;
 		}
 	}
 	return App;

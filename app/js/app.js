@@ -15,6 +15,7 @@ var App = module.exports = (function(){
 
 	var router = slider = null;
 
+	var onLocalhost = false;
 	var api = null;
 
 	var messenger = null;
@@ -49,9 +50,11 @@ var App = module.exports = (function(){
 		app = this;
 		_.extend( this, Backbone.Events );
 
+		onLocalhost = /(localhost|moba-lab.local)/.test(window.location.host);
+		
 		initializer.add( 'last', function(next){
 			api = new PieceMakerApi( this, "a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe", 
-									 (false ? "http://localhost:3000" : "http://notimetofly.herokuapp.com") );
+									 (onLocalhost ? 'http://localhost:3000' : 'http://notimetofly.herokuapp.com') );
 	    	api.loadPiece( 3, function(){
 	    		apiPieceLoaded.apply(this,arguments);
 	    		next();

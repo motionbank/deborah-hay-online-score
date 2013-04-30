@@ -1,6 +1,10 @@
 jQuery(function(){
 
-	var api = new PieceMakerApi(this,'a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe','http://localhost:3000');
+	var onLocalhost = /(localhost|moba-lab.local)/.test(window.location.host);
+
+	var api = new PieceMakerApi( this, 'a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe', 
+								 onLocalhost ? 'http://localhost:3000' : 'http://notimetofly.herokuapp.com' );
+
 	var parentWindow = null, parentWindowOrigin = '';
 	
 	var formats = [

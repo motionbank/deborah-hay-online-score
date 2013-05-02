@@ -73,17 +73,24 @@ var CellView = module.exports = Backbone.View.extend({
 
 	show : function () {
 		if ( this.isVisible ) return;
+
 		this.$el.show();
-		var imgSrc = this.cell.get('preview');
-		if ( imgSrc ) {
-			imgSrc = 'imgs/cells/'+imgSrc;
-			var img = new Image();
-			img.onload = (function(cellView){return function(){
-				cellView.$el.css({backgroundImage:'url("'+imgSrc/*+'?'+(new Date()).getTime()*/+'")'});
-			}})(this);
-			img.src = imgSrc;
-		}
 		this.isVisible = true;
+
+		var scene = gridView.getApp().getScene();
+		if ( scene ) { 
+			this.sceneChanged( scene ); 
+		} else {
+			var imgSrc = this.cell.get('preview');
+			if ( imgSrc ) {
+				imgSrc = 'imgs/cells/'+imgSrc;
+				var img = new Image();
+				img.onload = (function(cellView){return function(){
+					cellView.$el.css({backgroundImage:'url("'+imgSrc/*+'?'+(new Date()).getTime()*/+'")'});
+				}})(this);
+				img.src = imgSrc;
+			}
+		}
 	},
 
 	hide : function () {
@@ -92,7 +99,7 @@ var CellView = module.exports = Backbone.View.extend({
 	},
 
 	activate : function () {
-
+		
 	},
 
 	deactivate : function () {
@@ -104,7 +111,7 @@ var CellView = module.exports = Backbone.View.extend({
 
 	sceneChanged : function (newScene) {
 		if ( this.isVisible && !this.isActive ) {
-			console.log( 'scene changed: ' + newScene );
+			//console.log( 'scene changed: ' + newScene );
 		}
 	}
 });

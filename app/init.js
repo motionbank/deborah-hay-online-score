@@ -77,4 +77,13 @@ jQuery(function(){
 	// 		backgroundColor: c
 	// 	});
 	// });
+
+	/*
+	 + 	listen for window changes, this is a tough nut
+	 +
+	 L + + + + + + + + + + + + + + + + + + + + + */
+
+	jQuery(window).resize(function(){
+		console.log( 'window size changed' );
+	});
 });

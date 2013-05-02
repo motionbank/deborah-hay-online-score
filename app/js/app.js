@@ -147,6 +147,9 @@ var App = module.exports = (function(){
 		},
 		getPostMessenger : function () {
 			return messenger;
+		},
+		getScene : function () {
+			return currentScene;
 		}
 	}
 	return App;

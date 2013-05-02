@@ -42,7 +42,8 @@ jQuery(function(){
 
 	var $videoContainer = jQuery('#video-container');
 	$videoContainer.html('');
-	var $videoPlayer = jQuery('<video class="flowplayer" id="video-player" width="640" height="360" style="width: 600px; height: 338px;" '+
+	var $videoPlayer = jQuery('<video class="flowplayer" id="video-player" width="640" height="360" '+
+									 'style="width: 600px; height: 338px;" '+
 									 //'data-rmtp="rtmp://'+cloudFrontBaseURL+'/cfx/st"'+
 									 '>');
 
@@ -73,6 +74,7 @@ jQuery(function(){
 
 	fpVideoPlayer.bind('ready',function(){
 		fpVideoPlayer.pause();
+		setPlayerSize();
 		api.loadVideo( videoId, videoLoaded );
 	});
 
@@ -89,6 +91,33 @@ jQuery(function(){
 			}
 		}
 	});
+
+	jQuery(window).resize(function(){
+		setPlayerSize();
+	});
+
+	var setPlayerSize = function () {
+		var vw = fpVideoPlayer.video.width;
+		var vh = fpVideoPlayer.video.height;
+		var $doc = jQuery(document.body);
+		var dw = $doc.width();
+		var dh = $doc.height();
+		var vr = vw/vh;
+		var dr = dw/dh;
+		if ( dr >= vr ) {
+			vw = parseInt( Math.round( vr * dh ) );
+			vh = dh;
+		} else {
+			vh = parseInt( Math.round( dw / vr ) );
+			vw = dw;
+		}
+		jQuery('#video-container').css({
+			left: ((dw-vw) / 2) + 'px',
+			top: ((dh-vh) / 2) + 'px',
+			width: vw + 'px',
+			height: vh + 'px'
+		});
+	}
 
 	var videoLoaded = function ( video ) {
 		currentVideo = video;

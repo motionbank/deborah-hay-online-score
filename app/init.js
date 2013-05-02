@@ -26,7 +26,7 @@ jQuery(function(){
 				setTimeout(function(){
 					$mainMenuSliderLink.animate({height:'8px'},{duration:100});
 				},200);
-				$toolContainer.addClass('open');
+				$toolContainer.hide();
 			}
 		});
 

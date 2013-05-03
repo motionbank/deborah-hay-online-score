@@ -56,7 +56,6 @@ var GridView = module.exports = Backbone.View.extend({
 				dataType:'json',
 				success:function(data){
 					set.cells = data.cells;
-					console.log(set.cells);
 					self.loadSet( set.path );
 				},
 				error:function(err){

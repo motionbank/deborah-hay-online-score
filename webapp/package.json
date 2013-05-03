@@ -1,0 +1,24 @@
+{
+  "author": "Florian Jenett",
+  "name": "motionbank-score-deborah-hay-nttf-backend",
+  "description": "This is the BACKEND API for the online score for the piece 'No Time To Fly' by choreographer Deborah Hay",
+  "version": "X.X.X",
+  "homepage": "http://motionbank.org/",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "engines": {
+    "node": "~0.6.10 || 0.8 || 0.9"
+  },
+  "dependencies": {
+    "bcrypt":">= 0.7.5",
+    "express":">= 3.2.1",
+    "mysql":">= 2.0.0-alpha8",
+    "orm":">= 2.0.10",
+    "underscore":">= 1.4.4",
+    "validator":">= 1.1.1"
+  },
+  "devDependencies": {
+  }
+}

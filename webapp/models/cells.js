@@ -11,12 +11,10 @@ module.exports = function (db, models, sync) {
 		},
 		preview: {
 			type: 'text'
-		},
-		content_url: {
-			type: 'text'
 		}
 	},{
 		cache: false,
+		autoFetch: true,
 		validations: {
         	type: db.validators.insideList(
         		['text','title','recording','visualization','media','context','adaptation','resources'],
@@ -24,6 +22,8 @@ module.exports = function (db, models, sync) {
         	)
         }
 	});
+
+	model.hasMany('fields',models.fields,{},{reverse:'cell'});
 
 	if ( sync === true ) {
 		model.sync(function (err) {
@@ -36,7 +36,6 @@ module.exports = function (db, models, sync) {
 		rParams.type = params.type || 'title';
 		rParams.title = params.title;
 		rParams.preview = params.preview;
-		rParams.content_url = params.content_url;
 		return rParams;
 	}
 

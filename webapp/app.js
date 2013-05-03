@@ -63,6 +63,7 @@ app.use( orm.express( {
 }, {
     define: function (db, models) {
         models.users = require('./models/users')(db, models, true);
+        models.fields = require('./models/fields')(db, models, true);
         models.cells = require('./models/cells')(db, models, true);
         models.sets = require('./models/sets')(db, models, true);
     }
@@ -72,8 +73,34 @@ app.use( express.bodyParser() );
 
 app.use( express.static( __dirname + '/public' ) );
 
+// CORS, TODO: set to our domain only!
+app.use( function(req, res, next) {
+	var oneof = false;
+	if (req.headers.origin) {
+		res.header('Access-Control-Allow-Origin', req.headers.origin);
+		oneof = true;
+	}
+	if (req.headers['access-control-request-method']) {
+    	res.header('Access-Control-Allow-Methods', req.headers['access-control-request-method']);
+		oneof = true;
+	}
+	if (req.headers['access-control-request-headers']) {
+		res.header('Access-Control-Allow-Headers', req.headers['access-control-request-headers']);
+		oneof = true;
+	}
+	if (oneof) {
+		res.header('Access-Control-Max-Age', 60 * 60 * 24 * 365);
+	}
+    // intercept OPTIONS method
+    if (oneof && req.method == 'OPTIONS') {
+		res.send(200);
+    } else {
+		next();
+	}
+});
+
 // app.get('/import-sets',reqLoadUser,function(req,rs){
-// 	var path = __dirname + '/../app/data';
+// 	var path = __dirname + '/../app_off/data';
 // 	var collection = require( path + '/collections/' + 'motionbank' );
 // 	var cbs = [];
 // 	_.map(collection,function(f,p){
@@ -97,28 +124,61 @@ app.use( express.static( __dirname + '/public' ) );
 // 						next();
 // 					} else if (sets.length === 1) {
 // 						var set = sets[0];
-// 						var cells = _.map(data.cells,function(cell){
-// 							return {
-// 								type: cell.type,
-// 								title: cell.title,
-// 								preview: cell.preview,
-// 								content_url: cell.content_url
-// 							};
+// 						var cbs2 = [];
+// 						var savedCells = [];
+// 						_.map(data.cells,function(cell){
+// 							cbs2.push((function(cell){
+// 								return function(next2){
+// 									var cellData = {
+// 										type: cell.type,
+// 										title: cell.title,
+// 										preview: cell.preview
+// 									};
+// 									models.cells.create([cellData],function(err,cells){
+// 										if (err) {
+// 											console.log(err, cells);
+// 											next2();
+// 										} else {
+// 											console.log(cells);
+// 											var cellSaved = cells[0];
+// 											savedCells.push(cellSaved);
+// 											_.map(cell,function(v,k){
+// 												if ( k in cellSaved || !cell.hasOwnProperty(k) ) return;
+// 												models.fields.create([{
+// 													name: k, value: v
+// 												}],function(err,fields){
+// 													if (err) throw(err);
+// 													else {
+// 														cellSaved.addFields(fields,function(){
+// 															cellSaved.save(function(){
+// 															});
+// 														});
+// 													}
+// 												});
+// 											});
+// 											next2();
+// 										}
+// 									});
+// 								};
+// 							})(cell));
 // 						});
-// 						models.cells.create(cells,function(err,cells){
-// 							if (err) {
-// 								console.log(err, cells);
+// 						cbs2.push(function(){
+// 							set.addCells(savedCells);
+// 							set.save(function(err,set){
+// 								if (err) {
+// 									console.log(err);
+// 								}
 // 								next();
-// 							} else {
-// 								set.addCells(cells);
-// 								set.save(function(err,set){
-// 									if (err) {
-// 										console.log(err);
-// 									}
-// 									next();
-// 								});
-// 							}
+// 							});
 // 						});
+// 						var cb2 = cbs2.shift();
+// 						var nextCb2 = function () {
+// 							if ( cbs2.length > 0 ) {
+// 								cb2 = cbs2.shift();
+// 								cb2(nextCb2);
+// 							}
+// 						}
+// 						cb2(nextCb2);
 // 					}
 // 				});
 // 			}
@@ -167,7 +227,7 @@ app.get( '/users/:id', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 	});
 });
 
-app.get( '/users/:id/cells', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
+app.get( '/users/:id/sets', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 	req.models.users.get(req.params['id'], function(err,user){
 		if (err) {
 			throw(err);

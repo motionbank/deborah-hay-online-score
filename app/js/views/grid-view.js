@@ -3,7 +3,9 @@ var cellData = {}, cellViews = {}, cellViewsArr = [];
 var categories = [];
 
 var views = {};
+
 var currentCollection = [];
+var currentSet = null;
 
 var cellBorderHandle = 5;
 var gridX = 4, gridY = 3;
@@ -12,7 +14,6 @@ var lastRatio = 0.0;
 var app = null, setSelector = null;
 $mainTitleLink = null;
 
-var currentSet = null;
 var clickedCell = null;
 
 var GridView = module.exports = Backbone.View.extend({
@@ -25,8 +26,6 @@ var GridView = module.exports = Backbone.View.extend({
 		app = mainapp;
 
 		$mainTitleLink = jQuery('#main-title a');
-
-		currentCollection = require('data/collections/motionbank');
 		
 		app.getSlider().on('change:slider',function(val){
 			self.setRatio( val );
@@ -36,56 +35,68 @@ var GridView = module.exports = Backbone.View.extend({
 			self.loadSet(nextSetName);
 		});
 
-		this.loadSet( '<front>' );
+		//this.loadSet( '<front>' );
 
-		setSelector = new (require('js/views/select-set-view'))();
-		setSelector.setGridView(self);
+		// setSelector = new (require('js/views/select-set-view'))();
+		// setSelector.setGridView(self);
 
 	},
 
 	loadSet : function ( setUrl ) {
+		
+		var set = app.getSet( setUrl );
 
-		if ( !currentCollection || !currentCollection[setUrl] ) {
+		if ( !set ) {
 			throw( 'Set could not be loaded: ' + setUrl );
 			return;
 		}
 
-		if ( currentSet === currentCollection[setUrl] ) return;
+		if ( currentSet === set ) return;
+
+		if ( !set.cells ) {
+			var self = this;
+			jQuery.ajax({
+				url:'http://localhost:5555/sets/'+set.id,
+				dataType:'json',
+				success:function(data){
+					set.cells = data.cells;
+					console.log(set.cells);
+					self.loadSet( set.path );
+				},
+				error:function(err){
+					throw(err);
+				}
+			});
+			return;
+		}
+
+		currentSet = set;
 
 		_.each( cellViewsArr, function(cv, i){ cv.deactivate(); cv.hide(); });
-
-		cellData = require( 'data/sets/'+currentCollection[setUrl] );
-		currentSet = currentCollection[setUrl];
-
-		if ( !cellData ) {
-			throw( 'Set could not be loaded: ' + setUrl );
-			return;
-		}
 
 		views.CellView = views.CellView || require('js/views/cell-view');
 
 		this.$el.html(''); // TODO: more sane way of cleaning up?
 
-		$mainTitleLink.html( cellData.title );
+		$mainTitleLink.html( currentSet.title );
 
 		cellViews = {};
 		cellViewsArr = [];
 		clickedCell = null;
 
-		gridX = cellData.grid.x;
-		gridY = cellData.grid.y;
+		gridX = currentSet.grid_x;
+		gridY = currentSet.grid_y;
 
 		var visibleCells = gridX*gridY;
-
-		for ( var i = 0, g = visibleCells; i < cellData.cells.length; i++ ) {
+		for ( var i = 0, g = visibleCells; i < currentSet.cells.length; i++ ) {
 
 			try {
 				views[opts.type] = views[opts.type] || require('js/views/cell-view-'+opts.type);
 			} catch (e) {}
 			
-			var opts = cellData.cells[i];
+			var opts = currentSet.cells[i];
 			opts['preview'] = opts['preview'] === 'missing.jpg' ? opts.type+'-'+i+'.jpg' : opts['preview'];
-			opts['grid'] = cellData.grid || null;
+			opts['grid'] = {x:currentSet.grid_x, y:currentSet.grid_y};
 
 			var cv = new ( views[opts.type] || views.CellView )( opts, this );
 
@@ -99,10 +110,10 @@ var GridView = module.exports = Backbone.View.extend({
 			cellViewsArr.push( cv );
 		}
 
-		if ( cellData.cells.length <= (gridX * gridY) ) {
+		if ( currentSet.cells.length <= (gridX * gridY) ) {
 			app.getSlider().hide();
 		} else {
-			app.getSlider().setSize( (visibleCells * 1.0) / cellData.cells.length );
+			app.getSlider().setSize( (visibleCells * 1.0) / currentSet.cells.length );
 			app.getSlider().setRatio( 0.0 );
 			app.getSlider().show();
 		}
@@ -141,19 +152,19 @@ var GridView = module.exports = Backbone.View.extend({
 		lastRatio = ratio;
 	},
 
-	getCollection : function () {
-		return currentCollection;
-	},
+	// getCollection : function () {
+	// 	return currentCollection;
+	// },
 
 	toggleSetSelector : function () {
 		if ( jQuery('#grid-view').css('display') === 'block' ) {
 			jQuery('#grid-view').hide();
 			app.getSlider().hide();
-			setSelector.show();
+			//setSelector.show();
 		} else {
 			jQuery('#grid-view').show();
 			app.getSlider().show();
-			setSelector.hide();
+			//setSelector.hide();
 		}
 	},
 

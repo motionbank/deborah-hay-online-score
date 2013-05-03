@@ -23,6 +23,8 @@ var App = module.exports = (function(){
 	var currentScene = '';
 	var currentPerformance = '';
 
+	var sets = {};
+
 	/*
 	 +	static private helpers
 	 +
@@ -120,6 +122,28 @@ var App = module.exports = (function(){
 
 		gridView = new (require('js/views/grid-view'))( app );
 
+		initializer.add( 'last', function(next){
+			jQuery.ajax({
+				url: (onLocalhost?'http://localhost:5555':'')+'/users/1/sets',
+				dataType: 'json',
+				success: function (userWithSets) {
+					sets = {};
+					_.each(userWithSets.sets,function(set){
+						if ( !sets[set.path] ) {
+							sets[set.path] = set;
+						} else {
+							throw( 'Duplicate path!', set.path, set.id, sets[set.path].id );
+						}
+					});
+					gridView.loadSet('overview');
+					next();
+				},
+				error:function (err) {
+					throw(err);
+				}
+			});
+		}, this);
+
 		jQuery( '#change-set-item a' ).click(function(evt){
 			evt.preventDefault();
 			gridView.toggleSetSelector();
@@ -150,6 +174,9 @@ var App = module.exports = (function(){
 		},
 		getScene : function () {
 			return currentScene;
+		},
+		getSet : function (setUrl) {
+			return sets[setUrl];
 		}
 	}
 	return App;

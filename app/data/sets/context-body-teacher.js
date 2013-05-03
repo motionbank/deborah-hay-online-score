@@ -19,7 +19,12 @@ module.exports = {
 		/* anything that it needs to load / play */
 	},
 	cells : [
-		{ type: 'context', title: 'Interview', preview: 'missing.jpg', contentUrl: 'http://player.vimeo.com/video/64450487' },
+		{ 
+			type: 'context', 
+			title: 'Interview', 
+			preview: 'missing.jpg', 
+			contentUrl: 'http://player.vimeo.com/video/64450487' 
+		},
 		{ type: 'title', title: 'My Body the Teacher' },
 		{ type: 'context', title: 'Interview', preview: 'missing.jpg', contentUrl: 'http://player.vimeo.com/video/64450507' },
 		{ type: 'context', title: 'Interview', preview: 'missing.jpg', contentUrl: 'http://player.vimeo.com/video/64450508' },

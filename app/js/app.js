@@ -122,7 +122,7 @@ var App = module.exports = (function(){
 
 		gridView = new (require('js/views/grid-view'))( app );
 
-		initializer.add( 'last', function(next){
+		initializer.add( function(next){
 			jQuery.ajax({
 				url: (onLocalhost?'http://localhost:5555':'')+'/users/1/sets',
 				dataType: 'json',
@@ -177,6 +177,9 @@ var App = module.exports = (function(){
 		},
 		getSet : function (setUrl) {
 			return sets[setUrl];
+		},
+		getSets : function () {
+			return sets;
 		}
 	}
 	return App;

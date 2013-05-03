@@ -11,7 +11,7 @@ var cellBorderHandle = 5;
 var gridX = 4, gridY = 3;
 var lastRatio = 0.0;
 
-var app = null, setSelector = null;
+var app = null, setSelectorView = null;
 $mainTitleLink = null;
 
 var clickedCell = null;
@@ -35,11 +35,7 @@ var GridView = module.exports = Backbone.View.extend({
 			self.loadSet(nextSetName);
 		});
 
-		//this.loadSet( '<front>' );
-
-		// setSelector = new (require('js/views/select-set-view'))();
-		// setSelector.setGridView(self);
-
+		setSelectorView = new (require('js/views/select-set-view'))(self, app);
 	},
 
 	loadSet : function ( setUrl ) {
@@ -158,13 +154,13 @@ var GridView = module.exports = Backbone.View.extend({
 
 	toggleSetSelector : function () {
 		if ( jQuery('#grid-view').css('display') === 'block' ) {
-			jQuery('#grid-view').hide();
 			app.getSlider().hide();
-			//setSelector.show();
+			setSelectorView.show();
+			jQuery('#grid-view').hide();
 		} else {
-			jQuery('#grid-view').show();
+			setSelectorView.hide();
 			app.getSlider().show();
-			//setSelector.hide();
+			jQuery('#grid-view').show();
 		}
 	},
 
@@ -178,7 +174,7 @@ var GridView = module.exports = Backbone.View.extend({
 
 	show : function () {
 		this.$el.show();
-		if ( cellData.cells.length > (gridX * gridY) ) { // if returning to same as before
+		if ( cellData.cells && cellData.cells.length > (gridX * gridY) ) { // if returning to same as before
 			app.getSlider().show();
 		}
 	},

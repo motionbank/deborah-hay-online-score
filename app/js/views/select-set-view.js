@@ -1,32 +1,26 @@
 
-var gridView = null;
+var gridView = null, app = null;
 
 var SelectSetView = module.exports = Backbone.View.extend({
 
 	el : '#select-set-view',
 
-	initialize : function () {
-	},
-
-	setGridView : function ( gv ) {
-
+	initialize : function ( gv, mapp ) {
 		gridView = gv;
-		this.render(); // TODO: load later?
+		app = mapp;
 	},
 
 	render : function () {
 
 		var $sets = jQuery('#sets');
-		var setUrls = gridView.getCollection();
+		var sets = app.getSets();
 		var self = this;
 
-		for ( var k in setUrls ) {
-			if ( k === '<front>' ) continue;
-			var set = require('data/sets/'+setUrls[k]);
+		_.map(sets,function(set,path){
 			var $setContainer = jQuery( '<div class="set left" />' );
-			var $setLink = jQuery( '<a href="#set/'+k+'">'+
+			var $setLink = jQuery( '<a href="#set/'+path+'">'+
 										'<div class="title">'+set.title+'</div>'+
-										'<img src="imgs/sets/thumbs/medium/'+set.thumbs.medium+'" />'+
+										'<img src="imgs/sets/thumbs/medium/'+set.thumb_m+'" />'+
 									'</a>' );
 			$setContainer.append( $setLink );
 			$setLink.click(function(evt){
@@ -34,10 +28,11 @@ var SelectSetView = module.exports = Backbone.View.extend({
 				gridView.show();
 			});
 			$sets.append( $setContainer );
-		}
+		});
 	},
 
 	show : function () {
+		this.render();
 		this.$el.show();
 	},
 

@@ -3,3 +3,4 @@ thumbs.db
 public/*
 node_modules/*
 npm-debug.log
+*.bak

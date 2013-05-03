@@ -72,68 +72,68 @@ app.use( express.bodyParser() );
 
 app.use( express.static( __dirname + '/public' ) );
 
-app.get('/import-sets',reqLoadUser,function(req,rs){
-	var path = __dirname + '/../app/data';
-	var collection = require( path + '/collections/' + 'motionbank' );
-	var cbs = [];
-	_.map(collection,function(f,p){
-		var data = require( path + '/sets/' + f.replace('.js','') );
-		data.link = p;
-		cbs.push((function(data,models,user){
-			return function (next) {
-				models.sets.create([{
-					title: data.title,
-					description: data.description || '',
-					path: data.link,
-					thumb_s: data.thumbs && data.thumbs.small || '',
-					thumb_m: data.thumbs && data.thumbs.medium || '',
-					thumb_l: data.thumbs && data.thumbs.large || '',
-					grid_x: data.grid.x,
-					grid_y: data.grid.y,
-					creator_id: user.id
-				}],function(err,sets){
-					if (err) {
-						console.log(err);
-						next();
-					} else if (sets.length === 1) {
-						var set = sets[0];
-						var cells = _.map(data.cells,function(cell){
-							return {
-								type: cell.type,
-								title: cell.title,
-								preview: cell.preview,
-								content_url: cell.content_url
-							};
-						});
-						models.cells.create(cells,function(err,cells){
-							if (err) {
-								console.log(err, cells);
-								next();
-							} else {
-								set.addCells(cells);
-								set.save(function(err,set){
-									if (err) {
-										console.log(err);
-									}
-									next();
-								});
-							}
-						});
-					}
-				});
-			}
-		})(data,req.models,req.user));
-	});
-	var cb = cbs.shift();
-	var nextCb = function () {
-		if ( cbs.length > 0 ) {
-			cb = cbs.shift();
-			cb(nextCb);
-		}
-	}
-	cb(nextCb);
-	rs.send('OK');
-});
+// app.get('/import-sets',reqLoadUser,function(req,rs){
+// 	var path = __dirname + '/../app/data';
+// 	var collection = require( path + '/collections/' + 'motionbank' );
+// 	var cbs = [];
+// 	_.map(collection,function(f,p){
+// 		var data = require( path + '/sets/' + f.replace('.js','') );
+// 		data.link = p;
+// 		cbs.push((function(data,models,user){
+// 			return function (next) {
+// 				models.sets.create([{
+// 					title: data.title,
+// 					description: data.description || '',
+// 					path: data.link,
+// 					thumb_s: data.thumbs && data.thumbs.small || '',
+// 					thumb_m: data.thumbs && data.thumbs.medium || '',
+// 					thumb_l: data.thumbs && data.thumbs.large || '',
+// 					grid_x: data.grid.x,
+// 					grid_y: data.grid.y,
+// 					creator_id: user.id
+// 				}],function(err,sets){
+// 					if (err) {
+// 						console.log(err);
+// 						next();
+// 					} else if (sets.length === 1) {
+// 						var set = sets[0];
+// 						var cells = _.map(data.cells,function(cell){
+// 							return {
+// 								type: cell.type,
+// 								title: cell.title,
+// 								preview: cell.preview,
+// 								content_url: cell.content_url
+// 							};
+// 						});
+// 						models.cells.create(cells,function(err,cells){
+// 							if (err) {
+// 								console.log(err, cells);
+// 								next();
+// 							} else {
+// 								set.addCells(cells);
+// 								set.save(function(err,set){
+// 									if (err) {
+// 										console.log(err);
+// 									}
+// 									next();
+// 								});
+// 							}
+// 						});
+// 					}
+// 				});
+// 			}
+// 		})(data,req.models,req.user));
+// 	});
+// 	var cb = cbs.shift();
+// 	var nextCb = function () {
+// 		if ( cbs.length > 0 ) {
+// 			cb = cbs.shift();
+// 			cb(nextCb);
+// 		}
+// 	}
+// 	cb(nextCb);
+// 	rs.send('OK');
+// });
 
 /*
  +	CRUD users
@@ -167,6 +167,24 @@ app.get( '/users/:id', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 	});
 });
 
+app.get( '/users/:id/cells', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
+	req.models.users.get(req.params['id'], function(err,user){
+		if (err) {
+			throw(err);
+		} else {
+			user.getSets(function(err, sets){
+				if (err) {
+					res.json(500,{message:err.message});
+				} else {
+					user = user.publicProfile();
+					user.sets = sets;
+					res.json(user);
+				}
+			});
+		}
+	});
+});
+
 app.put( '/users/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
 });
 
@@ -179,8 +197,10 @@ app.delete( '/users/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, 
  L + + + + + + + + + + + + + + + + + + + + + + + + */
 
 // curl -X POST -d 'title=A title here&description=A longer description here' -L http://localhost:5555/sets
-app.post( '/sets', reqAcceptsJson, function ( req, res ) {
+
+app.post( '/sets', reqAcceptsJson, reqLoadUser, function ( req, res ) {
 	var params = req.models.sets.sanitizeInput(req.body);
+	params.creator_id = req.user.id;
 	req.models.sets.create([params],function(err,sets){
 		//console.log( sets );
 		if (err) {
@@ -194,12 +214,14 @@ app.post( '/sets', reqAcceptsJson, function ( req, res ) {
 });
 
 // curl -X POST -d 'title=title=A title here&type=recording' -L http://localhost:5555/sets/1/cells
-app.post( '/sets/:id/cells', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
+
+app.post( '/sets/:id/cells', reqAcceptsJson, reqLoadUser, paramIdIsNumber, function ( req, res ) {
 	req.models.sets.get(req.params['id'], function (err,set) {
 		if (err) {
 			res.json(500,{message:'set does not exist'});
 		} else {
 			var params = req.models.cells.sanitizeInput(req.body);
+			params.creator_id = req.user.id;
 			req.models.cells.create([params],function(err,cells){
 				//console.log( cells );
 				if (err) {
@@ -267,7 +289,8 @@ app.delete( '/sets/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, r
  L + + + + + + + + + + + + + + + + + + + + + + + + */
 
 // curl -X POST -d 'title=A title here&type=recording' -L http://localhost:5555/cells
-app.post( '/cells', reqAcceptsJson, function ( req, res ) {
+
+app.post( '/cells', reqAcceptsJson, reqLoadUser, function ( req, res ) {
 	var params = req.models.cells.sanitizeInput(req.body);
 	req.models.cells.create([params],function(err,cells){
 		//console.log( cells );

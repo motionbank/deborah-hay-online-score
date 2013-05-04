@@ -13,6 +13,8 @@ module.exports = function (db, models, sync) {
 		cache: false
 	});
 
+	model.hasOne('cell',models.cells,{},{reverse:'fields'});
+
 	if ( sync === true ) {
 		model.sync(function (err) {
 			!err && console.log( 'Table "fields" synced.' );

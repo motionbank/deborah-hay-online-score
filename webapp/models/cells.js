@@ -23,6 +23,8 @@ module.exports = function (db, models, sync) {
         }
 	});
 
+	model.hasMany('fields',models.fields,{},{reverse:'cell'});
+
 	if ( sync === true ) {
 		model.sync(function (err) {
 			!err && console.log( 'Table "cells" synced.' );

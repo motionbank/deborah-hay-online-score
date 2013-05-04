@@ -26,14 +26,14 @@ app.use( orm.express( {
     }
 } ) );
 
-app.get('/import-sets',reqLoadUser,function(req,rs){
+app.get('/import',function(req,rs){
 	var path = __dirname + '/../app_off/data';
 	var collection = require( path + '/collections/' + 'motionbank' );
 	var cbs = [];
 	_.map(collection,function(f,p){
 		var data = require( path + '/sets/' + f.replace('.js','') );
 		data.link = p;
-		cbs.push((function(data,models,user){
+		cbs.push((function(data,models){
 			return function (next) {
 				models.sets.create([{
 					title: data.title,
@@ -44,7 +44,7 @@ app.get('/import-sets',reqLoadUser,function(req,rs){
 					thumb_l: data.thumbs && data.thumbs.large || '',
 					grid_x: data.grid.x,
 					grid_y: data.grid.y,
-					creator_id: user.id
+					creator_id: 1 // fixed!
 				}],function(err,sets){
 					if (err) {
 						console.log(err);
@@ -77,7 +77,8 @@ app.get('/import-sets',reqLoadUser,function(req,rs){
 													if (err) throw(err);
 													else {
 														cellSaved.addFields(fields,function(){
-															cellSaved.save(function(){
+															cellSaved.save(function(err,c){
+																if (err) throw(err);
 															});
 														});
 													}
@@ -109,7 +110,7 @@ app.get('/import-sets',reqLoadUser,function(req,rs){
 					}
 				});
 			}
-		})(data,req.models,req.user));
+		})(data,req.models));
 	});
 	var cb = cbs.shift();
 	var nextCb = function () {

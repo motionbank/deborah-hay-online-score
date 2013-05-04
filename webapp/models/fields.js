@@ -13,7 +13,11 @@ module.exports = function (db, models, sync) {
 		cache: false
 	});
 
-	model.hasOne('cell',models.cells,{},{reverse:'fields'});
+	// model.hasOne( 'cell', models.cells, {
+	// 		required: true
+	// 	},{
+	// 		reverse: 'fields'
+	// });
 
 	if ( sync === true ) {
 		model.sync(function (err) {

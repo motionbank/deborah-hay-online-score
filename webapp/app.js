@@ -49,6 +49,8 @@ reqLoadUser = function (req, res, next) {
  +
  L + + + + + + + + + + + + + + + + + + + + + + + + */
 
+// set up ORM2, 
+// see https://github.com/dresende/node-orm2
 app.use( orm.express( {
 	database : "dhayapp",
 	protocol : "mysql",
@@ -66,8 +68,13 @@ app.use( orm.express( {
     }
 } ) );
 
+// gzip compress
+app.use( express.compress() );
+
+// handle POST data
 app.use( express.bodyParser() );
 
+// static files
 app.use( express.static( __dirname + '/public' ) );
 
 // CORS, TODO: set to our domain only!

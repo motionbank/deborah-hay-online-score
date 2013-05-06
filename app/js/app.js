@@ -55,10 +55,10 @@ var App = module.exports = (function(){
 		onLocalhost = /(localhost|moba-lab.local)/.test(window.location.host);
 		onLocalhost = false;
 		
-		initializer.add( 'last', function(next){
+		initializer.add( 'last', function initCreatePieceMaker (next){
 			api = new PieceMakerApi( this, "a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe", 
 									 (onLocalhost ? 'http://localhost:3000' : 'http://notimetofly.herokuapp.com') );
-	    	api.loadPiece( 3, function(){
+	    	api.loadPiece( 3, function pmPieceLoaded (){
 	    		apiPieceLoaded.apply(this,arguments);
 	    		next();
 	    	});
@@ -66,7 +66,7 @@ var App = module.exports = (function(){
 
 		messenger = new PostMessenger(window);
 
-		messenger.on( 'piecemakerapi', function (req,resp) {
+		messenger.on( 'piecemakerapi', function msgrPmApi (req,resp) {
 			var cacheKey = '[' + req.data.options.type + '] ' + req.data.options.url;
 			if ( cacheKey in apiCache && apiCache[cacheKey] ) {
 				resp.send('piecemakerapi',{
@@ -90,11 +90,11 @@ var App = module.exports = (function(){
 			}
 		});
 
-		messenger.on('get-scene',function(req,resp){
+		messenger.on( 'get-scene', function msgrGetScene (req,resp){
 			resp.send('set-scene',currentScene);
 		});
 
-		messenger.on('set-scene',function(req,resp){
+		messenger.on( 'set-scene', function msgrSetScene (req,resp){
 			currentScene = req.data;
 			app.trigger('change:scene',currentScene);
 		});
@@ -102,7 +102,7 @@ var App = module.exports = (function(){
 		messenger.accept( 'http://player.vimeo.com' );
 		messenger.on({
 			matcher: 'finish', 
-			callback: function ( req, resp ) {
+			callback: function msgrVimeoFinish ( req, resp ) {
 				app.trigger('vimeo:finish', req, resp);
 			},
 			nameAlias: 'event'
@@ -121,13 +121,13 @@ var App = module.exports = (function(){
 
 		router = new (require('js/router'))( app );
 
-		gridView = new (require('js/views/grid-view'))( app );
+		gridView = new (require('js/views/set-view'))( app );
 
-		initializer.add( function(next){
+		initializer.add( function initAppApi (next){
 			jQuery.ajax({
 				url: ( onLocalhost ? 'http://localhost:5555' : 'http://deborah-hay-app.eu01.aws.af.cm' ) + '/users/1/sets',
 				dataType: 'json',
-				success: function (userWithSets) {
+				success: function jqAjaxSuccessUserSets (userWithSets) {
 					sets = {};
 					_.each(userWithSets.sets,function(set){
 						if ( !sets[set.path] ) {
@@ -145,15 +145,15 @@ var App = module.exports = (function(){
 			});
 		}, this);
 
-		jQuery( '#change-set-item a' ).click(function(evt){
+		jQuery( '#change-set-item a' ).click(function jqClickChangeSet (evt){
 			evt.preventDefault();
 			gridView.toggleSetSelector();
 		});
-		jQuery( '#link-to-set-item a' ).click(function(evt){
+		jQuery( '#link-to-set-item a' ).click(function jqClickGetLink (evt){
 			evt.preventDefault();
 			gridView.toggleLink();
 		});
-		jQuery( '#edit-set-item a' ).click(function(evt){
+		jQuery( '#edit-set-item a' ).click(function jqClickEditSet (evt){
 			evt.preventDefault();
 			gridView.toggleSetEditor();
 		});

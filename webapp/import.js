@@ -39,11 +39,11 @@ app.get('/import',function(req,rs){
 					title: data.title,
 					description: data.description || '',
 					path: data.link,
-					thumb_s: data.thumbs && data.thumbs.small || '',
-					thumb_m: data.thumbs && data.thumbs.medium || '',
-					thumb_l: data.thumbs && data.thumbs.large || '',
-					grid_x: data.grid.x,
+					thumb: data.thumbs && data.thumbs.medium || '',
+					grid_x: data.grid.x * 10,
 					grid_y: data.grid.y,
+					grid_width: 320,
+					grid_height: 240,
 					creator_id: 1 // fixed!
 				}],function(err,sets){
 					if (err) {
@@ -91,7 +91,24 @@ app.get('/import',function(req,rs){
 							})(cell));
 						});
 						cbs2.push(function(){
-							set.addCells(savedCells);
+							var setX = 0, setXTotal = 0, setY = 0;
+							_.each(savedCells,function(c){
+								set.addCells(c,{
+									x: setX,
+									y: setY,
+									width: 1,
+									height: 1
+								});
+								setX++;
+								setXTotal++;
+								if ( setX >= 4 ) {
+									setX = 0;
+									setY++;
+								}
+							});
+							set.grid_x = setXTotal;
+							set.grid_y = setY;
+							//set.addCells(savedCells);
 							set.save(function(err,set){
 								if (err) {
 									console.log(err);
@@ -123,4 +140,4 @@ app.get('/import',function(req,rs){
 	rs.send('OK');
 });
 
-app.listen( process.env.VCAP_APP_PORT || 5555 );
+app.listen( process.env.VCAP_APP_PORT || 5556 );

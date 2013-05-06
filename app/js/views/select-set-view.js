@@ -23,7 +23,7 @@ var SelectSetView = module.exports = Backbone.View.extend({
 										'<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/thumbs/medium/'+set.thumb_m+'" />'+
 									'</a>' );
 			$setContainer.append( $setLink );
-			$setLink.click(function(evt){
+			$setLink.click(function jqClickSet (evt){
 				self.hide();
 				gridView.show();
 			});

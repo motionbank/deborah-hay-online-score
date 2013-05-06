@@ -34,7 +34,7 @@ var CellView = module.exports = Backbone.View.extend({
 		this.$el.addClass( 'h'+opts.grid.y );
 
 		var app = gridView.getApp();
-		app.on('change:scene',function(){
+		app.on( 'change:scene', function bbChangeScene (){
 			self.sceneChanged.apply(self,arguments);
 		});
 
@@ -89,7 +89,7 @@ var CellView = module.exports = Backbone.View.extend({
 			if ( this.$el.css('background-image') === 'none' && imgSrc ) {
 				imgSrc = this.cfUrl + '/cells/' + imgSrc;
 				var img = new Image();
-				img.onload = (function(cellView){return function(){
+				img.onload = (function(cellView){return function domImgLoaded (){
 					cellView.$el.css({
 						backgroundImage:'url("'+imgSrc/*+'?'+(new Date()).getTime()*/+'")'
 					});

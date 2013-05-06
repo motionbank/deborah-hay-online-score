@@ -22,8 +22,8 @@ jQuery(function(){
 			marginTop: (-tcHeight)+'px'
 		},{
 			duration: dur, query: false,
-			complete: function () {
-				setTimeout(function(){
+			complete: function enterAppAnimateSlideComplete (){
+				setTimeout(function enterAppAnimateSlider (){
 					$mainMenuSliderLink.animate({height:'8px'},{duration:100});
 				},200);
 				$toolContainer.hide();
@@ -34,7 +34,7 @@ jQuery(function(){
 			opacity: '0'
 		},{
 			duration: dur, query: false,
-			start: function () {
+			start: function enterAppAnimateLogoStart () {
 				$logo.css({backgroundImage:'url(imgs/logo-dark.png)'});
 			}
 		});
@@ -47,15 +47,15 @@ jQuery(function(){
 	 +
 	 L + + + + + + + + + + + + + + + + + + + + + */
 
-	initializer.add( function(next){
+	initializer.add( function initCreateApp (next){
 		app = new (require('js/app'))( initializer, slider );
 		next();
 	});
 
-	initializer.add( function(next){
+	initializer.add( function initActivateLink (next){
 		/* called from "enter" link on tool/splash screen */
 		jQuery('#link-enter-app').click(enterApp);
-		initializer.add( 'last', function (next) {
+		initializer.add( 'last', function initRandomSliderPosition (next) {
 			app.getSlider().setRatio( 0.25 + Math.random() * 0.5 );
 			//enterApp();
 			next();
@@ -63,7 +63,7 @@ jQuery(function(){
 		next();
 	});
 
-	initializer.add( 'later', function(next){
+	initializer.add( 'later', function initBBHistoryStart (next){
 		Backbone.history.start();
 		next();
 	});
@@ -84,6 +84,6 @@ jQuery(function(){
 	 L + + + + + + + + + + + + + + + + + + + + + */
 
 	jQuery(window).resize(function(){
-		console.log( 'window size changed' );
+		//console.log( 'window size changed' );
 	});
 });

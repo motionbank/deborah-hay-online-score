@@ -27,11 +27,11 @@ var GridView = module.exports = Backbone.View.extend({
 
 		$mainTitleLink = jQuery('#main-title a');
 		
-		app.getSlider().on('change:slider',function(val){
+		app.getSlider().on( 'change:slider',function bbChangeSliderCB (val){
 			self.setRatio( val );
 		});
 
-		app.getRouter().on('route:changeset',function(nextSetName){
+		app.getRouter().on( 'route:changeset',function bbRouteChangeSetCB (nextSetName){
 			self.loadSet(nextSetName);
 		});
 

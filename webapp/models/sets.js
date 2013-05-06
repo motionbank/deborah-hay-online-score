@@ -13,26 +13,28 @@ module.exports = function (db, models, sync) {
 			type: 'text',
 			required: true
 		},
-		thumb_s : {
-			type: 'text'
-		},
-		thumb_m : {
-			type: 'text'
-		},
-		thumb_l : {
+		thumb : {
 			type: 'text'
 		},
 		grid_x : {
 			type: 'number',
 			required: true,
-			rational: false,
-			defaultValue: 3
+			rational: false
 		},
 		grid_y : {
 			type: 'number',
 			required: true,
-			rational: false,
-			defaultValue: 3
+			rational: false
+		},
+		grid_width : {
+			type: 'number',
+			required: true,
+			rational: false
+		},
+		grid_height : {
+			type: 'number',
+			required: true,
+			rational: false
 		}
 	},{
 		cache: false
@@ -40,7 +42,31 @@ module.exports = function (db, models, sync) {
 
 	model.hasOne( 'creator', models.users, {required: true}, {reverse: 'sets'});
 
-	model.hasMany( 'cells', models.cells, {}, {reverse: 'sets'});
+	model.hasMany( 'cells', models.cells, {
+		/* options specific to this relation */
+		x: {
+			type: 'number',
+			rational: false,
+			required: true
+		},
+		y: {
+			type: 'number',
+			rational: false,
+			required: true
+		},
+		width: {
+			type: 'number',
+			rational: false,
+			required: true
+		},
+		height: {
+			type: 'number',
+			rational: false,
+			required: true
+		}
+	}, {
+		reverse: 'sets'
+	});
 
 	var titleToPath = function ( title ) {
 		if (!title) return undefined;
@@ -54,11 +80,11 @@ module.exports = function (db, models, sync) {
 		rParams.title = params.title;
 		rParams.description = params.description;
 		rParams.path = params.path || (rParams.title && titleToPath(rParams.title));
-		rParams.thumb_s = params.thumb_s;
-		rParams.thumb_m = params.thumb_m;
-		rParams.thumb_l = params.thumb_l;
+		rParams.thumb = params.thumb;
 		rParams.grid_x = params.grid_x;
 		rParams.grid_y = params.grid_y;
+		rParams.grid_width = params.grid_width;
+		rParams.grid_height = params.grid_height;
 		return rParams;
 	}
 

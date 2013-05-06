@@ -12,6 +12,7 @@ var CellView = module.exports = Backbone.View.extend({
 	cell : null,
 	isVisible : false,
 	isActive : false,
+	respondToSceneChange : false,
 
 	cfUrl : 'http://d35vpnmjdsiejq.cloudfront.net/dh/app',
 
@@ -80,7 +81,8 @@ var CellView = module.exports = Backbone.View.extend({
 		this.isVisible = true;
 
 		var scene = gridView.getApp().getScene();
-		if ( scene ) { 
+
+		if ( this.respondToSceneChange && scene ) { 
 			this.sceneChanged( scene ); 
 		} else {
 			var imgSrc = this.cell.get('preview');

@@ -1,6 +1,8 @@
 
 var CellView = module.exports = require('js/views/cell-view').extend({
 
+	respondToSceneChange : true,
+
 	activate : function () {
 		this.$el.addClass( 'active' );
 		this.isActive = true;

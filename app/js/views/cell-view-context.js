@@ -6,7 +6,6 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 		this.isActive = true;
 
 		var self = this;
-		console.log( this.cell );
 		var iframe = jQuery( '<iframe id="iframe-'+this.cid+'" src="'+this.cell.get('contentUrl')+'?api=1" '+
 									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
 		iframe.load(function(){

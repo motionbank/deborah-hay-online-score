@@ -39,7 +39,7 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 
 	sceneChanged : function (newScene) {
 		if ( this.isVisible && !this.isActive ) {
-			var imgSrc = 'imgs/cells/recordings/posters/'+this.cell.get('title')+'-'+newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-')+'.png';
+			var imgSrc = this.cfUrl + '/cells/recordings/posters/'+this.cell.get('title')+'-'+newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-')+'.png';
 			var img = new Image();
 			var self = this;
 			img.onload = function () {

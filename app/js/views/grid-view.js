@@ -52,7 +52,7 @@ var GridView = module.exports = Backbone.View.extend({
 		if ( !set.cells ) {
 			var self = this;
 			jQuery.ajax({
-				url:'http://localhost:5555/sets/'+set.id,
+				url: (app.isLocal() ? 'http://localhost:5555' : 'http://deborah-hay-app.eu01.aws.af.cm') + '/sets/' + set.id,
 				dataType:'json',
 				success:function(data){
 					set.cells = data.cells;

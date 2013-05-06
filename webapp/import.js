@@ -123,4 +123,4 @@ app.get('/import',function(req,rs){
 	rs.send('OK');
 });
 
-app.listen( 5555 );
+app.listen( process.env.VCAP_APP_PORT || 5555 );

@@ -3,10 +3,21 @@ var express 	= require('express'),
 	_			= require('underscore'),
 	orm 		= require('orm'),
 	app 		= express(),
+	config		= require('./config/config'),
 	reqAcceptsJson = null,
 	reqLoadUser = null,
 	paramIdIsNumber = null,
 	niy			= null;
+
+// appfog settings
+
+if ( process.env.VCAP_SERVICES 
+     && process.env.VCAP_SERVICES['mysql-5.1']
+     && process.env.VCAP_SERVICES['mysql-5.1'][0]
+     && process.env.VCAP_SERVICES['mysql-5.1'][0]['credentials'] ) {
+  config.db = process.env.VCAP_SERVICES['mysql-5.1'][0]['credentials'];
+  config.db.database = config.db.name;
+}
 
 /*
  +	Middlewares
@@ -51,22 +62,11 @@ reqLoadUser = function (req, res, next) {
 
 // set up ORM2, 
 // see https://github.com/dresende/node-orm2
-app.use( orm.express( {
-	database : "dhayapp",
-	protocol : "mysql",
-	host     : "localhost",
-	port     : 3306,
-	user 	 : "dhay",
-	password : "dhay",
-	query    : {
-		pool     : false,
-		debug    : true
-	}
-}, {
+app.use( orm.express( config.db, {
     define: function (db, models) {
         models = require('./models/models')(db, models, true);
     }
-} ) );
+}));
 
 // gzip compress
 app.use( express.compress() );
@@ -284,6 +284,19 @@ app.get( '/cells', reqAcceptsJson, function ( req, res ) {
 });
 
 // curl http://localhost:5555/cells/1
+app.get( '/cells/:id', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
+	req.models.cells.get(req.params['id'],function(err,cell){
+		if (err) {
+			res.json(500,{message:err.message});
+		} else {
+			var sets = cell.getSets(function(err,sets){
+				cell.sets = sets;
+				res.json(cell);
+			});
+		}
+	});
+});
+
 app.put( '/cells/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
 });
 
@@ -301,4 +314,4 @@ app.get('/',function(req,rs){
 			'please visit: <a href="http://motionbank.org/">motionbank.org</a>');
 });
 
-app.listen( 5555 );
+app.listen( process.env.VCAP_APP_PORT || 5555 );

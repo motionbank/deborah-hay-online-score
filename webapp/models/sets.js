@@ -38,12 +38,9 @@ module.exports = function (db, models, sync) {
 		cache: false
 	});
 
-	model.hasOne( 'creator', models.users, {
-		required: true,
-		reverse: 'sets'
-	});
+	model.hasOne( 'creator', models.users, {required: true}, {reverse: 'sets'});
 
-	model.hasMany( 'cells', models.cells );
+	model.hasMany( 'cells', models.cells, {}, {reverse: 'sets'});
 
 	var titleToPath = function ( title ) {
 		if (!title) return undefined;

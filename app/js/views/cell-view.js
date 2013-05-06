@@ -13,6 +13,8 @@ var CellView = module.exports = Backbone.View.extend({
 	isVisible : false,
 	isActive : false,
 
+	cfUrl : 'http://d35vpnmjdsiejq.cloudfront.net/dh/app',
+
 	$h1Title : null, 
 	$container : null,
 
@@ -83,7 +85,7 @@ var CellView = module.exports = Backbone.View.extend({
 		} else {
 			var imgSrc = this.cell.get('preview');
 			if ( imgSrc ) {
-				imgSrc = 'imgs/cells/'+imgSrc;
+				imgSrc = this.cfUrl + '/cells/' + imgSrc;
 				var img = new Image();
 				img.onload = (function(cellView){return function(){
 					cellView.$el.css({backgroundImage:'url("'+imgSrc/*+'?'+(new Date()).getTime()*/+'")'});

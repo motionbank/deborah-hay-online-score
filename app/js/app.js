@@ -53,6 +53,7 @@ var App = module.exports = (function(){
 		_.extend( this, Backbone.Events );
 
 		onLocalhost = /(localhost|moba-lab.local)/.test(window.location.host);
+		onLocalhost = false;
 		
 		initializer.add( 'last', function(next){
 			api = new PieceMakerApi( this, "a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe", 
@@ -124,7 +125,7 @@ var App = module.exports = (function(){
 
 		initializer.add( function(next){
 			jQuery.ajax({
-				url: (onLocalhost?'http://localhost:5555':'')+'/users/1/sets',
+				url: ( onLocalhost ? 'http://localhost:5555' : 'http://deborah-hay-app.eu01.aws.af.cm' ) + '/users/1/sets',
 				dataType: 'json',
 				success: function (userWithSets) {
 					sets = {};
@@ -180,6 +181,9 @@ var App = module.exports = (function(){
 		},
 		getSets : function () {
 			return sets;
+		},
+		isLocal : function () {
+			return onLocalhost;
 		}
 	}
 	return App;

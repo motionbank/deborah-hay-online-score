@@ -30,6 +30,9 @@ module.exports = function (db, models, sync) {
 			},
 			testPassword : function ( pswd ) {
 				return bcrypt.compareSync( pswd, this.password );
+			},
+			getSets : function ( cb ) {
+				models.sets.find({creator_id: this.id},cb);
 			}
 		}
 	});

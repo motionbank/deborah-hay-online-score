@@ -64,7 +64,7 @@ reqLoadUser = function (req, res, next) {
 // see https://github.com/dresende/node-orm2
 app.use( orm.express( config.db, {
     define: function (db, models) {
-        models = require('./models/models')(db, models, true);
+        models = require('./models/models')(db, models, (config.orm && config.orm.sync));
     }
 }));
 

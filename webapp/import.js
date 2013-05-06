@@ -91,7 +91,7 @@ app.get('/import',function(req,rs){
 							})(cell));
 						});
 						cbs2.push(function(){
-							var setX = 0, setXTotal = 0, setY = 0;
+							var setX = 0, setY = 0;
 							_.each(savedCells,function(c){
 								set.addCells(c,{
 									x: setX,
@@ -99,15 +99,14 @@ app.get('/import',function(req,rs){
 									width: 1,
 									height: 1
 								});
-								setX++;
-								setXTotal++;
-								if ( setX >= 4 ) {
-									setX = 0;
-									setY++;
+								setY++;
+								if ( setY >= 4 ) {
+									setY = 0;
+									setX++;
 								}
 							});
-							set.grid_x = setXTotal;
-							set.grid_y = setY;
+							set.grid_x = setX;
+							set.grid_y = 4;
 							//set.addCells(savedCells);
 							set.save(function(err,set){
 								if (err) {

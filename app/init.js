@@ -85,5 +85,6 @@ jQuery(function(){
 
 	jQuery(window).resize(function(){
 		//console.log( 'window size changed' );
+		app.sizeChanged();
 	});
 });

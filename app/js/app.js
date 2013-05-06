@@ -13,7 +13,7 @@ var App = module.exports = (function(){
 	var app = null;
 	var appState = null;
 
-	var router = slider = null;
+	var router = slider = null, gridView = null;
 
 	var onLocalhost = false;
 	var api = null;
@@ -53,7 +53,6 @@ var App = module.exports = (function(){
 		_.extend( this, Backbone.Events );
 
 		onLocalhost = /(localhost|moba-lab.local)/.test(window.location.host);
-		onLocalhost = false;
 		
 		initializer.add( 'last', function initCreatePieceMaker (next){
 			api = new PieceMakerApi( this, "a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe", 
@@ -184,6 +183,9 @@ var App = module.exports = (function(){
 		},
 		isLocal : function () {
 			return onLocalhost;
+		},
+		sizeChanged : function () {
+			gridView.sizeChanged();
 		}
 	}
 	return App;

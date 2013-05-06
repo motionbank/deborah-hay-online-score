@@ -29,10 +29,6 @@ var CellView = module.exports = Backbone.View.extend({
 		this.cell = new CellModel( opts );
 		gridView.$el.append( this.render() );
 
-		opts.grid = opts.grid || {x:4,y:3};
-		this.$el.addClass( 'w'+opts.grid.x );
-		this.$el.addClass( 'h'+opts.grid.y );
-
 		var app = gridView.getApp();
 		app.on( 'change:scene', function bbChangeScene (){
 			self.sceneChanged.apply(self,arguments);

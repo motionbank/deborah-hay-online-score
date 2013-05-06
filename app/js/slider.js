@@ -60,14 +60,15 @@ var SliderController = function( app ) {
 };
 
 SliderController.prototype = {
-	setRatio : function (r) {
+	setRatio : function (r,trigger) {
 		if ( r < 0 || r > 1 ) {
 			throw( 'Bad parameter for setRatio()' ); return;
 		}
 		$mainMenuSlider.css({
 			left: (r * ($mainMenuContainer.width() - $mainMenuSliderLink.width())) + 'px'
 		});
-		this.trigger('change:slider',r);
+		if ( trigger === undefined || trigger === true )
+			this.trigger('change:slider',r);
 		currentRatio = r;
 	},
 	setSize : function ( r ) {

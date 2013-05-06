@@ -10,5 +10,8 @@ module.exports = {
 			pool     : false,
 			debug    : true
 		}
+	},
+	orm: {
+		sync : true
 	}
 };

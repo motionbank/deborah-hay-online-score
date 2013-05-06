@@ -9,6 +9,7 @@ var currentSet = null;
 
 var cellBorderHandle = 5;
 var gridX = 4, gridY = 3;
+var cellWidth, cellHeight;
 var lastRatio = 0.0;
 
 var app = null, setSelectorView = null;
@@ -65,9 +66,10 @@ var GridView = module.exports = Backbone.View.extend({
 			return;
 		}
 
-		currentSet = set;
-
 		_.each( cellViewsArr, function(cv, i){ cv.deactivate(); cv.hide(); });
+
+		currentSet = set;
+		this.updateGridDimensions();
 
 		views.CellView = views.CellView || require('js/views/cell-view');
 
@@ -79,9 +81,6 @@ var GridView = module.exports = Backbone.View.extend({
 		cellViewsArr = [];
 		clickedCell = null;
 
-		gridX = currentSet.grid_x;
-		gridY = currentSet.grid_y;
-
 		var visibleCells = gridX*gridY;
 		for ( var i = 0, g = visibleCells; i < currentSet.cells.length; i++ ) {
 
@@ -91,7 +90,6 @@ var GridView = module.exports = Backbone.View.extend({
 			
 			var opts = currentSet.cells[i];
 			opts['preview'] = opts['preview'] === 'missing.jpg' ? opts.type+'-'+i+'.jpg' : opts['preview'];
-			opts['grid'] = {x:currentSet.grid_x, y:currentSet.grid_y};
 
 			var cv = new ( views[opts.type] || views.CellView )( opts, this );
 
@@ -105,61 +103,82 @@ var GridView = module.exports = Backbone.View.extend({
 			cellViewsArr.push( cv );
 		}
 
-		if ( currentSet.cells.length <= (gridX * gridY) ) {
-			app.getSlider().hide();
-		} else {
-			app.getSlider().setSize( (visibleCells * 1.0) / currentSet.cells.length );
-			app.getSlider().setRatio( 0.0 );
-			app.getSlider().show();
-		}
+		_.each( cellViewsArr, function (cv) {
+			cv.$el.css({
+				width: cellWidth+'px',
+				height: cellHeight+'px'
+			});
+		});
+
+		this.updateVisibleCells();
 	},
 
 	setRatio : function ( ratio ) {
 
-		if ( !cellData ) return;
+		if ( !cellData || !currentSet ) return;
 
-		// var ratioScaled = ratio * 5;
-		// var ratioInt = parseInt( ratioScaled );
-		// if ( ratioInt >= categories.length ) ratioInt = categories.length-1;
-		// var ratioFrag = ratioScaled-ratioInt;
-		// var cat = categories[ratioInt];
+		lastRatio = ratio;
 
-		// var iFrom = Math.max( 0, parseInt( ratioFrag * (cellViews[cat].length-tiles) ) );
-		// var iTo = Math.min( iFrom + tiles, cellViews[cat].length-1 );
-		// _.each( cellViews, function(cvCat){ _.each( cvCat, function(cv){ cv.hide() } ) });
-		// for ( var i = iFrom; i < iTo; i++ ) {
-		// 	cellViews[cat][i].show();
-		// }
+		this.updateVisibleCells();
+	},
 
-		var gridWidth = Math.ceil( cellViewsArr.length / gridY );
-		var iFrom = Math.round( ratio * (gridWidth-gridX) );
+	updateVisibleCells : function () {
+
+		if ( !cellData || !currentSet ) return;
+
+		var gridWidth = parseInt( Math.ceil( cellViewsArr.length / gridY ) );
+		var iFrom = Math.round( lastRatio * (gridWidth-gridX) );
 
 		var toShow = [];
 		for ( var n = 0; n < gridY; n++ ) {
 			for ( var i = 0; i < gridX; i++ ) {
 				var m = n * gridWidth + i + iFrom;
-				if ( m < cellViewsArr.length ) toShow.push(m);
+				toShow.push(m);
 			}
 		}
 
 		_.each( cellViewsArr, function(cv, i){ if ( toShow.indexOf(i) === -1 ) cv.hide(); else cv.show(); });
 
-		lastRatio = ratio;
+		if ( currentSet.cells.length <= (gridX * gridY) ) {
+			app.getSlider().hide();
+		} else {
+			app.getSlider().setSize( ((gridX * gridY) * 1.0) / currentSet.cells.length );
+			app.getSlider().setRatio( lastRatio, false );
+			app.getSlider().show();
+		}
 	},
 
-	// getCollection : function () {
-	// 	return currentCollection;
-	// },
+	updateGridDimensions : function () {
+
+		if ( !currentSet ) return;
+
+		var w = this.$el.width();
+		var h = this.$el.height();
+		
+		var ch = parseInt( Math.floor( h / currentSet.grid_y ) );
+		var cw = (currentSet.grid_width / currentSet.grid_height) * ch;
+
+		gridX = parseInt( w / cw );
+		gridY = currentSet.grid_y;
+
+		if ( w - (gridX * cw) > cw / 2 ) {
+			gridX++;
+		}
+		cw = parseInt( Math.floor( w / gridX ) );
+
+		cellWidth = cw;
+		cellHeight = ch;
+	},
 
 	toggleSetSelector : function () {
-		if ( jQuery('#grid-view').css('display') === 'block' ) {
+		if ( this.$el.css('display') === 'block' ) {
 			app.getSlider().hide();
 			setSelectorView.show();
-			jQuery('#grid-view').hide();
+			this.$el.hide();
 		} else {
 			setSelectorView.hide();
 			app.getSlider().show();
-			jQuery('#grid-view').show();
+			this.$el.show();
 		}
 	},
 
@@ -208,6 +227,22 @@ var GridView = module.exports = Backbone.View.extend({
 
 	getApp : function () {
 		return app;
+	},
+
+	sizeChanged : function () {
+		if ( currentSet ) {
+
+			this.updateGridDimensions();
+
+			_.each( cellViewsArr, function (cv) {
+				cv.$el.css({
+					width: cellWidth+'px',
+					height: cellHeight+'px'
+				});
+			});
+
+			this.updateVisibleCells();
+		}
 	}
 
 });

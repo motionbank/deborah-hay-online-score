@@ -86,11 +86,13 @@ var CellView = module.exports = Backbone.View.extend({
 			this.sceneChanged( scene ); 
 		} else {
 			var imgSrc = this.cell.get('preview');
-			if ( imgSrc ) {
+			if ( this.$el.css('background-image') === 'none' && imgSrc ) {
 				imgSrc = this.cfUrl + '/cells/' + imgSrc;
 				var img = new Image();
 				img.onload = (function(cellView){return function(){
-					cellView.$el.css({backgroundImage:'url("'+imgSrc/*+'?'+(new Date()).getTime()*/+'")'});
+					cellView.$el.css({
+						backgroundImage:'url("'+imgSrc/*+'?'+(new Date()).getTime()*/+'")'
+					});
 				}})(this);
 				img.src = imgSrc;
 			}

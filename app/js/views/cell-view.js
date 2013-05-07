@@ -1,6 +1,5 @@
 
 var CellModel = null;
-var gridView = null;
 
 var CellView = module.exports = Backbone.View.extend({
 
@@ -14,6 +13,8 @@ var CellView = module.exports = Backbone.View.extend({
 	isActive : false,
 	respondToSceneChange : false,
 
+	gridView : null,
+
 	cfUrl : 'http://d35vpnmjdsiejq.cloudfront.net/dh/app',
 
 	$h1Title : null, 
@@ -23,13 +24,13 @@ var CellView = module.exports = Backbone.View.extend({
 
 		var self = this;
 
-		gridView = gv;
+		this.gridView = gv;
 		CellModel = CellModel || require('js/models/cell-model');
 
 		this.cell = new CellModel( opts );
-		gridView.$el.append( this.render() );
+		this.gridView.$el.append( this.render() );
 
-		var app = gridView.getApp();
+		var app = this.gridView.getApp();
 		app.on( 'change:scene', function bbChangeScene (){
 			self.sceneChanged.apply(self,arguments);
 		});
@@ -60,9 +61,9 @@ var CellView = module.exports = Backbone.View.extend({
 		if ( this.cell.get('type') !== 'title' ) {
 			this.$el.click(function(evt){
 				if ( self.isActive ) return;
-				gridView.setClicked( self );
+				self.gridView.setClicked( self );
 				evt.preventDefault();
-				gridView.deactivateAll();
+				self.gridView.deactivateAll();
 				self.activate();
 			});
 		}
@@ -76,7 +77,7 @@ var CellView = module.exports = Backbone.View.extend({
 		this.$el.show();
 		this.isVisible = true;
 
-		var scene = gridView.getApp().getScene();
+		var scene = this.gridView.getApp().getScene();
 
 		if ( this.respondToSceneChange && scene ) { 
 			this.sceneChanged( scene ); 

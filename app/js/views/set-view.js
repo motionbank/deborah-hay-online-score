@@ -105,8 +105,8 @@ var GridView = module.exports = Backbone.View.extend({
 
 		_.each( cellViewsArr, function (cv) {
 			cv.$el.css({
-				width: cellWidth+'px',
-				height: cellHeight+'px'
+				width: (100.0/gridX)+'%',
+				height: (100.0/gridY)+'%'
 			});
 		});
 
@@ -232,16 +232,19 @@ var GridView = module.exports = Backbone.View.extend({
 	sizeChanged : function () {
 		if ( currentSet ) {
 
+			var gridXPrev = gridX, gridYPrev = gridY;
 			this.updateGridDimensions();
 
-			_.each( cellViewsArr, function (cv) {
-				cv.$el.css({
-					width: cellWidth+'px',
-					height: cellHeight+'px'
+			if ( gridX !== gridXPrev || gridY !== gridYPrev ) {
+				_.each( cellViewsArr, function (cv) {
+					cv.$el.css({
+						width: (100.0/gridX)+'%',
+						height: (100.0/gridY)+'%'
+					});
 				});
-			});
 
-			this.updateVisibleCells();
+				this.updateVisibleCells();
+			}
 		}
 	}
 

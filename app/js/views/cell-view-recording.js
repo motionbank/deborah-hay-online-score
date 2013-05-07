@@ -13,14 +13,14 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
 		iframe.load(function(){
 			var win = document.getElementById('iframe-'+self.cid).contentWindow;
-			var app = gridView.getApp();
+			var app = self.gridView.getApp();
 			var postmessenger = app.getPostMessenger();
 
 			postmessenger.send('connect',null,win);
 
 			// app.on( 'vimeo:finish', function(req, resp){
 			// 	if ( req.message.source === win ) {
-			// 		gridView.playNext(self);
+			// 		self.gridView.playNext(self);
 			// 		self.deactivate();
 			// 	}
 			// });

@@ -12,6 +12,7 @@ exports.config =
           'vendor/scripts/modernizr-latest.js'
           'vendor/scripts/jquery-2.0.0.js'
           'vendor/scripts/jquery-ui-1.10.2.custom.js'
+          'vendor/scripts/jquery-hammer.js'
           'vendor/scripts/underscore.js'
           'vendor/scripts/backbone.js'
           'vendor/scripts/backbone.localStorage.js'

@@ -37,6 +37,15 @@ var GridView = module.exports = Backbone.View.extend({
 		});
 
 		setSelectorView = new (require('js/views/select-set-view'))(self, app);
+
+		this.$el.on('swipe', function (event) {
+			event.preventDefault();
+			if ( event.direction == 'right' ) {
+				app.getSlider().forwards();
+			} else if ( event.direction == 'left' ) {
+				app.getSlider().backwards();
+			}
+		});
 	},
 
 	loadSet : function ( setUrl ) {

@@ -1,0 +1,58 @@
+#layout-editor, #cells, #main nav, #actions
+{
+	margin-top: 18px;
+}
+
+#layout-editor {
+/*	overflow-x: scroll;*/
+}
+
+.grid {
+	width: 100%;
+	height: 144px;
+}
+
+.grid .grid-cell {
+	border: 1px solid blue;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.grid .grid-cell.add-x {
+	width: 10px;
+}
+
+.grid .grid-cell.add-y {
+	height: 10px;
+}
+
+.grid .add-y.add-x {
+	width: inherit;
+	height: inherit;
+}
+
+
+#cells {
+}
+
+#cells .filters {
+	border-bottom: 1px solid black;
+	padding: 4.5px;
+}
+
+#cells .cell-list {
+	max-height: 504px;
+	overflow: hidden;
+	overflow-y: scroll;
+	border-bottom: 1px solid black;
+}
+
+#cells .cell-list .cell {
+	padding: 4.5px;
+	border-bottom: 1px solid black;
+}
+
+#cells .cell-list .cell.ui-draggable-dragging {
+	border: 1px solid black;
+	width: 200px;
+}

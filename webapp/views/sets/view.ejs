@@ -1,0 +1,13 @@
+<% include ../_header %>
+	<section id="main">
+		<style type="text/css">
+			
+		</style>
+		<h1><%= set.title %></h1>
+		<nav><ul>
+			<li><a href="/admin/sets/<%= set.id %>/edit">Edit</a></li>
+			<li><a href="/admin/sets/<%= set.id %>/layout">Layout</a></li>
+			<li><a href="/admin/sets/<%= set.id %>/delete">Delete</a></li>
+		</ul></nav>
+	</section>
+<% include ../_footer %>

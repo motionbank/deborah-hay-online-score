@@ -1,0 +1,65 @@
+<% include ../_header %>
+	<section id="main">
+		<script type="text/javascript">
+			var layoutEditor = (function(){
+				return {
+					set : {
+						id: <%= set.id %>,
+						grid_x: <%= set.grid_x %>,
+						grid_y: <%= set.grid_y %>,
+						grid_width: <%= set.grid_width %>,
+						grid_height: <%= set.grid_height %>
+					} 
+				}
+			})();
+		</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="/javascripts/ejs_production.js"></script>
+		<script src="/javascripts/layout.js" type="text/javascript"></script>
+		<style type="text/css">@import url('/stylesheets/layout.css')</style>
+		<h1><%= set.title %></h1>
+		<div id="actions"><form action="#"><input type="submit" value="Save"></form></div>
+		<div id="layout-editor">
+			<table class="grid">
+				<% for ( var i = 0, iy = 0; iy < set.grid_y; iy++ ) { %>
+					<tr>
+					<% for ( var ix = 0; ix < set.grid_x; ix++ ) { %>
+						<% if ( grid[iy] && grid[iy][ix] ) { %>
+							<td class="grid-cell" 
+								data-id="<%= grid[iy][ix].id %>" 
+								data-x="<%= ix %>" 
+								data-y="<%= iy %>"><%= grid[iy][ix].id %></td>
+						<% } else { %>
+							<td class="grid-cell" data-id="" data-x="<%= ix %>" 
+								data-y="<%= iy %>"></td>
+						<% } %>
+						<% if ( ix === set.grid_x-1 ) { %>
+							<td class="add-x grid-cell" data-y="<%= iy %>">+</td>
+						<% } %>
+					<% } %>
+					</tr>
+				<% } %>
+				<tr class="add-y">
+					<% for ( var ix = 0; ix < set.grid_x; ix++ ) { %>
+						<td class="add-y grid-cell" data-x="<%= ix %>">+</td>
+					<% } %>
+					<td class="add-y add-x grid-cell" data-x="<%= set.grid_x %>" data-y="<%= set.grid_y %>">+</td>
+				</tr>
+			</table>
+		</div>
+		<div id="cells">
+			<div class="filters"><form action="#">
+			Filter: <select>
+			<option values="all">---</option>
+			<% for ( var i = 0; i < types.length; i++ ) { %>
+				<option value="<%= types[i] %>"><%= types[i] %></option>
+			<% } %>
+			</select></form></div>
+			<div class="cell-list">
+				<% for ( var i = 0; i < cells.length; i++ ) { %>
+					<div class="cell type-<%= cells[i].type %>" data-id="<%= cells[i].id %>"><%= cells[i].title %></div>
+				<% } %>
+			</div>
+		</div>
+	</section>
+<% include ../_footer %>

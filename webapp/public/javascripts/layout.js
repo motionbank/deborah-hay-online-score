@@ -1,3 +1,7 @@
+/**
+ *	Quite a beast this is.
+ */
+
 jQuery(function(){
 
 	var tplTableRow = '<td class="grid-cell <%= classes.join(\' \') %>" '+
@@ -46,13 +50,13 @@ jQuery(function(){
 			var $cell = jQuery(this);
 			$cell.css({
 				backgroundColor: 'white'
-			})
+			});
 		},
 		out: function () {
 			var $cell = jQuery(this);
 			$cell.css({
 				backgroundColor: ''
-			})
+			});
 		},
 		drop: function (evt, ui) {
 
@@ -124,20 +128,23 @@ jQuery(function(){
 		},
 		tolerance: 'pointer'
 	};
+
 	var draggableGridCellOpts = {
 		revert: true,
 		revertDuration: 20,
 		start : function (evt,ui) {
 			jQuery(this).css({zIndex:999});
-			
+
 			ui.helper.data('droppedOnGrid',false);
 		},
 		stop : function (evt,ui) {
-			jQuery(this).css({zIndex:'auto'});
+			var $e = jQuery(this);
+			$e.css({zIndex:'auto'});
 
 			if ( ui.helper.data('droppedOnGrid') === false ) {
-				ui.helper.data('id',null);
-				ui.helper.css({
+
+				$e.data('id',null);
+				$e.css({
 					backgroundImage: 'none'
 				});
 			}
@@ -149,7 +156,7 @@ jQuery(function(){
 			$e = jQuery(e);
 			if ( $e.hasClass('add-x') || $e.hasClass('add-y') ) return;
 			$e.draggable(draggableGridCellOpts);
-		});
+	});
 
 	var addColumn = function (columns, rows) {
 

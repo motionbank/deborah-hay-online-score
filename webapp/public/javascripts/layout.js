@@ -18,8 +18,8 @@ jQuery(function(){
 			$e = jQuery(e);
 			if ( $e.hasClass('add-x') || $e.hasClass('add-y') ) return;
 			$e.css({
-				width: (100.0/layoutEditor.set.grid_x) + '%',
-				height: (100.0/layoutEditor.set.grid_y) + '%'
+				width: cw + 'px',
+				height: ch + 'px'
 			});
 		});
 	}

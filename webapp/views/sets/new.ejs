@@ -1,0 +1,31 @@
+<% include ../_header %>
+	<section id="main">
+		<style type="text/css">
+			form {
+				padding-top: 18px
+			}
+			form input[type=text],
+			form textarea {
+				width: 360px;
+				margin: 0px 0px 9px 0px
+			}
+			form label {
+				display: block;
+			}
+			form textarea {
+				height: 144px
+			}
+		</style>
+		<h1>Create a new set</h1>
+		<form method="post" action="/admin/sets/new">
+			<input type="hidden" name="user_id" value="<%= user.id %>"/>
+			<label for="title">Title</label>
+			<input type="text" name="title" value="" /><br/>
+			<label for="title">Path</label>
+			<input type="text" name="path" value="" /><br/>
+			<label for="title">Description</label>
+			<textarea name="description"></textarea><br/>
+			<input type="submit" value="Save" />
+		</form>
+	</section>
+<% include ../_footer %>

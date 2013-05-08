@@ -1,0 +1,32 @@
+<% include ../_header %>
+	<section id="main">
+		<style type="text/css">
+			form {
+				padding-top: 18px
+			}
+			form input[type=text],
+			form textarea {
+				width: 360px;
+				margin: 0px 0px 9px 0px
+			}
+			form label {
+				display: block;
+			}
+			form textarea {
+				height: 144px
+			}
+		</style>
+		<h1>Edit set »<%= set.title %>« (#<%= set.id %>)</h1>
+		<form method="post" action="/admin/sets/<%= set.id %>/save">
+			<input type="hidden" name="user_id" value="<%= user.id %>"/>
+			<input type="hidden" name="set_id" value="<%= set.id %>"/>
+			<label for="title">Title</label>
+			<input type="text" name="title" value="<%= set.title %>" /><br/>
+			<label for="title">Path</label>
+			<input type="text" name="path" value="<%= set.path %>" /><br/>
+			<label for="title">Description</label>
+			<textarea name="description"><%= set.description %></textarea><br/>
+			<input type="submit" value="Save" /> <a href="/admin/sets/<%= set.id %>/delete">Delete set</a>
+		</form>
+	</section>
+<% include ../_footer %>

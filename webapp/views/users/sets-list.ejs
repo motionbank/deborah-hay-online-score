@@ -1,0 +1,4 @@
+<h1>You have <%= user.sets.length %> sets</h1>
+<% for ( var i = 0; i < user.sets.length; i++ ) { %>
+	<a href="/admin/sets/<%= user.sets[i].id %>"><%= user.sets[i].title %></a><br />
+<% } %>

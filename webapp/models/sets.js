@@ -19,22 +19,26 @@ module.exports = function (db, models, sync) {
 		grid_x : {
 			type: 'number',
 			required: true,
-			rational: false
+			rational: false,
+			defaultValue: 4
 		},
 		grid_y : {
 			type: 'number',
 			required: true,
-			rational: false
+			rational: false,
+			defaultValue: 3
 		},
 		grid_width : {
 			type: 'number',
 			required: true,
-			rational: false
+			rational: false,
+			defaultValue: 320
 		},
 		grid_height : {
 			type: 'number',
 			required: true,
-			rational: false
+			rational: false,
+			defaultValue: 240
 		}
 	},{
 		cache: false

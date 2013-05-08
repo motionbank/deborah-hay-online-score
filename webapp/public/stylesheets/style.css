@@ -1,0 +1,31 @@
+
+body {
+	background: #d7eeee;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	font-size: 12px;
+}
+
+#header {
+	float: left;
+	width: 144px;
+	padding: 36px;
+}
+
+#main, #messages {
+	margin-left: 216px;
+	padding: 36px;
+	padding-bottom: 0px;
+}
+
+#messages .message {
+	color: red;
+	background-color: #99ffff;
+	padding: 18px;
+	border: 1px solid red;
+	margin-bottom: 9px;
+	width: 360px;
+}
+
+a, a:hover, a:active, a:link, a:visited {
+	color: #ff6644;
+}

@@ -16,6 +16,14 @@
 	border: 1px solid blue;
 	text-align: center;
 	vertical-align: middle;
+
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: fixed;
+	-webkit-background-size : cover;
+	-moz-background-size : cover;
+	-o-background-size : cover;
+	background-size : cover;
 }
 
 .grid .grid-cell.add-x {

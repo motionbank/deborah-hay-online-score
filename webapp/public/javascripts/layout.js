@@ -58,6 +58,7 @@ jQuery(function(){
 
 			var $cell = jQuery(this);
 			var $item = ui.draggable;
+			$item.data('droppedOnGrid',true);
 
 			$cell.css({
 				backgroundColor: ''
@@ -71,10 +72,20 @@ jQuery(function(){
 				// swap IDs
 				var cellId = $cell.data('id'),
 					itemId = $item.data('id');
+
+				var cBgImg = $cell.css('background-image'),
+					iBgImg = $item.css('background-image');
+
 				$cell.data('id',itemId||null);
-				$cell.html(itemId||'');
+				//$cell.html(itemId||'');
+				$cell.css({
+					backgroundImage: iBgImg
+				});
 				$item.data('id',cellId||null);
-				$item.html(cellId||'');
+				//$item.html(cellId||'');
+				$item.css({
+					backgroundImage: cBgImg
+				});
 
 			} else {
 
@@ -102,9 +113,12 @@ jQuery(function(){
 				var id = $item.data( 'id' );
 				
 				$cell.data( 'id', id );
-				$cell.html( id );
+				//$cell.html( id );
 				$cell.css({
-					borderColor: 'red'
+					borderColor: 'red',
+					backgroundImage: 
+						'url("http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/'+
+							$item.data('preview')+'")'
 				});
 			}
 		},
@@ -113,11 +127,20 @@ jQuery(function(){
 	var draggableGridCellOpts = {
 		revert: true,
 		revertDuration: 20,
-		start : function () {
+		start : function (evt,ui) {
 			jQuery(this).css({zIndex:999});
+			
+			ui.helper.data('droppedOnGrid',false);
 		},
-		stop : function () {
+		stop : function (evt,ui) {
 			jQuery(this).css({zIndex:'auto'});
+
+			if ( ui.helper.data('droppedOnGrid') === false ) {
+				ui.helper.data('id',null);
+				ui.helper.css({
+					backgroundImage: 'none'
+				});
+			}
 		}
 	};
 

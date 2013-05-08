@@ -9,7 +9,7 @@
 						grid_y: <%= set.grid_y %>,
 						grid_width: <%= set.grid_width %>,
 						grid_height: <%= set.grid_height %>
-					} 
+					}
 				}
 			})();
 		</script>
@@ -28,7 +28,11 @@
 							<td class="grid-cell" 
 								data-id="<%= grid[iy][ix].id %>" 
 								data-x="<%= ix %>" 
-								data-y="<%= iy %>"><%= grid[iy][ix].id %></td>
+								data-y="<%= iy %>"
+								<% if ( grid[iy][ix].preview ) { %>
+								style="background-image:url('http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/<%= grid[iy][ix].preview %>')"
+								<% } %>
+								><!-- <%= grid[iy][ix].id %> --></td>
 						<% } else { %>
 							<td class="grid-cell" data-id="" data-x="<%= ix %>" 
 								data-y="<%= iy %>"></td>
@@ -57,7 +61,10 @@
 			</select></form></div>
 			<div class="cell-list">
 				<% for ( var i = 0; i < cells.length; i++ ) { %>
-					<div class="cell type-<%= cells[i].type %>" data-id="<%= cells[i].id %>"><%= cells[i].title %></div>
+					<div class="cell type-<%= cells[i].type %>" 
+						 data-id="<%= cells[i].id %>"
+						 data-preview="<%= cells[i].preview %>"
+						 ><%= cells[i].title %></div>
 				<% } %>
 			</div>
 		</div>

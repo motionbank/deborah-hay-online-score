@@ -1,5 +1,8 @@
 module.exports = function (db, models, sync) {
 
+	var cellTypes = ['text','title','recording','visualization',
+					 'media','context','adaptation','resources'];
+
 	var model = db.define('cells',{
 		type: {
 			type: 'text',
@@ -17,13 +20,19 @@ module.exports = function (db, models, sync) {
 		autoFetch: true,
 		validations: {
         	type: db.validators.insideList(
-        		['text','title','recording','visualization','media','context','adaptation','resources'],
+        		cellTypes,
         		'Given "type" is not allowed'
         	)
         }
 	});
 
-	model.hasMany('fields',models.fields,{},{reverse:'cell'});
+	model.cellTypes = function () {
+		return cellTypes;
+	}
+
+	model.hasMany( 'fields', models.fields, {}, {
+		reverse:'cell'
+	});
 
 	if ( sync === true ) {
 		model.sync(function (err) {

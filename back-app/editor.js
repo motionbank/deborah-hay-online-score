@@ -13,7 +13,8 @@ var express 	= require('express'),
 	noop 		= function(){},
 	ensureParamIdNumeric = noop,
 	message 	= noop,
-	error 		= noop;
+	error 		= noop,
+	noError		= noop;
 
 
 // appfog settings
@@ -113,6 +114,15 @@ error = function (req, res, error) {
 		title: 'E R R 0 R !', 
 		message: error + ''
 	}));
+};
+
+noError = function (req,res,err) {
+	if (err) {
+		error(req,res,err);
+		return false;
+	} else {
+		return true;
+	}
 }
 
 /*
@@ -150,7 +160,7 @@ app.get( pathBase + '/sets/new', function (req, res) {
 // SETS - CREATE
 
 app.post( pathBase + '/sets/new', function (req, res) {
-	console.log( req.body );
+	//console.log( req.body );
 	if ( req.user.id !== parseInt(req.body.user_id) ) {
 		error( req, res, 'Uuups. Something went wrong!');
 		return;
@@ -166,7 +176,7 @@ app.post( pathBase + '/sets/new', function (req, res) {
 		} else if ( sets.length == 0 ) {
 			error(req,res,'Set was not created .. hm?!');
 		} else {
-			res.redirect('/admin/sets/'+sets[0].id+'/edit');
+			res.redirect('/admin/sets/'+sets[0].id+'/layout');
 		}
 	});
 });
@@ -189,7 +199,7 @@ app.get( pathBase + '/sets/:id', ensureParamIdNumeric, function(req, res){
 // SETS - UPDATE
 
 app.post( pathBase + '/sets/:id/save', ensureParamIdNumeric, function (req, res) {
-	console.log( req.body );
+	//console.log( req.body );
 	if ( req.user.id !== parseInt(req.body.user_id) ) {
 		error(req,res,'Uuups. Something went wrong!');
 		return;
@@ -207,7 +217,7 @@ app.post( pathBase + '/sets/:id/save', ensureParamIdNumeric, function (req, res)
 					error( req, res, err );
 				} else {
 					message(req,'Set was saved!');
-					res.redirect('/admin/sets/'+set.id);
+					res.redirect('/admin/sets/'+set.id+'/layout');
 				}
 			});
 		}
@@ -259,7 +269,7 @@ app.post( pathBase + '/sets/:id/save-cells', ensureParamIdNumeric, function(req,
 		if (err) {
 			error( req, res, err );
 		} else {
-			console.log( req.body.cells );
+			//console.log( req.body.cells );
 			var cellIds = [];
 			_.each(req.body.cells,function(c){
 				cellIds.push(c.id);
@@ -343,6 +353,210 @@ app.get( pathBase + '/sets/:id/delete', ensureParamIdNumeric, function(req, res)
 				} else {
 					message(req,'Set »'+set.title+'« (#'+set.id+') was deleted!');
 					res.redirect('/admin/');
+				}
+			});
+		}
+	});
+});
+
+// CELLS - NEW
+
+app.get( pathBase + '/cells/new', function (req, res) {
+	res.render('cells/new', _.extend(viewOpts,{
+		title: 'create new cell',
+		types: req.models.cells.cellTypes()
+	}));
+});
+
+// CELLS - CREATE
+
+app.post( pathBase + '/cells/new', function (req, res) {
+	//console.log( req.body );
+	if ( req.user.id !== parseInt(req.body.user_id) ) {
+		error( req, res, 'Uuups. Something went wrong!');
+	} else if ( req.models.cells.cellTypes().indexOf( req.body.type ) === -1 ) {
+		error( req, res, 'That type is not allowed!' );
+	} else {
+		req.models.cells.create([{
+				type: req.body.type,
+				title: req.body.title,
+				preview: req.body.preview
+		}],function(err, cells){
+			if (err) {
+				error(req,res,err);
+			} else {
+				var cell = cells[0];
+				
+				var cbs = [];
+				_.each(req.body.field_keys,function(key,i){
+					var val = req.body.field_values[i];
+					cbs.push(function(next) {
+						req.models.fields.create([{
+							name: key,
+							value: val
+						}], function (err, fields) {
+							if (err) {
+								error(req,res,err);
+							} else {
+								cell.addFields(fields[0]);
+								next();
+							}
+						});
+					});
+				});
+				cbs.push(function(){
+					cell.save(function(){
+						if (err) {
+							error(rer,res,err);
+						} else {
+							res.redirect( pathBase + '/cells/'+cell.id );
+						}
+					});
+				});
+				var cb = cbs.shift();
+				var nextCb = function () {
+					if ( cbs.length > 0 ) {
+						cb = cbs.shift();
+						cb(nextCb);
+					}
+				}
+				cb(nextCb);
+			}
+		});
+	}
+});
+
+// CELLS - LIST
+
+app.get( pathBase + '/cells', function (req,res){
+	req.models.cells.find(['type','title'],function(err,cells){
+		if (noError(req,res,err)) {
+			res.render('cells/list',_.extend(viewOpts,{
+				title: 'All cells',
+				cells: cells
+			}));
+		}
+	});
+});
+
+// CELLS - VIEW
+
+app.get( pathBase + '/cells/:id', ensureParamIdNumeric, function(req,res){
+	req.models.cells.get(req.params.id,function(err,cell){
+		if ( noError(req,res,err) ) {
+			cell.getFields(function(err,fields){
+				if (noError(req,res,err)) {
+					cell.fields = fields;
+					res.render('cells/view',_.extend(viewOpts,{
+						title: 'cell (#'+cell.id+')',
+						cell: cell
+					}));
+				}
+			});
+		}
+	});
+});
+
+// CELLS - EDIT
+
+app.get( pathBase + '/cells/:id/edit', ensureParamIdNumeric, function(req,res){
+	req.models.cells.get(req.params.id, function(err,cell){
+		if ( noError(req,res,err) ) {
+			cell.getFields(function(err,fields){
+				if ( noError(req,res,err) ) {
+					cell.fields = fields;
+					res.render('cells/edit',_.extend(viewOpts,{
+						title: 'cell (#'+cell.id+')',
+						cell: cell,
+						types: req.models.cells.cellTypes()
+					}));
+				}
+			});
+		}
+	});
+});
+
+// CELLS - UPDATE
+
+app.post( pathBase + '/cells/:id/save', ensureParamIdNumeric, function(req, res){
+	req.models.cells.get(req.params.id,function(err,cell){
+		if ( noError(req,res,err) ) {
+			cell.getFields(function(err,fields){
+				if ( noError(req, res, err) ) {
+					cell.removeFields();
+					if ( fields ) {
+						_.each(fields,function(field){
+							field.remove(/* just assume it's ok */);
+						});
+					}
+					cell.save({
+						title: req.body.title,
+						type: req.body.type,
+						preview: req.body.preview
+					}, function(err){
+						if ( noError(req,res,err) ) {
+							var cbs = [];
+							_.each(req.body.field_keys,function(key,i){
+								var val = req.body.field_values[i];
+								cbs.push(function(next) {
+									req.models.fields.create([{
+										name: key,
+										value: val
+									}], function (err, fields) {
+										if (err) {
+											error(req,res,err);
+										} else {
+											cell.addFields(fields[0]);
+											next();
+										}
+									});
+								});
+							});
+							cbs.push(function(){
+								cell.save(function(){
+									if (err) {
+										error(rer,res,err);
+									} else {
+										res.redirect( pathBase + '/cells/'+cell.id );
+									}
+								});
+							});
+							var cb = cbs.shift();
+							var nextCb = function () {
+								if ( cbs.length > 0 ) {
+									cb = cbs.shift();
+									cb(nextCb);
+								}
+							}
+							cb(nextCb);
+						}
+					});
+				}
+			});
+		}
+	});
+});
+
+// CELLS - DELETE
+
+app.get( pathBase + '/cells/:id/delete', ensureParamIdNumeric, function(req,res){
+	req.models.cells.get(req.params.id, function(err,cell){
+		if ( noError(req,res,err) ) {
+			cell.getFields(function(err,fields){
+				if ( noError(req,res,err) ) {
+					cell.fields = fields;
+					cell.removeFields();
+					if ( fields ) {
+						_.each(fields,function(field){
+							field.remove(/* just assume it's ok */);
+						});
+					}
+					cell.remove(function(err){
+						if (noError(req,res,err)) {
+							message(req,'Cell deleted');
+							res.redirect('/admin/');
+						}
+					});
 				}
 			});
 		}

@@ -296,7 +296,7 @@ jQuery(function(){
 
 		evt.preventDefault();
 
-		var cells = [];
+		var cells = [], cols = [], rows = [];
 		jQuery('.grid-cell',$table).each(function(i,e){
 			
 			$e = jQuery(e);
@@ -309,16 +309,26 @@ jQuery(function(){
 					x: $e.data('x'), 
 					y: $e.data('y') 
 				});
+				cols[$e.data('x')] = true;
+				rows[$e.data('y')] = true;
 			}
-
 		});
+
+		var save_cols = set.grid_cols;
+		if ( cols.length !== set.grid_cols ) {
+			save_cols--;
+		}
+		var save_rows = set.grid_rows;
+		if ( rows.length !== set.grid_rows ) {
+			save_rows--;
+		}
 
 		jQuery.ajax({
 			url: '/admin/sets/'+set.id+'/save-cells',
 			data: {
 				cells: cells,
-				grid_cols: set.grid_cols,
-				grid_rows: set.grid_rows,
+				grid_cols: save_cols,
+				grid_rows: save_rows,
 			},
 			method: 'post',
 			beforeSend: function () {

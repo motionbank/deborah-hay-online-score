@@ -1,14 +1,15 @@
 
 Layout editor
 =============
-- remove columns / rows
+x remove columns / rows
+  (empty right/bottom edges are removed)
 - list view: see which items are already in set
-- filter is bad
+x hover cell should highlight in list
+- filter is bad ux
 - list-view items need better formatting and details (preview)
-- double click cell to edit it
-- hover cell should highlight in list
+x double click cell to edit it
 - UNDO ?!
 
 Sets
 ====
-- edit aspect size
+x edit aspect size

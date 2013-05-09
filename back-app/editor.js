@@ -168,7 +168,7 @@ app.post( pathBase + '/sets/new', function (req, res) {
 	req.models.sets.create([{
 		title: req.body.title,
 		description: req.body.description,
-		path: req.body.path,
+		path: req.body.title.toLowerCase().replace(/[^a-z0-9]+/ig,'-').replace(/-+/ig,'-'),
 		creator_id: req.user.id
 	}],function(err, sets){
 		if (err) {
@@ -297,9 +297,9 @@ app.post( pathBase + '/sets/:id/save-cells', ensureParamIdNumeric, function(req,
 					});
 
 					cbs.push(function(next){
-						if ( req.body.grid_x * req.body.grid_y >= cells.length ) {
-							set.grid_x = req.body.grid_x;
-							set.grid_y = req.body.grid_y;
+						if ( req.body.grid_cols * req.body.grid_rows >= cells.length ) {
+							set.grid_cols = req.body.grid_cols;
+							set.grid_rows = req.body.grid_rows;
 						} else {
 							error(req,res, 'Cell number does not match grid x,y' );
 						}

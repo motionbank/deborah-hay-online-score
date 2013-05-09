@@ -16,25 +16,25 @@ module.exports = function (db, models, sync) {
 		thumb : {
 			type: 'text'
 		},
-		grid_x : {
+		grid_cols : {
 			type: 'number',
 			required: true,
 			rational: false,
 			defaultValue: 0
 		},
-		grid_y : {
+		grid_rows : {
 			type: 'number',
 			required: true,
 			rational: false,
 			defaultValue: 0
 		},
-		grid_width : {
+		cell_width : {
 			type: 'number',
 			required: true,
 			rational: false,
 			defaultValue: 320
 		},
-		grid_height : {
+		cell_height : {
 			type: 'number',
 			required: true,
 			rational: false,
@@ -85,10 +85,10 @@ module.exports = function (db, models, sync) {
 		rParams.description = params.description;
 		rParams.path = params.path || (rParams.title && titleToPath(rParams.title));
 		rParams.thumb = params.thumb;
-		rParams.grid_x = params.grid_x;
-		rParams.grid_y = params.grid_y;
-		rParams.grid_width = params.grid_width;
-		rParams.grid_height = params.grid_height;
+		rParams.grid_cols = params.grid_cols;
+		rParams.grid_rows = params.grid_rows;
+		rParams.cell_width = params.cell_width;
+		rParams.cell_height = params.cell_height;
 		return rParams;
 	}
 

@@ -40,10 +40,10 @@ app.get('/import',function(req,rs){
 					description: data.description || '',
 					path: data.link,
 					thumb: data.thumbs && data.thumbs.medium || '',
-					grid_x: data.grid.x * 10,
-					grid_y: data.grid.y,
-					grid_width: 320,
-					grid_height: 240,
+					grid_cols: data.grid.x * 10,
+					grid_rows: data.grid.y,
+					cell_width: 320,
+					cell_height: 240,
 					creator_id: 1 // fixed!
 				}],function(err,sets){
 					if (err) {
@@ -105,8 +105,8 @@ app.get('/import',function(req,rs){
 									setX++;
 								}
 							});
-							set.grid_x = setX;
-							set.grid_y = 4;
+							set.grid_cols = setX;
+							set.grid_rows = 4;
 							//set.addCells(savedCells);
 							set.save(function(err,set){
 								if (err) {

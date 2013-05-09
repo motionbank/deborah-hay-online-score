@@ -8,8 +8,8 @@ var SetModel = module.exports = Backbone.Model.extend({
 		thumb_s : '',
 		thumb_m : '',
 		thumb_x : '',
-		grid_x : '',
-		grid_y : '',
+		grid_cols : '',
+		grid_rows : '',
 		creator : { /* a user */ },
 		cells : [ /* some cells */ ]
 	},

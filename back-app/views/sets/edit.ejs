@@ -15,6 +15,9 @@
 			form textarea {
 				height: 144px
 			}
+			form #aspect-ratio input {
+				width: 170px;
+			}
 		</style>
 		<h1>Edit set »<%= set.title %>« (#<%= set.id %>)</h1>
 		<form method="post" action="/admin/sets/<%= set.id %>/save">
@@ -22,8 +25,13 @@
 			<input type="hidden" name="set_id" value="<%= set.id %>"/>
 			<label for="title">Title</label>
 			<input type="text" name="title" value="<%= set.title %>" /><br/>
-			<label for="title">Path</label>
+			<label for="title">Path (URL)</label>
 			<input type="text" name="path" value="<%= set.path %>" /><br/>
+			<label for="title">Cell aspect ratio (width / height)</label>
+			<fieldset id="aspect-ratio">
+				<input type="text" name="cell_width" value="<%= set.cell_width || 320 %>" /> / 
+				<input type="text" name="cell_height" value="<%= set.cell_height || 240 %>" /><br/>
+			</fieldset>
 			<label for="title">Description</label>
 			<textarea name="description"><%= set.description %></textarea><br/>
 			<input type="submit" value="Save" /> <a href="/admin/sets/<%= set.id %>/delete" confirm="Delete this set?">Delete set</a> <a href="/admin/sets/<%= set.id %>/layout">Edit layout</a>

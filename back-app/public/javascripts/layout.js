@@ -20,9 +20,9 @@ jQuery(function(){
 	// helper: recalculate table cell sizes and set them
 	var resetTableWidth = function () {
 
-		var ch = (144-10) / set.grid_y;
-		var cw = (set.grid_width / set.grid_height) * ch;
-		var table_width = cw * set.grid_x + 10;
+		var ch = (144-10) / set.grid_rows;
+		var cw = (set.cell_width / set.cell_height) * ch;
+		var table_width = cw * set.grid_cols + 10;
 
 		$table.css({
 			width: table_width+'px',
@@ -112,11 +112,11 @@ jQuery(function(){
 					$cells = addColumn(columns,rows);
 					if (columns === 0 && rows === 0) { // grid was empty
 						addRow(columns+1,rows);
-						set.grid_y++;
+						set.grid_rows++;
 					}
 					$cell = $cells[$cell.data('y')];
 					
-					set.grid_x++;
+					set.grid_cols++;
 					resetTableWidth();
 
 				} else if ( $cell.hasClass('add-y') ) { // dropped on add row cell (bottom)
@@ -124,7 +124,7 @@ jQuery(function(){
 					$cells = addRow(columns,rows);
 					$cell = $cells[$cell.data('x')];
 
-					set.grid_y++;
+					set.grid_rows++;
 					resetTableWidth();
 				}
 				
@@ -294,8 +294,8 @@ jQuery(function(){
 			url: '/admin/sets/'+set.id+'/save-cells',
 			data: {
 				cells: cells,
-				grid_x: set.grid_x,
-				grid_y: set.grid_y,
+				grid_cols: set.grid_cols,
+				grid_rows: set.grid_rows,
 			},
 			method: 'post',
 			beforeSend: function () {

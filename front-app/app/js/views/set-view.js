@@ -131,9 +131,7 @@ var GridView = module.exports = Backbone.View.extend({
 
 		if ( !cellData || !currentSet ) return;
 
-		// TODO: change grid_x to grid_width, change grid_width to cell_width, ...
-
-		var gridWidth = currentSet.grid_x;
+		var gridWidth = currentSet.grid_cols;
 		var xFrom = Math.round( lastRatio * (gridWidth-gridXVisible) );
 
 		_.each( cellViewsArr, function(cv, i){ 
@@ -171,11 +169,11 @@ var GridView = module.exports = Backbone.View.extend({
 		var w = this.$el.width();
 		var h = this.$el.height();
 		
-		var ch = parseInt( Math.floor( h / currentSet.grid_y ) );
-		var cw = (currentSet.grid_width / currentSet.grid_height) * ch;
+		var ch = parseInt( Math.floor( h / currentSet.grid_rows ) );
+		var cw = (currentSet.cell_width / currentSet.cell_height) * ch;
 
 		gridXVisible = parseInt( w / cw );
-		gridYVisible = currentSet.grid_y;
+		gridYVisible = currentSet.grid_rows;
 
 		if ( w - (gridXVisible * cw) > cw / 2 ) {
 			gridXVisible++;

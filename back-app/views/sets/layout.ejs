@@ -5,10 +5,10 @@
 				return {
 					set : {
 						id: <%= set.id %>,
-						grid_x: <%= set.grid_x %>,
-						grid_y: <%= set.grid_y %>,
-						grid_width: <%= set.grid_width %>,
-						grid_height: <%= set.grid_height %>
+						grid_cols: <%= set.grid_cols %>,
+						grid_rows: <%= set.grid_rows %>,
+						cell_width: <%= set.cell_width %>,
+						cell_height: <%= set.cell_height %>
 					},
 					types : [
 						<% for ( var i = 0; i < types.length; i++ ) { %>
@@ -27,9 +27,9 @@
 		<div id="actions"><form action="#"><input type="submit" value="Save"> <a href="/admin/sets/<%= set.id %>/edit">Edit</a> <a href="/admin/sets/<%= set.id %>/delete" confirm="Delete this set?">Delete</a></form></div>
 		<div id="layout-editor">
 			<table class="grid">
-				<% for ( var i = 0, iy = 0; iy < set.grid_y; iy++ ) { %>
+				<% for ( var i = 0, iy = 0; iy < set.grid_rows; iy++ ) { %>
 					<tr>
-					<% for ( var ix = 0; ix < set.grid_x; ix++ ) { %>
+					<% for ( var ix = 0; ix < set.grid_cols; ix++ ) { %>
 						<% if ( grid[iy] && grid[iy][ix] ) { %>
 							<td class="grid-cell" 
 								data-id="<%= grid[iy][ix].id %>" 
@@ -43,17 +43,19 @@
 							<td class="grid-cell" data-id="" data-x="<%= ix %>" 
 								data-y="<%= iy %>">.</td>
 						<% } %>
-						<% if ( ix === set.grid_x-1 ) { %>
+						<% if ( ix === set.grid_cols-1 ) { %>
 							<td class="add-x grid-cell" data-y="<%= iy %>">+</td>
 						<% } %>
 					<% } %>
 					</tr>
 				<% } %>
 				<tr class="add-y">
-					<% for ( var ix = 0; ix < set.grid_x; ix++ ) { %>
+					<% for ( var ix = 0; ix < set.grid_cols; ix++ ) { %>
 						<td class="add-y grid-cell" data-x="<%= ix %>">+</td>
 					<% } %>
-					<td class="add-y add-x grid-cell" data-x="<%= set.grid_x %>" data-y="<%= set.grid_y %>">+</td>
+					<td class="add-y add-x grid-cell" 
+						data-x="<%= set.grid_cols %>" 
+						data-y="<%= set.grid_rows %>">+</td>
 				</tr>
 			</table>
 		</div>

@@ -408,8 +408,8 @@ window.require.register("js/models/set-model", function(exports, require, module
   		thumb_s : '',
   		thumb_m : '',
   		thumb_x : '',
-  		grid_x : '',
-  		grid_y : '',
+  		grid_cols : '',
+  		grid_rows : '',
   		creator : { /* a user */ },
   		cells : [ /* some cells */ ]
   	},
@@ -990,9 +990,7 @@ window.require.register("js/views/set-view", function(exports, require, module) 
 
   		if ( !cellData || !currentSet ) return;
 
-  		// TODO: change grid_x to grid_width, change grid_width to cell_width, ...
-
-  		var gridWidth = currentSet.grid_x;
+  		var gridWidth = currentSet.grid_cols;
   		var xFrom = Math.round( lastRatio * (gridWidth-gridXVisible) );
 
   		_.each( cellViewsArr, function(cv, i){ 
@@ -1030,11 +1028,11 @@ window.require.register("js/views/set-view", function(exports, require, module) 
   		var w = this.$el.width();
   		var h = this.$el.height();
   		
-  		var ch = parseInt( Math.floor( h / currentSet.grid_y ) );
-  		var cw = (currentSet.grid_width / currentSet.grid_height) * ch;
+  		var ch = parseInt( Math.floor( h / currentSet.grid_rows ) );
+  		var cw = (currentSet.cell_width / currentSet.cell_height) * ch;
 
   		gridXVisible = parseInt( w / cw );
-  		gridYVisible = currentSet.grid_y;
+  		gridYVisible = currentSet.grid_rows;
 
   		if ( w - (gridXVisible * cw) > cw / 2 ) {
   			gridXVisible++;

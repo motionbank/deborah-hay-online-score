@@ -70,14 +70,6 @@ jQuery(function(){
 	
 	initializer.start();
 
-	// jQuery('#grid-view article.cell').each(function(i,e){
-	// 	var g = parseInt(130 + Math.random()*50);
-	// 	var c = 'rgb('+g+','+g+','+g+')';
-	// 	jQuery(e).css({
-	// 		backgroundColor: c
-	// 	});
-	// });
-
 	/*
 	 + 	listen for window changes, this is a tough nut
 	 +

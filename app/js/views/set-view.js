@@ -8,7 +8,7 @@ var currentCollection = [];
 var currentSet = null;
 
 var cellBorderHandle = 5;
-var gridX = 4, gridY = 3;
+var gridXVisible = 4, gridYVisible = 3;
 var cellWidth, cellHeight;
 var lastRatio = 0.0;
 
@@ -27,6 +27,8 @@ var GridView = module.exports = Backbone.View.extend({
 		app = mainapp;
 
 		$mainTitleLink = jQuery('#main-title a');
+
+		this.$elParent = this.$el.parent();
 		
 		app.getSlider().on( 'change:slider',function bbChangeSliderCB (val){
 			self.setRatio( val );
@@ -91,7 +93,7 @@ var GridView = module.exports = Backbone.View.extend({
 		cellViewsArr = [];
 		clickedCell = null;
 
-		var visibleCells = gridX*gridY;
+		var visibleCells = gridXVisible*gridYVisible;
 		for ( var i = 0, g = visibleCells; i < currentSet.cells.length; i++ ) {
 
 			try {
@@ -113,13 +115,6 @@ var GridView = module.exports = Backbone.View.extend({
 			cellViewsArr.push( cv );
 		}
 
-		_.each( cellViewsArr, function (cv) {
-			cv.$el.css({
-				width: (100.0/gridX)+'%',
-				height: (100.0/gridY)+'%'
-			});
-		});
-
 		this.updateVisibleCells();
 	},
 
@@ -136,23 +131,34 @@ var GridView = module.exports = Backbone.View.extend({
 
 		if ( !cellData || !currentSet ) return;
 
-		var gridWidth = parseInt( Math.ceil( cellViewsArr.length / gridY ) );
-		var xFrom = Math.round( lastRatio * (gridWidth-gridX) );
+		// TODO: change grid_x to grid_width, change grid_width to cell_width, ...
 
-		var toShow = [];
-		for ( var n = 0; n < gridY; n++ ) {
-			for ( var i = 0; i < gridX; i++ ) {
-				var m = n * gridWidth + i + xFrom;
-				toShow.push(m);
+		var gridWidth = currentSet.grid_x;
+		var xFrom = Math.round( lastRatio * (gridWidth-gridXVisible) );
+
+		_.each( cellViewsArr, function(cv, i){ 
+			var cellPosition = cv.cell.get('extra');
+			if ( cellPosition.x >= xFrom && cellPosition.x < xFrom+gridXVisible ) {
+				cv.show();
+				cv.$el.css({
+					position: 'absolute',
+					left: 	((100.0/gridXVisible)*(cellPosition.x-xFrom))+'%',
+					top: 	((100.0/gridYVisible)*cellPosition.y)+'%',
+					width: 	(100.0/gridXVisible)+'%',
+					height: (100.0/gridYVisible)+'%'
+				});
+			} else {
+				cv.hide();
 			}
-		}
+		});
 
-		_.each( cellViewsArr, function(cv, i){ if ( toShow.indexOf(i) === -1 ) cv.hide(); else cv.show(); });
+		if ( currentSet.cells.length <= (gridXVisible * gridYVisible) ) {
 
-		if ( currentSet.cells.length <= (gridX * gridY) ) {
 			app.getSlider().hide();
+
 		} else {
-			app.getSlider().setSize( ((gridX * gridY) * 1.0) / currentSet.cells.length );
+
+			app.getSlider().setSize( ((gridXVisible * gridYVisible) * 1.0) / currentSet.cells.length );
 			app.getSlider().setRatio( lastRatio, false );
 			app.getSlider().show();
 		}
@@ -168,27 +174,27 @@ var GridView = module.exports = Backbone.View.extend({
 		var ch = parseInt( Math.floor( h / currentSet.grid_y ) );
 		var cw = (currentSet.grid_width / currentSet.grid_height) * ch;
 
-		gridX = parseInt( w / cw );
-		gridY = currentSet.grid_y;
+		gridXVisible = parseInt( w / cw );
+		gridYVisible = currentSet.grid_y;
 
-		if ( w - (gridX * cw) > cw / 2 ) {
-			gridX++;
+		if ( w - (gridXVisible * cw) > cw / 2 ) {
+			gridXVisible++;
 		}
-		cw = parseInt( Math.floor( w / gridX ) );
+		cw = parseInt( Math.floor( w / gridXVisible ) );
 
 		cellWidth = cw;
 		cellHeight = ch;
 	},
 
 	toggleSetSelector : function () {
-		if ( this.$el.css('display') === 'block' ) {
+		if ( this.$elParent.css('display') === 'block' ) {
 			app.getSlider().hide();
 			setSelectorView.show();
-			this.$el.hide();
+			this.$elParent.hide();
 		} else {
 			setSelectorView.hide();
 			app.getSlider().show();
-			this.$el.show();
+			this.$elParent.show();
 		}
 	},
 
@@ -201,8 +207,8 @@ var GridView = module.exports = Backbone.View.extend({
 	},
 
 	show : function () {
-		this.$el.show();
-		if ( cellData.cells && cellData.cells.length > (gridX * gridY) ) { // if returning to same as before
+		this.$elParent.show();
+		if ( cellData.cells && cellData.cells.length > (gridXVisible * gridYVisible) ) { // if returning to same as before
 			app.getSlider().show();
 		}
 	},
@@ -242,16 +248,10 @@ var GridView = module.exports = Backbone.View.extend({
 	sizeChanged : function () {
 		if ( currentSet ) {
 
-			var gridXPrev = gridX, gridYPrev = gridY;
+			var gridXVisiblePrev = gridXVisible, gridYVisiblePrev = gridYVisible;
 			this.updateGridDimensions();
 
-			if ( gridX !== gridXPrev || gridY !== gridYPrev ) {
-				_.each( cellViewsArr, function (cv) {
-					cv.$el.css({
-						width: (100.0/gridX)+'%',
-						height: (100.0/gridY)+'%'
-					});
-				});
+			if ( gridXVisible !== gridXVisiblePrev || gridYVisible !== gridYVisiblePrev ) {
 
 				this.updateVisibleCells();
 			}

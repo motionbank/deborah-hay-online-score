@@ -1,7 +1,6 @@
 
 #grid-view article.cell {
-	display: block;
-	float: left;
+	position: absolute;
 	padding: 1px;
 	color: white;
 }

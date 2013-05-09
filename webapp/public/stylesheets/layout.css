@@ -4,7 +4,8 @@
 }
 
 #layout-editor {
-/*	overflow-x: scroll;*/
+	overflow-x: scroll;
+	padding-bottom: 9px;
 }
 
 .grid {
@@ -24,6 +25,10 @@
 	-moz-background-size : cover;
 	-o-background-size : cover;
 	background-size : cover;
+}
+
+.grid .grid-cell.selected {
+	border-color: white;
 }
 
 .grid .grid-cell.add-x {

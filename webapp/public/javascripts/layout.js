@@ -4,20 +4,31 @@
 
 jQuery(function(){
 
+	// EJS template for table cells
 	var tplTableRow = '<td class="grid-cell <%= classes.join(\' \') %>" '+
 						  'data-x="<%= x %>" '+
 						  'data-y="<%= y %>"><%= html %></td>'
 
-	var $table = jQuery( '.grid' );
+	var $table 			= jQuery( '.grid' ), // cache jQuery table
+		$selectedCell 	= null,				 // the currently selected cell
+		$filterSelect	= jQuery('.filters form select'),
+		$cellList 		= jQuery('.cell-list .cell');
+		types 			= layoutEditor.types,
+		filters 		= {},
+		set 			= layoutEditor.set;
 
+	// helper: recalculate table cell sizes and set them
 	var resetTableWidth = function () {
-		var ch = (144-10) / layoutEditor.set.grid_y;
-		var cw = (layoutEditor.set.grid_width / layoutEditor.set.grid_height) * ch;
-		var table_width = cw * layoutEditor.set.grid_x + 10;
+
+		var ch = (144-10) / set.grid_y;
+		var cw = (set.grid_width / set.grid_height) * ch;
+		var table_width = cw * set.grid_x + 10;
+
 		$table.css({
 			width: table_width+'px',
 			height: 144+'px'
 		});
+
 		jQuery('.grid-cell',$table).each(function(i,e){
 			$e = jQuery(e);
 			if ( $e.hasClass('add-x') || $e.hasClass('add-y') ) return;
@@ -28,9 +39,11 @@ jQuery(function(){
 		});
 	}
 
+	// use once at startup
 	resetTableWidth();
 
-	jQuery('.cell-list .cell').each(function(i,e){
+	// make all list items (cells) draggable
+	$cellList.each(function(i,e){
 		var $e = jQuery(e);
 		$e.draggable({
 			revert: true,
@@ -38,13 +51,10 @@ jQuery(function(){
 			helper: 'clone',
 			appendTo: '#main',
 			containment: '#main',
-			// cursorAt: {
-			// 	left: $e.width()/2, 
-			// 	//top: $e.height()/2
-			// }
 		});
 	});
 
+	// options for droppables (grid cells)
 	var droppableGridCellOpts = {
 		over: function () {
 			var $cell = jQuery(this);
@@ -68,12 +78,13 @@ jQuery(function(){
 				backgroundColor: ''
 			});
 
+			// if it's a grid-cell that was dropped
 			if ( $item.hasClass('grid-cell') ) {
 
-				if ( $item.hasClass('add-x') || $cell.hasClass('add-x') ) return;
+				if ( $item.hasClass('add-x') || $cell.hasClass('add-x') ) return; // adders at right/bottom
 				if ( $item.hasClass('add-y') || $cell.hasClass('add-y') ) return;
 				
-				// swap IDs
+				// swap IDs, backgrounds, content
 				var cellId = $cell.data('id'),
 					itemId = $item.data('id');
 
@@ -81,43 +92,47 @@ jQuery(function(){
 					iBgImg = $item.css('background-image');
 
 				$cell.data('id',itemId||null);
-				//$cell.html(itemId||'');
+				$cell.html(iBgImg==='none'?itemId:'');
 				$cell.css({
 					backgroundImage: iBgImg
 				});
 				$item.data('id',cellId||null);
-				//$item.html(cellId||'');
+				$item.html(cBgImg==='none'?cellId:'');
 				$item.css({
 					backgroundImage: cBgImg
 				});
 
-			} else {
+			} else { // ... list item was dropped
 
 				var columns = jQuery('tr:first', $table).children().length-1;
 				var rows = jQuery('tr',$table).length-1;
 
-				if ( $cell.hasClass('add-x') ) {
+				if ( $cell.hasClass('add-x') ) {  // dropped on add column cell (right)
+
 					$cells = addColumn(columns,rows);
-					if (columns === 0 && rows === 0) {
+					if (columns === 0 && rows === 0) { // grid was empty
 						addRow(columns+1,rows);
-						layoutEditor.set.grid_y++;
+						set.grid_y++;
 					}
 					$cell = $cells[$cell.data('y')];
 					
-					layoutEditor.set.grid_x++;
+					set.grid_x++;
 					resetTableWidth();
-				} else if ( $cell.hasClass('add-y') ) {
+
+				} else if ( $cell.hasClass('add-y') ) { // dropped on add row cell (bottom)
+
 					$cells = addRow(columns,rows);
 					$cell = $cells[$cell.data('x')];
 
-					layoutEditor.set.grid_y++;
+					set.grid_y++;
 					resetTableWidth();
 				}
 				
-				var id = $item.data( 'id' );
+				var id = $item.data( 'id' ),
+					iBgImg = $item.data('preview');
 				
 				$cell.data( 'id', id );
-				//$cell.html( id );
+				$cell.html( iBgImg==='none'?id:'' );
 				$cell.css({
 					borderColor: 'red',
 					backgroundImage: 
@@ -129,15 +144,18 @@ jQuery(function(){
 		tolerance: 'pointer'
 	};
 
+	// options to make grid cells draggable
 	var draggableGridCellOpts = {
 		revert: true,
 		revertDuration: 20,
 		start : function (evt,ui) {
+
 			jQuery(this).css({zIndex:999});
 
 			ui.helper.data('droppedOnGrid',false);
 		},
 		stop : function (evt,ui) {
+
 			var $e = jQuery(this);
 			$e.css({zIndex:'auto'});
 
@@ -151,13 +169,31 @@ jQuery(function(){
 		}
 	};
 
+	// apply droppable and draggable options to grid cells
 	jQuery('.grid .grid-cell').droppable(
-		droppableGridCellOpts).each(function(i,e){
-			$e = jQuery(e);
+		droppableGridCellOpts
+	).each(function(i,e){
+
+			var $e = jQuery(e);
 			if ( $e.hasClass('add-x') || $e.hasClass('add-y') ) return;
+
 			$e.draggable(draggableGridCellOpts);
+
+			$e.click(function(){
+				
+				var $selPrev = $selectedCell;
+				
+				jQuery('.grid .grid-cell.selected').removeClass('selected');
+				$selectedCell = null;
+				
+				if ( $selPrev !== $e ) {
+					$e.addClass('selected');
+					$selectedCell = $e;
+				}
+			});
 	});
 
+	// helper to add a column to table
 	var addColumn = function (columns, rows) {
 
 		var ejsTableRow = new EJS({text:tplTableRow});
@@ -193,6 +229,7 @@ jQuery(function(){
 		return $cells;
 	}
 
+	// helper to add row to table
 	var addRow = function (columns, rows) {
 
 		var $row = jQuery( '<tr></tr>' );
@@ -235,11 +272,10 @@ jQuery(function(){
 		return $cells;
 	}
 
+	// action for "save" button, does ajax save
 	jQuery('#actions form').submit(function(evt){
 
 		evt.preventDefault();
-
-		// TODO: lock interface
 
 		var cells = [];
 		jQuery('.grid-cell',$table).each(function(i,e){
@@ -255,19 +291,58 @@ jQuery(function(){
 		});
 
 		jQuery.ajax({
-			url: '/admin/sets/'+layoutEditor.set.id+'/save-cells',
+			url: '/admin/sets/'+set.id+'/save-cells',
 			data: {
 				cells: cells,
-				grid_x: layoutEditor.set.grid_x,
-				grid_y: layoutEditor.set.grid_y,
+				grid_x: set.grid_x,
+				grid_y: set.grid_y,
 			},
 			method: 'post',
+			beforeSend: function () {
+				// TODO: lock interface
+			},
 			success : function () {
-				window.location.href = window.location.href;
+				//window.location.href = window.location.href;
 			},
 			error : function () {
 				console.log( arguments );
+				alert('Saving failed! See console log ..');
+			},
+			complete: function (){
+				// TODO: unlock interface
 			}
 		});
 	});
-})
+
+	_.each(types, function(t){
+		filters[t] = {
+			active: true,
+			$option: jQuery('option[value='+t+']', $filterSelect),
+			$cells: jQuery('.cell-list .cell.type-'+t)
+		};
+	});
+
+	$filterSelect.change(function(){
+		var val = jQuery(this).val();
+		if (val === '-- all --') {
+			_.each(filters,function(f){
+				f.active = true;
+			});
+		} else if (val === '-- none --') {
+			_.each(filters,function(f){
+				f.active = false;
+			});
+		} else {
+			filters[val].active = !filters[val].active;
+		}
+		_.each(filters,function(f,v){
+			f.$option.html(f.active ? v : '- ' + v);
+			if ( f.active ) {
+				f.$cells.show();
+			} else {
+				f.$cells.hide();
+			}
+		});
+	});
+
+});

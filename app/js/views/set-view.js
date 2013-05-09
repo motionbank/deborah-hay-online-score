@@ -137,12 +137,12 @@ var GridView = module.exports = Backbone.View.extend({
 		if ( !cellData || !currentSet ) return;
 
 		var gridWidth = parseInt( Math.ceil( cellViewsArr.length / gridY ) );
-		var iFrom = Math.round( lastRatio * (gridWidth-gridX) );
+		var xFrom = Math.round( lastRatio * (gridWidth-gridX) );
 
 		var toShow = [];
 		for ( var n = 0; n < gridY; n++ ) {
 			for ( var i = 0; i < gridX; i++ ) {
-				var m = n * gridWidth + i + iFrom;
+				var m = n * gridWidth + i + xFrom;
 				toShow.push(m);
 			}
 		}

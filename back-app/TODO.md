@@ -7,6 +7,7 @@ Layout editor
 - list-view items need better formatting and details (preview)
 - double click cell to edit it
 - hover cell should highlight in list
+- UNDO ?!
 
 Sets
 ====

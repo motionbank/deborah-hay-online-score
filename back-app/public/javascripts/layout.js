@@ -177,6 +177,8 @@ jQuery(function(){
 			var $e = jQuery(e);
 			if ( $e.hasClass('add-x') || $e.hasClass('add-y') ) return;
 
+			var id = $e.data('id');
+
 			$e.draggable(draggableGridCellOpts);
 
 			$e.click(function(){
@@ -190,6 +192,23 @@ jQuery(function(){
 					$e.addClass('selected');
 					$selectedCell = $e;
 				}
+			}).dblclick(function(){
+
+				if ( id && confirm('Go to cell? Unsaved changes will be lost ..') ) {
+					window.location.href = '/admin/cells/'+id+'/edit';
+				}
+			}).hover(function(){
+
+				jQuery( '.cell-list .cell[data-id='+id+']' ).css({
+					backgroundColor: 'red'
+				});
+
+			},function(){
+
+				$cellList.css({
+					backgroundColor: 'inherit'
+				});
+
 			});
 	});
 
@@ -279,7 +298,10 @@ jQuery(function(){
 
 		var cells = [];
 		jQuery('.grid-cell',$table).each(function(i,e){
+			
 			$e = jQuery(e);
+			if ( $e.hasClass('add-x') || $e.hasClass('add-y') ) return;
+
 			var id = $e.data('id');
 			if ( id ) {
 				cells.push({
@@ -288,6 +310,7 @@ jQuery(function(){
 					y: $e.data('y') 
 				});
 			}
+
 		});
 
 		jQuery.ajax({

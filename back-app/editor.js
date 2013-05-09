@@ -211,7 +211,9 @@ app.post( pathBase + '/sets/:id/save', ensureParamIdNumeric, function (req, res)
 			set.save({
 				title: req.body.title,
 				path: req.body.path,
-				description: req.body.description
+				description: req.body.description,
+				cell_width: req.body.cell_width,
+				cell_height: req.body.cell_height
 			},function(){
 				if (err) {
 					error( req, res, err );

@@ -6,14 +6,14 @@ This directory contains the files needed to build the (soon to be) online score 
 http://motionbank.org/
 http://theforsythecompany.com/
 
-Frontend
+Frontend (in front-app/)
 ========
 
 backbone.js, ...
 
 Use brunch.io to run it.
 
-Backend
+Backend (in back-app/)
 =======
 
 Node.js, express, ... running on appfog.

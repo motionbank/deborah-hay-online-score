@@ -554,7 +554,7 @@ app.get( pathBase + '/cells/:id/delete', ensureParamIdNumeric, function(req,res)
 					cell.remove(function(err){
 						if (noError(req,res,err)) {
 							message(req,'Cell deleted');
-							res.redirect('/admin/');
+							res.redirect(pathBase+'/cells');
 						}
 					});
 				}

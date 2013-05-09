@@ -1,0 +1,55 @@
+<% include ../_header %>
+	<style type="text/css">
+	.cell {
+		padding: 4.5px;
+		overflow: auto;
+	}
+	.cell:hover {
+		background-color: rgba(0,0,0,0.1);
+	}
+	.cell div {
+		float: left;
+	}
+	.cell .preview {
+		width: 30px;
+		padding-right: 9px;
+	}
+	.cell .title {
+		min-width: 360px;
+	}
+	.cell .type {
+		min-width: 270px;
+		color: #888888;
+	}
+	.cell .menu {
+/*		float: right;
+		text-align: right;*/
+		width: 270px;
+	}
+	.cell {
+		clear: both;
+	}
+	#cells {
+		margin-top: 18px;
+		width: 100%;
+		float: left;
+	}
+	</style>
+	<section id="main">
+		<h1><%= title %></h1>
+		<div id="cells">
+		<% for ( var i = 0; i < cells.length; i++ ) { %>
+		<% var cell = cells[i]; %>
+			<div class="cell">
+				<div class="preview"><img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/<%= cell.preview %>" style="max-width: 30px; max-height: 30px"/></div>
+				<div class="title"><a href="/admin/cells/<%= cell.id %>"><%= cell.title %></a></div>
+				<div class="type"><%= cell.type %></div>
+				<div class="menu">
+					<a href="/admin/cells/<%= cell.id %>/edit">edit</a>
+					<a href="/admin/cells/<%= cell.id %>/delete" confirm="Delete this cell?">delete</a>
+				</div>
+			</div>
+		<% } %>
+		</div>
+	</section>
+<% include ../_footer %>

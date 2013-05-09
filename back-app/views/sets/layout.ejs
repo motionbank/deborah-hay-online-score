@@ -41,7 +41,7 @@
 								><% if ( !grid[iy][ix].preview ) { %><%= grid[iy][ix].id %><% } %></td>
 						<% } else { %>
 							<td class="grid-cell" data-id="" data-x="<%= ix %>" 
-								data-y="<%= iy %>"></td>
+								data-y="<%= iy %>">.</td>
 						<% } %>
 						<% if ( ix === set.grid_x-1 ) { %>
 							<td class="add-x grid-cell" data-y="<%= iy %>">+</td>

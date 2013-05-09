@@ -5,3 +5,4 @@ node_modules/*
 npm-debug.log
 *.bak
 webapp/config/config.js
+node_modules/*

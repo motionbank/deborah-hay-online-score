@@ -122,6 +122,10 @@ error = function (req, res, error) {
 
 // INDEX
 
+app.get( '/', function (req,res){
+	res.redirect('/admin/');
+});
+
 app.get( pathBase, function (req, res) {
 	req.user.getSets(function(err,sets){
 		if (err) {

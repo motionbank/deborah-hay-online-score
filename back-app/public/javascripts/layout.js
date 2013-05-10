@@ -20,14 +20,16 @@ jQuery(function(){
 	// helper: recalculate table cell sizes and set them
 	var resetTableWidth = function () {
 
+		var tableHeight = $table.height();
 		var helperSize = 15; /* see width, height in layout.css */
-		var ch = (144-helperSize) / set.grid_rows;
+
+		var ch = (tableHeight-helperSize) / set.grid_rows;
 		var cw = (set.cell_width / set.cell_height) * ch;
-		var table_width = cw * set.grid_cols + helperSize;
+		var tableWidth = cw * set.grid_cols + helperSize;
 
 		$table.css({
-			width: table_width+'px',
-			height: 144+'px'
+			width: tableWidth+'px',
+			height: tableHeight+'px'
 		});
 
 		jQuery('.grid-cell',$table).each(function(i,e){
@@ -200,10 +202,15 @@ jQuery(function(){
 			}).dblclick(function(){
 
 				if ( id ) {
-					var cellTitle = jQuery('.cell-list .cell[data-id='+id+'] .title').text();
-					if ( confirm('Go to cell »'+cellTitle+'«? Unsaved changes will be lost ..') ) {
-						window.location.href = '/admin/cells/'+id+'/edit';
-					}
+					// var cellTitle = jQuery('.cell-list .cell[data-id='+id+'] .title').text();
+					// if ( confirm('Go to cell »'+cellTitle+'«? Unsaved changes will be lost ..') ) {
+					// 	window.location.href = '/admin/cells/'+id+'/edit';
+					// }
+					var $cellList = jQuery('.cell-list')
+					$cellList.animate({
+						scrollTop: $cellList.scrollTop() + 
+										(jQuery( '.cell-list .cell[data-id='+id+']' ).offset().top - $cellList.offset().top)
+					}, 500);
 				}
 			}).hover(function(){
 

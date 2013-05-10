@@ -64,15 +64,11 @@ jQuery(function(){
 	var droppableGridCellOpts = {
 		over: function () {
 			var $cell = jQuery(this);
-			$cell.css({
-				backgroundColor: 'white'
-			});
+			$cell.addClass('drag-hover');
 		},
 		out: function () {
 			var $cell = jQuery(this);
-			$cell.css({
-				backgroundColor: ''
-			});
+			$cell.removeClass('drag-hover');
 		},
 		drop: function (evt, ui) {
 
@@ -133,14 +129,16 @@ jQuery(function(){
 					set.grid_rows++;
 					resetTableWidth();
 				}
+
+				jQuery('.grid .just-dropped, .grid .drag-hover').removeClass('just-dropped').removeClass('drag-hover');
 				
 				var id = $item.data( 'id' ),
 					iBgImg = $item.data('preview');
 				
 				$cell.data( 'id', id );
 				$cell.html( iBgImg==='none'?id:'' );
+				$cell.addClass('just-dropped');
 				$cell.css({
-					borderColor: 'red',
 					backgroundImage: 
 						'url("http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/'+
 							$item.data('preview')+'")'
@@ -200,8 +198,11 @@ jQuery(function(){
 				}
 			}).dblclick(function(){
 
-				if ( id && confirm('Go to cell? Unsaved changes will be lost ..') ) {
-					window.location.href = '/admin/cells/'+id+'/edit';
+				if ( id ) {
+					var cellTitle = jQuery('.cell-list .cell[data-id='+id+'] .title').text();
+					if ( confirm('Go to cell »'+cellTitle+'«? Unsaved changes will be lost ..') ) {
+						window.location.href = '/admin/cells/'+id+'/edit';
+					}
 				}
 			}).hover(function(){
 

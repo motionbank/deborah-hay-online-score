@@ -36,14 +36,16 @@
 					<tr>
 					<% for ( var ix = 0; ix < set.grid_cols; ix++ ) { %>
 						<% if ( grid[iy] && grid[iy][ix] ) { %>
+							<% var cell = grid[iy][ix]; %>
 							<td class="grid-cell" 
-								data-id="<%= grid[iy][ix].id %>" 
+								title="<%= cell.title %> (#<% cell.id %>), <%= cell.type %>"
+								data-id="<%= cell.id %>" 
 								data-x="<%= ix %>" 
 								data-y="<%= iy %>"
-								<% if ( grid[iy][ix].preview ) { %>
-								style="background-image:url('http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/<%= grid[iy][ix].preview %>')"
+								<% if ( cell.preview ) { %>
+								style="background-image:url('http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/<%= cell.preview %>')"
 								<% } %>
-								><% if ( !grid[iy][ix].preview ) { %><%= grid[iy][ix].id %><% } %></td>
+								><% if ( !cell.preview ) { %><%= cell.id %><% } %></td>
 						<% } else { %>
 							<td class="grid-cell" data-id="" data-x="<%= ix %>" 
 								data-y="<%= iy %>">.</td>

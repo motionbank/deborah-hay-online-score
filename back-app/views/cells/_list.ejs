@@ -1,0 +1,30 @@
+<style type="text/css">@import url('/stylesheets/cells.css');</style>
+<div class="cell-list">
+<% var cellsEditable = cellsEditable || false; %>
+<% var typeHeading = false; %>
+<% for ( var i = 0; i < cells.length; i++ ) { %>
+	<% var cell = cells[i]; %>
+	<% if ( typeHeading !== cell.type ) { %>
+		<div class="type-group type-<%= cell.type %>">
+			<div class="type-group-title">
+				<a href="#" onclick="jQuery('.cell-list .cell.type-<%= cell.type %>').toggle(); return false">
+					<%= cell.type.toUpperCase() %>
+			</a></div>
+		<% typeHeading = cell.type; %>
+	<% } %>
+	<div class="cell type-<%= cell.type %>" 
+		 data-id="<%= cell.id %>" 
+		 data-preview="<%= cell.preview || 'missing.jpg' %>">
+		<div class="preview"><img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/<%= cell.preview || 'missing.jpg' %>"/></div>
+		<div class="title"><a href="/admin/cells/<%= cell.id %>"><%= cell.title %></a></div>
+		<div class="type"><%= cell.type %></div>
+		<div class="menu">
+			<a href="/admin/cells/<%= cell.id %>/edit">edit</a>
+			<a href="/admin/cells/<%= cell.id %>/delete" confirm="Delete this cell?">delete</a>
+		</div>
+	</div>
+	<% if ( i === cells.length-1 || cells[i+1].type !== cell.type ) { %>
+		</div>
+	<% } %>
+<% } %>
+</div>

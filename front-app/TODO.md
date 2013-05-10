@@ -24,7 +24,7 @@ General UX
 ==========================
 - show left / right transition
 - show keyboard shortcuts
-- animate switch set -> selector -> set
+- animate switch set -> selector -> sets
 
 
 All tiles

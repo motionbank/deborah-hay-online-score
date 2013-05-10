@@ -1,0 +1,54 @@
+.cell-list {
+	border-top: 1px solid #888888;
+	margin-top: 18px;
+	width: 100%;
+	float: left;
+}
+.type-group .type-group-title,
+.cell {
+	padding: 4.5px;
+	padding-left: 9px;
+	border-bottom: 1px solid #888888;
+}
+.type-group .type-group-title a {
+	font-style: italic;
+	color: #888888;
+	text-decoration: none;
+}
+.cell {
+	padding: 4.5px;
+	height: 25px;
+	overflow: auto;
+}
+.cell:hover {
+	background-color: rgba(0,0,0,0.1);
+}
+.cell div {
+	float: left;
+}
+.cell .preview {
+	width: 30px;
+	padding-right: 9px;
+}
+.cell .title {
+	min-width: 360px;
+}
+.cell .type {
+	min-width: 270px;
+	color: #888888;
+}
+.cell .menu {
+/*		float: right;
+	text-align: right;*/
+	width: 270px;
+}
+.cell {
+	clear: both;
+}
+.cell .preview {
+	width: 40px;
+}
+.cell .preview img {
+	max-width: 40px; 
+	max-height: 20px
+}

@@ -11,12 +11,16 @@
 .grid {
 	width: 100%;
 	height: 144px;
+	border-collapse: separate;
 }
 
 .grid .grid-cell {
-	border: 1px solid blue;
+	opacity: 1;
+	border: 1px solid #97aaaa;
+	background-color: #c7dddd;
 	text-align: center;
 	vertical-align: middle;
+	color: #97aaaa;
 
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -27,8 +31,31 @@
 	background-size : cover;
 }
 
+.grid .grid-cell.drag-hover,
+.grid .grid-cell.just-dropped {
+	border: 1px solid white;
+}
+
+.grid .grid-cell.drag-hover {
+	opacity: 0.75;
+	background-color: white;
+}
+
 .grid .grid-cell.selected {
 	border-color: white;
+}
+
+.grid .grid-cell.add-x,
+.grid .grid-cell.add-y {
+	color: #97aaaa;
+	border: 0px solid transparent;
+	background-color: transparent;
+}
+
+.grid .grid-cell.add-x.drag-hover,
+.grid .grid-cell.add-y.drag-hover {
+	color: #536666;
+	background-color: white;
 }
 
 .grid .grid-cell.add-x {
@@ -52,6 +79,7 @@
 	max-height: 504px;
 	overflow: hidden;
 	overflow-y: scroll;
+	border-bottom: 1px solid #888888;
 }
 
 .cell.drag-helper {
@@ -59,7 +87,7 @@
 	height: 100px;
 	text-align: center;
 	border: 1px solid rgba(0,0,0,0.3);
-	background-color: rgba(0,0,0,0.5);
+	background-color: rgba(0,0,0,0.15);
 	overflow: hidden;
 	color: white;
 }

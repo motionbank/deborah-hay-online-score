@@ -6,6 +6,11 @@ General content
 - generative logo
 
 
+General code
+==========================
+- make global settings to be besed on one config file (streamer urls, server addresses, keys, ...)
+
+
 General style
 ==========================
 - logo / icons below slider
@@ -18,6 +23,7 @@ Mobile devices
 - hide slider
 - add hint about sliding
 - tab to see info, tab again to play cell
+- top bar is quite large with 72px height on mobile
 
 
 General UX
@@ -32,6 +38,7 @@ All tiles
 - info hover
 - indicate which "is playing"
 - slider: indicate where playing tile is in set
+- make sure content is visible
 
 
 Vimeo tiles
@@ -45,3 +52,4 @@ Flowplayer tiles
 - buy to get rid of logo ($95): http://flowplayer.org/download/
 - fetch current scene on deactivate
 - show loading preview
+- HTML5 video not scaled right

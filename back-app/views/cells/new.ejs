@@ -1,49 +1,7 @@
 <% include ../_header %>
 	<section id="main">
-		<style type="text/css">
-			form {
-				padding-top: 18px
-			}
-			form input[type=text],
-			form select,
-			form textarea {
-				width: 360px;
-				margin: 0px 0px 9px 0px
-			}
-			form label {
-				display: block;
-			}
-			form #fields input {
-				width: 177px;
-				margin: 0px 0px 4.5px 0px
-			}
-			form fieldset {
-				margin: 0px 0px 18px 0px
-			}
-		</style>
-		<script src="/javascripts/cells-edit.js" type="text/javascript"></script>
+		<style type="text/css">@import url('/stylesheets/cells.css');</style>
 		<h1>Create a new cell</h1>
-		<form method="post" action="/admin/cells/new">
-			<input type="hidden" name="user_id" value="<%= user.id %>"/>
-			<label for="title">Type</label>
-			<select name="type">
-				<% for ( var i = 0; i < types.length; i++ ) { %>
-					<option value="<%= types[i] %>"><%= types[i] %></option>
-				<% } %>
-			</select>
-			<label for="title">Title</label>
-			<input type="text" name="title" value="" /><br/>
-
-			<label for="title">Preview</label>
-			<input type="text" name="preview" value="missing.jpg" /><br/>
-
-			<label for="fields">Fields</label>
-			<fieldset id="fields">
-			<input type="text" name="field_keys[]" value="" /><input type="text" name="field_values[]" value="" /><br />
-			<a id="add-fields" href="#">Add more</a><br/>
-			</fieldset>
-
-			<input type="submit" value="Save" />
-		</form>
+		<% include _edit %>
 	</section>
 <% include ../_footer %>

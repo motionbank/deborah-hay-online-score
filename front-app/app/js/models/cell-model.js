@@ -13,7 +13,11 @@ var CellModel = module.exports = Backbone.Model.extend({
 		this.set( opts );
 		var self = this;
 		_.map( opts.fields, function (f) {
-			self.set( f.name, f.value );
+			if ( self.get( f.name ) === undefined ) {
+				self.set( f.name, f.value );
+			} else {
+				console.log( 'Possible cell field conflict: ', f );
+			}
 		});
 	}
 

@@ -2,9 +2,11 @@ jQuery(function(){
 
 	// add a new input filed below "add field"
 
-	jQuery('.cell-edit a.add-fields').click(function(){
+	jQuery('.cell-edit a.add-fields').click(function(evt){
+		evt.preventDefault();
 		jQuery( '<input type="text" name="field_keys[]" value="" />'+
 				'<input type="text" name="field_values[]" value="" /><br />').insertBefore(this);
+		return false;
 	});
 
 	// in lists allow for inline editing

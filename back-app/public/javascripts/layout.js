@@ -20,9 +20,10 @@ jQuery(function(){
 	// helper: recalculate table cell sizes and set them
 	var resetTableWidth = function () {
 
-		var ch = (144-10) / set.grid_rows;
+		var helperSize = 15; /* see width, height in layout.css */
+		var ch = (144-helperSize) / set.grid_rows;
 		var cw = (set.cell_width / set.cell_height) * ch;
-		var table_width = cw * set.grid_cols + 10;
+		var table_width = cw * set.grid_cols + helperSize;
 
 		$table.css({
 			width: table_width+'px',

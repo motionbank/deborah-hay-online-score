@@ -15,6 +15,9 @@
 .cell-edit form label {
 	display: block;
 }
+.cell-edit form .fields {
+	clear: both;
+}
 .cell-edit form .fields input {
 	width: 177px;
 	margin: 0px 0px 4.5px 0px

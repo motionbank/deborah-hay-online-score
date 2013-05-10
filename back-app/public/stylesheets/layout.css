@@ -59,11 +59,11 @@
 }
 
 .grid .grid-cell.add-x {
-	width: 10px;
+	width: 15px;
 }
 
 .grid .grid-cell.add-y {
-	height: 10px;
+	height: 15px;
 }
 
 .grid .add-y.add-x {

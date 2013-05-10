@@ -1,35 +1,6 @@
 <% include ../_header %>
 	<section id="main">
 		<style type="text/css">@import url('/stylesheets/cells.css');</style>
-		<script type="text/javascript">
-			jQuery(function(){
-				jQuery('.inp-preview').change(function(evt){
-
-					var self = this;
-					var $self = jQuery(this);
-					var $container = jQuery('.img-preview-container', $self.parent());
-
-					$container.html('');
-
-					var img = new Image();
-					img.onload = function () {
-						$container.css({
-							border: '0px solid transparent',
-							width: 'auto', height: 'auto'
-						});
-						$container.append(img);
-					}
-					img.onerror = function () {
-						$container.css({
-							border: '1px solid red',
-							width: '360px', height: '72px',
-							color: 'red'
-						}).html( 'Not found ..' );
-					}
-					img.src = 'http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/'+$self.val();
-				});
-			});
-		</script>
 		<h1>Edit cell »<%= cell.title %>« (#<%= cell.id %>)</h1>
 		<% include _edit %>
 	</section>

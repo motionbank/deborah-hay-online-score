@@ -53,3 +53,4 @@ Flowplayer tiles
 - fetch current scene on deactivate
 - show loading preview
 - HTML5 video not scaled right
+- sometimes the scene does not get loaded (if it is a late scene) ... or it does change twice, just after it loaded?

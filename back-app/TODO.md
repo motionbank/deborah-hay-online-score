@@ -18,6 +18,8 @@ Sets
 ==================
 
 x edit aspect size
+- can not drag grid cell to "add-xy" and make more rows / cols
+- when moving grid cells around they loose their double click / hover feats.
 
 
 Cells

@@ -11,10 +11,16 @@ var CellView = module.exports = Backbone.View.extend({
 	cell : null,
 	isVisible : false,
 	isActive : false,
+
+	currentRecording : '',
+	currentScene : '',
+
 	respondToSceneChange : false,
+	respondToRecordingChange : false,
 
 	gridView : null,
 
+	cfBaseHTML5 : 'd35vpnmjdsiejq.cloudfront.net',
 	cfUrl : 'http://d35vpnmjdsiejq.cloudfront.net/dh/app',
 
 	$h1Title : null, 
@@ -30,9 +36,16 @@ var CellView = module.exports = Backbone.View.extend({
 		this.cell = new CellModel( opts );
 		this.gridView.$el.append( this.render() );
 
+		this.respondToRecordingChange = this.cell.get('per-recording') || false;
+
 		var app = this.gridView.getApp();
+
 		app.on( 'change:scene', function bbChangeScene (){
 			self.sceneChanged.apply(self,arguments);
+		});
+
+		app.on( 'change:recording', function bbChangeRecording (){
+			self.recordingChanged.apply(self, arguments);
 		});
 
 		this.hide();
@@ -110,6 +123,9 @@ var CellView = module.exports = Backbone.View.extend({
 		this.isActive = false;
 
 		this.$container.html('');
+	},
+
+	recordingChanged : function (newRecording) {
 	},
 
 	sceneChanged : function (newScene) {

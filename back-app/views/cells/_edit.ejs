@@ -27,12 +27,13 @@
 		<% for ( var i = 0; i < cell.fields.length; i++ ) { %>
 			<input type="text" name="field_keys[]" value="<%= cell.fields[i].name %>" />
 			<input type="text" name="field_values[]" value="<%= cell.fields[i].value %>" />
+			<br />
 		<% } %>
 	<% } else { %>
 		<input type="text" name="field_keys[]" value="" />
 		<input type="text" name="field_values[]" value="" />
+		<br />
 	<% } %>
-	<br />
 
 	<a class="add-fields" href="#">Add more</a><br/>
 	</fieldset>

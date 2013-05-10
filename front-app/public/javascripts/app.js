@@ -620,28 +620,14 @@ window.require.register("js/views/cell-view-recording", function(exports, requir
   		var iframe = jQuery( '<iframe id="iframe-'+this.cid+'" src="'+this.cell.get('contentUrl')+'?v='+this.cell.get('title')+'&id='+this.cell.get('videoId')+'" '+
   									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
   		iframe.load(function(){
+
   			var win = document.getElementById('iframe-'+self.cid).contentWindow;
   			var app = self.gridView.getApp();
+
+  			app.trigger('change:recording', self.cell.get('recording'));
+
   			var postmessenger = app.getPostMessenger();
-
   			postmessenger.send('connect',null,win);
-
-  			// app.on( 'vimeo:finish', function(req, resp){
-  			// 	if ( req.message.source === win ) {
-  			// 		self.gridView.playNext(self);
-  			// 		self.deactivate();
-  			// 	}
-  			// });
-  			// postmessenger.send({
-  			// 	name: 'addEventListener', data: 'finish', 
-  			// 	receiver: win, receiverOrigin: 'http://player.vimeo.com',
-  			// 	nameAlias: 'method', dataAlias: 'value'
-  			// });
-  			// postmessenger.send({
-  			// 	name: 'play', data: null, 
-  			// 	receiver: win, receiverOrigin: 'http://player.vimeo.com',
-  			// 	nameAlias: 'method', dataAlias: 'value'
-  			// });
   		});
   		this.$container.empty();
   		this.$container.append(iframe);
@@ -675,15 +661,30 @@ window.require.register("js/views/cell-view-visualization", function(exports, re
 
   	respondToSceneChange : true,
 
-  	sceneChanged : function (newScene) {
+  	recordingChanged : function ( newRecording ) {
+  		this.currentRecording = newRecording;
+  		this.sceneChanged( this.currentScene );
+  	},
 
-  		if ( this.isVisible && !this.isActive ) {
+  	sceneChanged : function ( newScene ) {
+  		this.currentScene = newScene;
+
+  		if ( newScene && this.isVisible && !this.isActive ) {
 
   			var self = this;
-  			var scene = newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-');
-  			var recording = '';
 
-  			var imgSrc = this.cfUrl + '/cells/'+this.cell.get('base-path')+scene+'.png';
+  			var scene = newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-');
+  			var imgSrc = this.cfUrl + '/cells/'+this.cell.get('base-path');
+
+  			if ( this.respondToRecordingChange ) {
+  				imgSrc += this.currentRecording+'_';
+  			}
+
+  			if ( this.respondToSceneChange ) {
+  				imgSrc += scene;
+  			}
+
+  			imgSrc += '.png';
 
   			var img = new Image();
   			img.onload = function () {
@@ -715,10 +716,16 @@ window.require.register("js/views/cell-view", function(exports, require, module)
   	cell : null,
   	isVisible : false,
   	isActive : false,
+
+  	currentRecording : '',
+  	currentScene : '',
+
   	respondToSceneChange : false,
+  	respondToRecordingChange : false,
 
   	gridView : null,
 
+  	cfBaseHTML5 : 'd35vpnmjdsiejq.cloudfront.net',
   	cfUrl : 'http://d35vpnmjdsiejq.cloudfront.net/dh/app',
 
   	$h1Title : null, 
@@ -734,9 +741,16 @@ window.require.register("js/views/cell-view", function(exports, require, module)
   		this.cell = new CellModel( opts );
   		this.gridView.$el.append( this.render() );
 
+  		this.respondToRecordingChange = this.cell.get('per-recording') || false;
+
   		var app = this.gridView.getApp();
+
   		app.on( 'change:scene', function bbChangeScene (){
   			self.sceneChanged.apply(self,arguments);
+  		});
+
+  		app.on( 'change:recording', function bbChangeRecording (){
+  			self.recordingChanged.apply(self, arguments);
   		});
 
   		this.hide();
@@ -814,6 +828,9 @@ window.require.register("js/views/cell-view", function(exports, require, module)
   		this.isActive = false;
 
   		this.$container.html('');
+  	},
+
+  	recordingChanged : function (newRecording) {
   	},
 
   	sceneChanged : function (newScene) {

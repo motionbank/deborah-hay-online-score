@@ -12,28 +12,14 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 		var iframe = jQuery( '<iframe id="iframe-'+this.cid+'" src="'+this.cell.get('contentUrl')+'?v='+this.cell.get('title')+'&id='+this.cell.get('videoId')+'" '+
 									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
 		iframe.load(function(){
+
 			var win = document.getElementById('iframe-'+self.cid).contentWindow;
 			var app = self.gridView.getApp();
+
+			app.trigger('change:recording', self.cell.get('recording'));
+
 			var postmessenger = app.getPostMessenger();
-
 			postmessenger.send('connect',null,win);
-
-			// app.on( 'vimeo:finish', function(req, resp){
-			// 	if ( req.message.source === win ) {
-			// 		self.gridView.playNext(self);
-			// 		self.deactivate();
-			// 	}
-			// });
-			// postmessenger.send({
-			// 	name: 'addEventListener', data: 'finish', 
-			// 	receiver: win, receiverOrigin: 'http://player.vimeo.com',
-			// 	nameAlias: 'method', dataAlias: 'value'
-			// });
-			// postmessenger.send({
-			// 	name: 'play', data: null, 
-			// 	receiver: win, receiverOrigin: 'http://player.vimeo.com',
-			// 	nameAlias: 'method', dataAlias: 'value'
-			// });
 		});
 		this.$container.empty();
 		this.$container.append(iframe);

@@ -367,7 +367,8 @@ app.get( pathBase + '/sets/:id/delete', idNumeric, function(req, res){
 app.get( pathBase + '/cells/new', function (req, res) {
 	res.render('cells/new', _.extend(viewOpts,{
 		title: 'create new cell',
-		types: req.models.cells.cellTypes()
+		types: req.models.cells.cellTypes(),
+		cell: {}
 	}));
 });
 

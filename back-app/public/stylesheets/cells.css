@@ -1,3 +1,32 @@
+
+/* ------------------ +
+ +	EDIT
+ + ------------------ */
+
+.cell-edit form {
+	padding-top: 18px
+}
+.cell-edit form input[type=text],
+.cell-edit form select,
+.cell-edit form textarea {
+	width: 360px;
+	margin: 0px 0px 9px 0px
+}
+.cell-edit form label {
+	display: block;
+}
+.cell-edit form .fields input {
+	width: 177px;
+	margin: 0px 0px 4.5px 0px
+}
+.cell-edit form fieldset {
+	margin: 0px 0px 18px 0px
+}
+
+/* ------------------ +
+ +	LISTS
+ + ------------------ */
+
 .cell-list {
 	border-top: 1px solid #888888;
 	margin-top: 18px;
@@ -17,7 +46,7 @@
 }
 .cell {
 	padding: 4.5px;
-	height: 25px;
+	min-height: 25px;
 	overflow: auto;
 }
 .cell:hover {

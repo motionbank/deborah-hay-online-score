@@ -1,6 +1,7 @@
 
 var express 	= require('express'),
 	_			= require('underscore'),
+	ejs			= require('ejs'),
 	orm 		= require('orm'),
 	dbModels	= null,
 	config		= require('./config/config'),
@@ -11,7 +12,7 @@ var express 	= require('express'),
 		messages: []
 	},
 	noop 		= function(){},
-	ensureParamIdNumeric = noop,
+	idNumeric = noop,
 	message 	= noop,
 	error 		= noop,
 	noError		= noop;
@@ -78,7 +79,7 @@ app.use( function appUseCookieSessionWrapper (req, res, next) {
  +
  L + + + + + + + + + + + + + + + + + + + + + + + + */
 
-ensureParamIdNumeric = function (req, res, next) {
+idNumeric = function (req, res, next) {
 	if ( !req.params.id ) {
 		throw( 'Missing id from params!' );
 	} else {
@@ -183,7 +184,7 @@ app.post( pathBase + '/sets/new', function (req, res) {
 
 // SETS - READ
 
-app.get( pathBase + '/sets/:id', ensureParamIdNumeric, function(req, res){
+app.get( pathBase + '/sets/:id', idNumeric, function(req, res){
 	req.models.sets.get(req.params.id,function(err,set){
 		if (err) {
 			error( req, res, err );
@@ -198,7 +199,7 @@ app.get( pathBase + '/sets/:id', ensureParamIdNumeric, function(req, res){
 
 // SETS - UPDATE
 
-app.post( pathBase + '/sets/:id/save', ensureParamIdNumeric, function (req, res) {
+app.post( pathBase + '/sets/:id/save', idNumeric, function (req, res) {
 	//console.log( req.body );
 	if ( req.user.id !== parseInt(req.body.user_id) ) {
 		error(req,res,'Uuups. Something went wrong!');
@@ -228,7 +229,7 @@ app.post( pathBase + '/sets/:id/save', ensureParamIdNumeric, function (req, res)
 
 // SETS - LAYOUT (ADD CELLS VIEW)
 
-app.get( pathBase + '/sets/:id/layout', ensureParamIdNumeric, function(req, res){
+app.get( pathBase + '/sets/:id/layout', idNumeric, function(req, res){
 	req.models.sets.get(req.params.id,function(err,set){
 		if (err) {
 			error( req, res, err );
@@ -266,7 +267,7 @@ app.get( pathBase + '/sets/:id/layout', ensureParamIdNumeric, function(req, res)
 
 // SETS - SAVE CELLS FROM LAYOUT
 
-app.post( pathBase + '/sets/:id/save-cells', ensureParamIdNumeric, function(req,res){
+app.post( pathBase + '/sets/:id/save-cells', idNumeric, function(req,res){
 	req.models.sets.get(req.params.id,function(err,set){
 		if (err) {
 			error( req, res, err );
@@ -330,7 +331,7 @@ app.post( pathBase + '/sets/:id/save-cells', ensureParamIdNumeric, function(req,
 
 // SETS - EDIT
 
-app.get( pathBase + '/sets/:id/edit', ensureParamIdNumeric, function(req, res){
+app.get( pathBase + '/sets/:id/edit', idNumeric, function(req, res){
 	req.models.sets.get(req.params.id,function(err,set){
 		if (err) {
 			error( req, res, err );
@@ -344,7 +345,7 @@ app.get( pathBase + '/sets/:id/edit', ensureParamIdNumeric, function(req, res){
 
 // SETS - DELETE
 
-app.get( pathBase + '/sets/:id/delete', ensureParamIdNumeric, function(req, res){
+app.get( pathBase + '/sets/:id/delete', idNumeric, function(req, res){
 	req.models.sets.get(req.params.id,function(err,set){
 		if (err) {
 			error( req, res, err );
@@ -443,7 +444,7 @@ app.get( pathBase + '/cells', function (req,res){
 
 // CELLS - VIEW
 
-app.get( pathBase + '/cells/:id', ensureParamIdNumeric, function(req,res){
+app.get( pathBase + '/cells/:id', idNumeric, function(req,res){
 	req.models.cells.get(req.params.id,function(err,cell){
 		if ( noError(req,res,err) ) {
 			cell.getFields(function(err,fields){
@@ -461,17 +462,31 @@ app.get( pathBase + '/cells/:id', ensureParamIdNumeric, function(req,res){
 
 // CELLS - EDIT
 
-app.get( pathBase + '/cells/:id/edit', ensureParamIdNumeric, function(req,res){
+app.get( pathBase + '/cells/:id/edit', idNumeric, function(req,res){
 	req.models.cells.get(req.params.id, function(err,cell){
 		if ( noError(req,res,err) ) {
 			cell.getFields(function(err,fields){
 				if ( noError(req,res,err) ) {
 					cell.fields = fields;
-					res.render('cells/edit',_.extend(viewOpts,{
+					var renderOpts = _.extend(viewOpts,{
 						title: 'cell (#'+cell.id+')',
 						cell: cell,
 						types: req.models.cells.cellTypes()
-					}));
+					});
+					if ( !req.xhr ) {
+						res.render('cells/edit',renderOpts);
+					} else if ( req.accepts('json') ) {
+						var file = './views/cells/_edit.ejs';
+						var tplStr = require('fs').readFileSync(file).toString();
+						res.send({
+							html: ejs.render(tplStr,_.extend(renderOpts,{
+								filename: file
+							})),
+							cell: cell
+						});
+					} else {
+						error(req,res,'Uh, not sure how to handle this one ..');
+					}
 				}
 			});
 		}
@@ -480,7 +495,7 @@ app.get( pathBase + '/cells/:id/edit', ensureParamIdNumeric, function(req,res){
 
 // CELLS - UPDATE
 
-app.post( pathBase + '/cells/:id/save', ensureParamIdNumeric, function(req, res){
+app.post( pathBase + '/cells/:id/save', idNumeric, function(req, res){
 	req.models.cells.get(req.params.id,function(err,cell){
 		if ( noError(req,res,err) ) {
 			cell.getFields(function(err,fields){
@@ -519,7 +534,15 @@ app.post( pathBase + '/cells/:id/save', ensureParamIdNumeric, function(req, res)
 									if (err) {
 										error(rer,res,err);
 									} else {
-										res.redirect( pathBase + '/cells/'+cell.id );
+										if ( !req.xhr ) {
+											res.redirect( pathBase + '/cells/'+cell.id );
+										} else if ( req.accepts('json') ) {
+											res.send({
+												cell: cell
+											});
+										} else {
+											error(req,res,'Unable to save this cell');
+										}
 									}
 								});
 							});
@@ -541,7 +564,7 @@ app.post( pathBase + '/cells/:id/save', ensureParamIdNumeric, function(req, res)
 
 // CELLS - DELETE
 
-app.get( pathBase + '/cells/:id/delete', ensureParamIdNumeric, function(req,res){
+app.get( pathBase + '/cells/:id/delete', idNumeric, function(req,res){
 	req.models.cells.get(req.params.id, function(err,cell){
 		if ( noError(req,res,err) ) {
 			cell.getFields(function(err,fields){

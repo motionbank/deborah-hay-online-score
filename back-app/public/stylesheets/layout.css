@@ -44,12 +44,7 @@
 	height: inherit;
 }
 
-
-#cells {
-}
-
 #cells .filters {
-	border-bottom: 1px solid black;
 	padding: 4.5px;
 }
 
@@ -57,15 +52,28 @@
 	max-height: 504px;
 	overflow: hidden;
 	overflow-y: scroll;
-	border-bottom: 1px solid black;
 }
 
-#cells .cell-list .cell {
-	padding: 4.5px;
-	border-bottom: 1px solid black;
+.cell.drag-helper {
+	width: 100px;
+	height: 100px;
+	text-align: center;
+	border: 1px solid rgba(0,0,0,0.3);
+	background-color: rgba(0,0,0,0.5);
+	overflow: hidden;
+	color: white;
 }
 
-#cells .cell-list .cell.ui-draggable-dragging {
-	border: 1px solid black;
-	width: 200px;
+.cell.drag-helper * {
+	float: none;
+}
+
+.cell.drag-helper .preview {
+	display: block;
+	width: 100px;
+}
+
+.cell.drag-helper .preview img {
+	max-width: 100px;
+	max-height: 70px;
 }

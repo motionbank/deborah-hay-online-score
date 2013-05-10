@@ -48,9 +48,15 @@ jQuery(function(){
 		$e.draggable({
 			revert: true,
 			revertDuration: 20,
-			helper: 'clone',
+			helper: function () {
+				var $e = jQuery(this);
+				var $dragEl = jQuery('<div class="cell drag-helper" />');
+				$dragEl.append( jQuery( '.preview', $e ).clone() );
+				$dragEl.append( jQuery( '.title', $e ).text() );
+				$dragEl.data('id',$e.data('id'));
+				return $dragEl;
+			},
 			appendTo: '#main',
-			containment: '#main',
 		});
 	});
 
@@ -200,7 +206,7 @@ jQuery(function(){
 			}).hover(function(){
 
 				jQuery( '.cell-list .cell[data-id='+id+']' ).css({
-					backgroundColor: 'red'
+					backgroundColor: 'rgba(255,0,0,0.2)'
 				});
 
 			},function(){
@@ -347,35 +353,35 @@ jQuery(function(){
 		});
 	});
 
-	_.each(types, function(t){
-		filters[t] = {
-			active: true,
-			$option: jQuery('option[value='+t+']', $filterSelect),
-			$cells: jQuery('.cell-list .cell.type-'+t)
-		};
-	});
+	// _.each(types, function(t){
+	// 	filters[t] = {
+	// 		active: true,
+	// 		$option: jQuery('option[value='+t+']', $filterSelect),
+	// 		$cells: jQuery('.cell-list .cell.type-'+t)
+	// 	};
+	// });
 
-	$filterSelect.change(function(){
-		var val = jQuery(this).val();
-		if (val === '-- all --') {
-			_.each(filters,function(f){
-				f.active = true;
-			});
-		} else if (val === '-- none --') {
-			_.each(filters,function(f){
-				f.active = false;
-			});
-		} else {
-			filters[val].active = !filters[val].active;
-		}
-		_.each(filters,function(f,v){
-			f.$option.html(f.active ? v : '- ' + v);
-			if ( f.active ) {
-				f.$cells.show();
-			} else {
-				f.$cells.hide();
-			}
-		});
-	});
+	// $filterSelect.change(function(){
+	// 	var val = jQuery(this).val();
+	// 	if (val === '-- all --') {
+	// 		_.each(filters,function(f){
+	// 			f.active = true;
+	// 		});
+	// 	} else if (val === '-- none --') {
+	// 		_.each(filters,function(f){
+	// 			f.active = false;
+	// 		});
+	// 	} else {
+	// 		filters[val].active = !filters[val].active;
+	// 	}
+	// 	_.each(filters,function(f,v){
+	// 		f.$option.html(f.active ? v : '- ' + v);
+	// 		if ( f.active ) {
+	// 			f.$cells.show();
+	// 		} else {
+	// 			f.$cells.hide();
+	// 		}
+	// 	});
+	// });
 
 });

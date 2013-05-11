@@ -9,9 +9,32 @@
 }
 
 .grid {
+}
+
+.grid {
 	width: 100%;
 	height: 144px;
 	border-collapse: separate;
+	position: relative;
+}
+
+.grid .cell-adder {
+	border: 1px solid #97aaaa;
+	position: absolute;
+}
+
+.grid .add-col {
+	width: 13px;
+	height: 100%;
+	right: 0px;
+	top: 0px;
+}
+
+.grid .add-row {
+	height: 13px;
+	width: 100%;
+	bottom: 0px;
+	left: 0px;
 }
 
 .grid .grid-cell {
@@ -70,6 +93,28 @@
 	width: inherit;
 	height: inherit;
 }
+
+.grid-cell .resize-handle {
+	display: none;
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	width: 8px;
+	height: 8px;
+	background-color: white;
+}
+
+.grid-cell.selected .resize-handle {
+	display: block;
+}
+
+.grid-cell.z-behind {
+	z-index: -100;
+}
+
+/*
+ +	CELL LIST
+ + -------------- */
 
 #cells .filters {
 	padding: 4.5px;

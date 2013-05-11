@@ -31,7 +31,35 @@
 			<a href="/admin/sets/<%= set.id %>/delete" confirm="Delete this set?">Delete</a>
 		</form></div>
 		<div id="layout-editor">
-			<table class="grid">
+			<div class="grid">
+				<% for ( var i = 0, iy = 0; iy < set.grid_rows; iy++ ) { %>
+					<% for ( var ix = 0; ix < set.grid_cols; ix++ ) { %>
+						<% if ( grid[iy] && grid[iy][ix] ) { %>
+							<% var cell = grid[iy][ix]; %>
+							<div class="grid-cell"
+								title="<%= cell.title %> (#<% cell.id %>), <%= cell.type %>"
+								data-id="<%= cell.id %>" 
+								data-x="<%= ix %>" 
+								data-y="<%= iy %>"
+								data-width="<%= cell.extra.width || 1 %>" 
+								data-height="<%= cell.extra.height || 1 %>"
+								<% if ( cell.preview ) { %>
+									style="background-image:url('http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/<%= cell.preview %>')"
+								<% } %>	><div class="resize-handle ui-resizable-handle ui-resizable-se"></div></div>
+						<% } else { %>
+							<div class="grid-cell z-behind"
+								title="Drop cells here"
+								data-x="<%= ix %>" 
+								data-y="<%= iy %>"
+								data-width="1" 
+								data-height="1"></div>
+						<% } %>
+					<% } %>
+				<% } %>
+				<div class="add-col cell-adder"></div>
+				<div class="add-row cell-adder"></div>
+			</div>
+<!-- 			<table class="grid">
 				<% for ( var i = 0, iy = 0; iy < set.grid_rows; iy++ ) { %>
 					<tr>
 					<% for ( var ix = 0; ix < set.grid_cols; ix++ ) { %>
@@ -66,7 +94,7 @@
 						data-x="<%= set.grid_cols %>" 
 						data-y="<%= set.grid_rows %>">+</td>
 				</tr>
-			</table>
+			</table> -->
 		</div>
 		<div id="cells">
 			<div class="filters">Filters go here ...</div>

@@ -18,6 +18,7 @@ x list-view items need better formatting and details (preview)
 x double click cell to edit it
 - UNDO ?!
 - show save (ajax) is working in the back
+- grid should not be a <table> but use the same tech as the front end .. bunch of position
 
 
 Sets

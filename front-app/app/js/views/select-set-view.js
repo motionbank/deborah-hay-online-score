@@ -29,10 +29,14 @@ var SelectSetView = module.exports = Backbone.View.extend({
 			});
 			$sets.append( $setContainer );
 		});
+
+		rendered = true;
 	},
 
 	show : function () {
-		this.render();
+		if ( !rendered ) {
+			this.render();
+		}
 	},
 
 	hide : function () {

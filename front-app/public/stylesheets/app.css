@@ -385,7 +385,6 @@ a, a:hover, a:active, a:link, a:visited {
 	display: none;
 }
 
-
 #grid-view article.cell.no-img .info,
 #grid-view article.cell:hover .info {
 	display: block;
@@ -413,6 +412,13 @@ a, a:hover, a:active, a:link, a:visited {
 	-moz-background-size : cover;
 	-o-background-size : cover;
 	background-size : cover;
+}
+
+#grid-view article.cell.type-visualization {
+	-webkit-background-size : contain;
+	-moz-background-size : contain;
+	-o-background-size : contain;
+	background-size : contain;
 }
 
 #grid-view article.cell .content {

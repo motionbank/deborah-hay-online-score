@@ -1,5 +1,5 @@
 
-var gridView = null, app = null;
+var gridView = null, app = null, rendered = false;
 
 var SelectSetView = module.exports = Backbone.View.extend({
 

@@ -5,14 +5,16 @@ jQuery(function(){
 		parentWindow 	= null,
 		parentWindowOrigin = null,
 		currentScene    = null,
-		$scenes 		= {};
+		scenesByMarker 	= {},
+		$scenes 		= null;
 
-	jQuery('.scene').each(function (i,s) {
-		console.log(s);
+	$scenes = jQuery('.scene');
+	$scenes.each(function (i,s) {
 		var $s = jQuery(s);
-		$scenes[$s.data('title')] = $s;
+		scenesByMarker[$s.data('title')] = $s;
 		$s.hide();
-	});
+	})
+	$scenes.first().show();
 
 	messenger.on('connect',function(req,res){
 
@@ -34,12 +36,14 @@ jQuery(function(){
 
 	var setToScene = function ( newScene ) {
 
-		if ( newScene !== currentScene && newScene in $scenes ) {
-			if ( currentScene ) {
-				$scenes[currentScene].hide();
+		if ( newScene !== currentScene ) {
+			if ( newScene in scenesByMarker ) {
+				$scenes.hide();
+				scenesByMarker[newScene].show();
+				currentScene = newScene;
+			} else {
+				console.log( 'Unable to find scene: ' + newScene );
 			}
-			$scenes[newScene].show();
-			currentScene = newScene;
 		} else {
 			// TODO, what to display if we can not make sense of the scene?
 			// ... like playing a Vimeo video

@@ -31,6 +31,7 @@ General UX
 - show left / right transition
 - show keyboard shortcuts
 - animate switch set -> selector -> sets
+- a global indicator that show where you are in the recordings / time / performer dimensions
 
 
 All tiles

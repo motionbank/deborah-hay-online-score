@@ -9,7 +9,7 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 
 		var self = this;
 
-		var iframe = jQuery( '<iframe id="iframe-'+this.cid+'" src="'+this.cell.get('contentUrl')+'?v='+this.cell.get('title')+'&id='+this.cell.get('videoId')+'" '+
+		var iframe = jQuery( '<iframe id="iframe-'+this.cid+'" src="'+this.cell.get('content-url')+'?v='+this.cell.get('title')+'&id='+this.cell.get('videoId')+'" '+
 									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
 		iframe.load(function(){
 

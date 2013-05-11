@@ -8,7 +8,7 @@ General content
 
 General code
 ==========================
-- make global settings to be besed on one config file (streamer urls, server addresses, keys, ...)
+- make global settings to be besed on one config file (streamer urls, server addresses, keys, ...), check module code as well!
 
 
 General style
@@ -49,9 +49,14 @@ Vimeo tiles
 Flowplayer tiles
 ==========================
 - style interface
-- buy to get rid of logo ($95): http://flowplayer.org/download/
+- buy to get rid of logo ($95, one domain): http://flowplayer.org/download/
 - fetch current scene on deactivate
 - show loading preview
 - HTML5 video not scaled right
 - sometimes the scene does not get loaded (if it is a late scene) ... or it does change twice, just after it loaded?
 - full screen button missing
+
+Content
+==========================
+- optimize content for cell sizes
+- compress static content

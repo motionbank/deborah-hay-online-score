@@ -1,6 +1,6 @@
 jQuery(function(){
 
-	var onLocalhost = /(localhost|moba-lab.local)/.test(window.location.host);
+	var onLocalhost = /(localhost|.+\.local)/.test(window.location.host);
 
 	var api = new PieceMakerApi( this, 'a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe', 
 								 onLocalhost ? 'http://localhost:3000' : 'http://notimetofly.herokuapp.com' );
@@ -37,10 +37,6 @@ jQuery(function(){
 		setToScene( req.data );
 	});
 
-	// http://flowplayer.org/docs/api.html
-	// http://flash.flowplayer.org/documentation/api/
-	var fpVideoPlayer = flowplayer();
-
 	var $videoContainer = jQuery('#video-container');
 	$videoContainer.html('');
 	var $videoPlayer = jQuery('<video class="flowplayer" id="video-player" />');
@@ -67,36 +63,44 @@ jQuery(function(){
 	};
 	//console.log( opts );
 
-	jQuery('#video-container').flowplayer(opts);
-	fpVideoPlayer = flowplayer();
+	var fPlayer = null;
 
-	fpVideoPlayer.bind('ready',function(){
-		fpVideoPlayer.pause();
-		setPlayerSize();
-		api.loadVideo( videoId, videoLoaded );
-	});
+	// http://flowplayer.org/docs/api.html
+	// http://flash.flowplayer.org/documentation/api/
+	flowplayer(function(fp){
+		
+		fPlayer = fp; // store it in function context
 
-	fpVideoPlayer.bind('progress',function(evt){
-		var now = fpVideoPlayer.video.time * 1000 + currentVideo.happened_at_float;
-		var lastScene = currentScene;
-		for ( var i = 0; i < sceneEvents.length-1; i++ ) {
-			if ( sceneEvents[i+1].happened_at_float > now ) {
-				if ( lastScene !== sceneEvents[i] ) {
-					currentScene = sceneEvents[i];
-					messenger.send('set-scene',currentScene.title,parentWindow);
+		fPlayer.bind('ready',function(){
+			fPlayer.pause();
+			setPlayerSize();
+			api.loadVideo( videoId, videoLoaded );
+		});
+
+		fPlayer.bind('progress',function(evt){
+			var now = fPlayer.video.time * 1000 + currentVideo.happened_at_float;
+			var lastScene = currentScene;
+			for ( var i = 0; i < sceneEvents.length-1; i++ ) {
+				if ( sceneEvents[i+1].happened_at_float > now ) {
+					if ( lastScene !== sceneEvents[i] ) {
+						currentScene = sceneEvents[i];
+						messenger.send('set-scene',currentScene.title,parentWindow);
+					}
+					return;
 				}
-				return;
 			}
-		}
+		});
 	});
+
+	var $videoContainer = jQuery('#video-container').flowplayer(opts);
 
 	jQuery(window).resize(function(){
 		setPlayerSize();
 	});
 
 	var setPlayerSize = function () {
-		var vw = fpVideoPlayer.video.width;
-		var vh = fpVideoPlayer.video.height;
+		var vw = fPlayer.video.width;
+		var vh = fPlayer.video.height;
 		var $doc = jQuery(document.body);
 		var dw = $doc.width();
 		var dh = $doc.height();
@@ -124,20 +128,31 @@ jQuery(function(){
 
 	var eventsLoaded = function ( events ) {
 		sceneEvents = events.events;
-		messenger.send('get-scene',null,parentWindow);
+		messenger.send( 'get-scene', null, parentWindow );
 	}
 
 	var setToScene = function ( newScene ) {
+
+		if ( currentScene ) return; // block own calls after initial get-scene
+
 		for ( var i = 0; i < sceneEvents.length; i++ ) {
 			if ( sceneEvents[i].title === newScene ) {
-				flowplayer().seek( (sceneEvents[i].happened_at_float - currentVideo.happened_at_float) / 1000.0, function () {
-					currentScene = sceneEvents[i];
-					flowplayer().play();
-				});
+				// if ( fPlayer.seekable ) {
+					fPlayer.seek( (sceneEvents[i].happened_at_float - currentVideo.happened_at_float) / 1000.0, function () {
+						currentScene = sceneEvents[i];
+						fPlayer.resume();
+					});
+				// } else {
+				// 	console.log( "setToScene, playing" );
+				// 	fPlayer.play(0);
+				// }
 				return;
 			}
 		}
-		flowplayer().play(); // nothing found? play from beginning i guess
+		// not found ... play from start i guess
+		fPlayer.seek(0, function () {
+			fPlayer.resume();
+		});
 	}
 
 });

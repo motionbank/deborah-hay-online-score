@@ -98,6 +98,12 @@ var App = module.exports = (function(){
 			app.trigger('change:scene',currentScene);
 		});
 
+		messenger.on( 'get-config', function msgrGetScene (req,resp){
+			resp.send('set-config',{
+				onLocalhost : onLocalhost
+			});
+		});
+
 		messenger.accept( 'http://player.vimeo.com' );
 		messenger.on({
 			matcher: 'finish', 

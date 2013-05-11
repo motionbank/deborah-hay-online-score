@@ -1,37 +1,53 @@
 
-var CellView = module.exports = require('js/views/cell-view').extend({
+var CellView = require('js/views/cell-view');
+var CellViewText = module.exports = CellView.extend({
+
+	// instance variables
+
+	iframe : null,
+	iframeWindow : null,
+	postmessenger : null,
+
+	initialize: function () {
+
+		// call initialize on super!
+		CellView.prototype.initialize.apply(this,arguments);
+
+		this.activate();
+	},
 
 	activate : function () {
 		this.$el.addClass( 'active' );
 		this.isActive = true;
 
 		var self = this;
-		var iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
+		this.iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
 									 'src="'+this.cell.get('content-url')+'" '+
 									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
-		iframe.load(function(){
-			var win = document.getElementById('iframe-'+self.cid).contentWindow;
+		this.iframe.load(function(){
+			
+			self.iframeWindow = document.getElementById('iframe-'+self.cid).contentWindow;
+			
 			var app = self.gridView.getApp();
-			var postmessenger = app.getPostMessenger();
-			// app.on( 'vimeo:finish', function(req, resp){
-			// 	if ( req.message.source === win ) {
-			// 		self.gridView.playNext(self);
-			// 		self.deactivate();
-			// 	}
-			// });
-			// postmessenger.send({
-			// 	name: 'addEventListener', data: 'finish', 
-			// 	receiver: win, receiverOrigin: 'http://player.vimeo.com',
-			// 	nameAlias: 'method', dataAlias: 'value'
-			// });
-			// postmessenger.send({
-			// 	name: 'play', data: null, 
-			// 	receiver: win, receiverOrigin: 'http://player.vimeo.com',
-			// 	nameAlias: 'method', dataAlias: 'value'
-			// });
+			self.postmessenger = app.getPostMessenger();
+
+			self.postmessenger.send('connect',null,self.iframeWindow);
+		
 		});
+
 		this.$container.empty();
-		this.$container.append(iframe);
+		this.$container.append( this.iframe );
 	},
 
+	deactivate : function () {
+		// noop
+	},
+
+	sceneChanged : function ( newScene ) {
+
+		if ( this.isVisible ) {
+
+			this.postmessenger.send( 'set-scene', newScene, this.iframeWindow );
+		}
+	}
 });

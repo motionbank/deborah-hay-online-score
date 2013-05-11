@@ -133,17 +133,22 @@ var GridView = module.exports = Backbone.View.extend({
 
 		var gridWidth = currentSet.grid_cols;
 		var xFrom = Math.round( lastRatio * (gridWidth-gridXVisible) );
+		var cw = 100.0/gridXVisible;
+		var ch = 100.0/gridYVisible;
 
 		_.each( cellViewsArr, function(cv, i){ 
-			var cellPosition = cv.cell.get('extra');
-			if ( cellPosition.x >= xFrom && cellPosition.x < xFrom+gridXVisible ) {
+			var cellDim = cv.cell.get('extra');
+			// ... not too far left or right
+			if ( !( (cellDim.x + (cellDim.width-1)) < xFrom ||
+					 cellDim.x > xFrom+gridXVisible ) 
+				) {
 				cv.show();
 				cv.$el.css({
 					position: 'absolute',
-					left: 	((100.0/gridXVisible)*(cellPosition.x-xFrom))+'%',
-					top: 	((100.0/gridYVisible)*cellPosition.y)+'%',
-					width: 	(100.0/gridXVisible)+'%',
-					height: (100.0/gridYVisible)+'%'
+					left: 	(cw*(cellDim.x-xFrom))+'%',
+					top: 	(ch*cellDim.y)+'%',
+					width: 	(cw*cellDim.width)+'%',
+					height: (ch*cellDim.height)+'%'
 				});
 			} else {
 				cv.hide();

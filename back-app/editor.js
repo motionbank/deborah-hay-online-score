@@ -267,7 +267,7 @@ app.get( pathBase + '/sets/:id/layout', idNumeric, function(req, res){
 
 // SETS - SAVE CELLS FROM LAYOUT
 
-app.post( pathBase + '/sets/:id/save-cells', idNumeric, function(req,res){
+app.post( pathBase + '/sets/:id/layout', idNumeric, function(req,res){
 	req.models.sets.get(req.params.id,function(err,set){
 		if (err) {
 			error( req, res, err );
@@ -294,7 +294,7 @@ app.post( pathBase + '/sets/:id/save-cells', idNumeric, function(req,res){
 					_.each(req.body.cells,function(c){
 						cbs.push(function(next){
 							set.addCells( cellsById['id-'+c.id],
-										  {x:c.x,y:c.y} );
+										  { x:c.x, y:c.y, width:c.width, height:c.height } );
 							next();
 						});
 					});

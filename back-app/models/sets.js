@@ -61,12 +61,14 @@ module.exports = function (db, models, sync) {
 		width: {
 			type: 'number',
 			rational: false,
-			required: true
+			required: true,
+			defaultValue: 1
 		},
 		height: {
 			type: 'number',
 			rational: false,
-			required: true
+			required: true,
+			defaultValue: 1
 		}
 	}, {
 		reverse: 'sets'

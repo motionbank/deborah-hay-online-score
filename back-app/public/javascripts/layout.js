@@ -76,6 +76,8 @@ jQuery(function(){
 		drop: function (evt, ui) {
 
 			var $cell = jQuery(this);
+			$cell.removeClass('drag-hover');
+
 			var $item = ui.draggable;
 			$item.data('droppedOnGrid',true);
 
@@ -157,14 +159,20 @@ jQuery(function(){
 		revertDuration: 20,
 		start : function (evt,ui) {
 
-			jQuery(this).css({zIndex:999});
+			jQuery(this).css({
+				backgroundColor: 'inherit',
+				zIndex:999
+			});
 
 			ui.helper.data('droppedOnGrid',false);
 		},
 		stop : function (evt,ui) {
 
 			var $e = jQuery(this);
-			$e.css({zIndex:'auto'});
+
+			$e.css({
+				zIndex: 'auto'
+			});
 
 			if ( ui.helper.data('droppedOnGrid') === false ) {
 
@@ -176,56 +184,57 @@ jQuery(function(){
 		}
 	};
 
-	// apply droppable and draggable options to grid cells
-	jQuery('.grid .grid-cell').droppable(
-		droppableGridCellOpts
-	).each(function(i,e){
+	var makeGridCellInteractive = function ( $e ) {
 
-			var $e = jQuery(e);
-			if ( $e.hasClass('add-x') || $e.hasClass('add-y') ) return;
+		if ( $e.hasClass('add-x') || $e.hasClass('add-y') ) return;
 
+		$e.draggable(draggableGridCellOpts);
+
+		$e.click(function(){
+			
+			var $selPrev = $selectedCell;
+			
+			jQuery('.grid .grid-cell.selected').removeClass('selected');
+			$selectedCell = null;
+			
+			if ( $selPrev !== $e ) {
+				$e.addClass('selected');
+				$selectedCell = $e;
+			}
+		}).dblclick(function(){
 			var id = $e.data('id');
-
-			$e.draggable(draggableGridCellOpts);
-
-			$e.click(function(){
-				
-				var $selPrev = $selectedCell;
-				
-				jQuery('.grid .grid-cell.selected').removeClass('selected');
-				$selectedCell = null;
-				
-				if ( $selPrev !== $e ) {
-					$e.addClass('selected');
-					$selectedCell = $e;
-				}
-			}).dblclick(function(){
-
-				if ( id ) {
-					// var cellTitle = jQuery('.cell-list .cell[data-id='+id+'] .title').text();
-					// if ( confirm('Go to cell »'+cellTitle+'«? Unsaved changes will be lost ..') ) {
-					// 	window.location.href = '/admin/cells/'+id+'/edit';
-					// }
-					var $cellList = jQuery('.cell-list')
-					$cellList.animate({
-						scrollTop: $cellList.scrollTop() + 
-										(jQuery( '.cell-list .cell[data-id='+id+']' ).offset().top - $cellList.offset().top)
-					}, 500);
-				}
-			}).hover(function(){
-
-				jQuery( '.cell-list .cell[data-id='+id+']' ).css({
-					backgroundColor: 'rgba(255,0,0,0.2)'
-				});
-
-			},function(){
-
-				$cellList.css({
-					backgroundColor: 'inherit'
-				});
-
+			if ( id ) {
+				// var cellTitle = jQuery('.cell-list .cell[data-id='+id+'] .title').text();
+				// if ( confirm('Go to cell »'+cellTitle+'«? Unsaved changes will be lost ..') ) {
+				// 	window.location.href = '/admin/cells/'+id+'/edit';
+				// }
+				var $cellList = jQuery('.cell-list')
+				$cellList.animate({
+					scrollTop: $cellList.scrollTop() + 
+									(jQuery( '.cell-list .cell[data-id='+id+']' ).offset().top - $cellList.offset().top)
+				}, 500);
+			}
+		}).hover(function(){
+			var id = $e.data('id');
+			jQuery( '.cell-list .cell[data-id='+id+']' ).css({
+				backgroundColor: 'rgba(255,0,0,0.2)'
 			});
-	});
+
+		},function(){
+
+			$cellList.css({
+				backgroundColor: 'inherit'
+			});
+
+		});
+	};
+
+	// apply droppable and draggable options to grid cells
+	jQuery('.grid .grid-cell').
+		droppable( droppableGridCellOpts ).
+		each(function(i,e){
+			makeGridCellInteractive( jQuery(e) );
+		});
 
 	// helper to add a column to table
 	var addColumn = function (columns, rows) {
@@ -246,8 +255,7 @@ jQuery(function(){
 			var $cell = jQuery( ejsTableRow.render(cellData) );
 			$cell.droppable(droppableGridCellOpts);
 			if ( !isAdder ) {
-				$cell.draggable(
-					draggableGridCellOpts);
+				makeGridCellInteractive( $cell );
 			}
 
 			$lastCell = jQuery('td:last', $rows[iy] ).get(0);
@@ -281,7 +289,9 @@ jQuery(function(){
 			}
 			var $cell = jQuery( ejsTableRow.render(cellData) );
 			$cell.droppable(droppableGridCellOpts);
-			if ( !isAdder ) $cell.draggable(draggableGridCellOpts);
+			if ( !isAdder ) {
+				makeGridCellInteractive( $cell );
+			}
 
 			$row.append( $cell );
 			$cells.push($cell);
@@ -322,7 +332,9 @@ jQuery(function(){
 				cells.push({
 					id: id, 
 					x: $e.data('x'), 
-					y: $e.data('y') 
+					y: $e.data('y'),
+					width: $e.data('width') || 1, 
+					height: $e.data('height') || 1
 				});
 				cols[$e.data('x')] = true;
 				rows[$e.data('y')] = true;
@@ -339,7 +351,7 @@ jQuery(function(){
 		}
 
 		jQuery.ajax({
-			url: '/admin/sets/'+set.id+'/save-cells',
+			url: '/admin/sets/'+set.id+'/layout',
 			data: {
 				cells: cells,
 				grid_cols: save_cols,
@@ -361,36 +373,4 @@ jQuery(function(){
 			}
 		});
 	});
-
-	// _.each(types, function(t){
-	// 	filters[t] = {
-	// 		active: true,
-	// 		$option: jQuery('option[value='+t+']', $filterSelect),
-	// 		$cells: jQuery('.cell-list .cell.type-'+t)
-	// 	};
-	// });
-
-	// $filterSelect.change(function(){
-	// 	var val = jQuery(this).val();
-	// 	if (val === '-- all --') {
-	// 		_.each(filters,function(f){
-	// 			f.active = true;
-	// 		});
-	// 	} else if (val === '-- none --') {
-	// 		_.each(filters,function(f){
-	// 			f.active = false;
-	// 		});
-	// 	} else {
-	// 		filters[val].active = !filters[val].active;
-	// 	}
-	// 	_.each(filters,function(f,v){
-	// 		f.$option.html(f.active ? v : '- ' + v);
-	// 		if ( f.active ) {
-	// 			f.$cells.show();
-	// 		} else {
-	// 			f.$cells.hide();
-	// 		}
-	// 	});
-	// });
-
 });

@@ -42,6 +42,8 @@
 								data-id="<%= cell.id %>" 
 								data-x="<%= ix %>" 
 								data-y="<%= iy %>"
+								data-width="<%= cell.extra.width || 1 %>" 
+								data-height="<%= cell.extra.height || 1 %>"
 								<% if ( cell.preview ) { %>
 								style="background-image:url('http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/<%= cell.preview %>')"
 								<% } %>

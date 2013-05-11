@@ -1,4 +1,10 @@
 
+General
+=================
+
+- hook into AWS to make finding paths / previews / videos easier
+
+
 Layout editor
 ==================
 

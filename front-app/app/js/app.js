@@ -52,7 +52,7 @@ var App = module.exports = (function(){
 		app = this;
 		_.extend( this, Backbone.Events );
 
-		onLocalhost = /(localhost|moba-lab.local)/.test(window.location.host);
+		onLocalhost = /(localhost|.+\.local)/.test(window.location.host);
 		
 		initializer.add( 'last', function initCreatePieceMaker (next){
 			api = new PieceMakerApi( this, "a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe", 

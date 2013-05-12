@@ -12,7 +12,7 @@ module.exports = function (db, models, sync) {
 			type: 'text',
 			required: true
 		},
-		preview: {
+		poster: {
 			type: 'text'
 		}
 	},{
@@ -44,7 +44,7 @@ module.exports = function (db, models, sync) {
 		var rParams = {};
 		rParams.type = params.type || 'title';
 		rParams.title = params.title;
-		rParams.preview = params.preview;
+		rParams.poster = params.poster;
 		return rParams;
 	}
 

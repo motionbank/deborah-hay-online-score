@@ -13,7 +13,7 @@ module.exports = function (db, models, sync) {
 			type: 'text',
 			required: true
 		},
-		thumb : {	// TODO: "thumb" here, "preview" in cells?
+		poster : {	// TODO: "thumb" here, "preview" in cells?
 			type: 'text'
 		},
 		grid_cols : {
@@ -86,7 +86,7 @@ module.exports = function (db, models, sync) {
 		rParams.title = params.title;
 		rParams.description = params.description;
 		rParams.path = params.path || (rParams.title && titleToPath(rParams.title));
-		rParams.thumb = params.thumb;
+		rParams.poster = params.poster;
 		rParams.grid_cols = params.grid_cols;
 		rParams.grid_rows = params.grid_rows;
 		rParams.cell_width = params.cell_width;

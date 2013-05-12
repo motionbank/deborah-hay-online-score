@@ -64,7 +64,7 @@ var CellView = module.exports = Backbone.View.extend({
 		this.$el.html( elHtml );
 		this.$container = jQuery( '.content', this.$el );
 
-		var previewImg = this.cell.get('preview');
+		var previewImg = this.cell.get('poster');
 		if ( !previewImg ) {
 			this.$el.addClass( 'no-img' );
 		}
@@ -95,9 +95,9 @@ var CellView = module.exports = Backbone.View.extend({
 		if ( this.respondToSceneChange && scene ) { 
 			this.sceneChanged( scene ); 
 		} else {
-			var imgSrc = this.cell.get('preview');
+			var imgSrc = this.cell.get('poster');
 			if ( this.$el.css('background-image') === 'none' && imgSrc ) {
-				imgSrc = this.cfUrl + '/cells/' + imgSrc;
+				imgSrc = this.cfUrl + '/cells/poster/full/' + imgSrc;
 				var img = new Image();
 				img.onload = (function(cellView){return function domImgLoaded (){
 					cellView.$el.css({

@@ -39,7 +39,7 @@ app.get('/import',function(req,rs){
 					title: data.title,
 					description: data.description || '',
 					path: data.link,
-					thumb: data.thumbs && data.thumbs.medium || '',
+					poster: data.thumbs && data.thumbs.medium || '',
 					grid_cols: data.grid.x * 10,
 					grid_rows: data.grid.y,
 					cell_width: 320,
@@ -59,7 +59,7 @@ app.get('/import',function(req,rs){
 									var cellData = {
 										type: cell.type,
 										title: cell.title,
-										preview: cell.preview
+										poster: cell.preview
 									};
 									models.cells.create([cellData],function(err,cells){
 										if (err) {

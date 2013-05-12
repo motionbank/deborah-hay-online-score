@@ -141,12 +141,12 @@
 	float: none;
 }
 
-.cell.drag-helper .preview {
+.cell.drag-helper .poster {
 	display: block;
 	width: 100px;
 }
 
-.cell.drag-helper .preview img {
+.cell.drag-helper .poster img {
 	max-width: 100px;
 	max-height: 70px;
 }

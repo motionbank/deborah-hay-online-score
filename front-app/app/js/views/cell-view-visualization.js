@@ -16,7 +16,7 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 			var self = this;
 
 			var scene = newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-');
-			var imgSrc = this.cfUrl + '/cells/'+this.cell.get('base-path');
+			var imgSrc = this.cfUrl + '/cells/visualization/full/'+this.cell.get('base-path');
 
 			if ( this.respondToRecordingChange ) {
 				imgSrc += this.currentRecording+'_';

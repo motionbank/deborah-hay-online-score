@@ -77,7 +77,7 @@ jQuery(function(){
 			helper: function () {
 				var $e = jQuery(this);
 				var $dragEl = jQuery('<div class="cell drag-helper" />');
-				$dragEl.append( jQuery( '.preview', $e ).clone() );
+				$dragEl.append( jQuery( '.poster', $e ).clone() );
 				$dragEl.append( jQuery( '.title', $e ).text() );
 				$dragEl.data('id',$e.data('id'));
 				return $dragEl;
@@ -153,7 +153,7 @@ jQuery(function(){
 							removeClass('drag-hover');
 					
 					var id = $item.data( 'id' ),
-						iBgImg = $item.data('preview');
+						iBgImg = $item.data('poster');
 					
 					$cell.data( 'id', id );
 					// $cell.html( iBgImg==='none'?id:'' );
@@ -161,7 +161,7 @@ jQuery(function(){
 					$cell.css({
 						backgroundImage: 
 							'url("http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/'+
-								$item.data('preview')+'")'
+								'poster/small/'+$item.data('poster')+'")'
 					});
 				}
 				

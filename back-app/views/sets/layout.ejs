@@ -43,8 +43,8 @@
 								data-y="<%= iy %>"
 								data-width="<%= cell.extra.width || 1 %>" 
 								data-height="<%= cell.extra.height || 1 %>"
-								<% if ( cell.preview ) { %>
-									style="background-image:url('http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/<%= cell.preview %>')"
+								<% if ( cell.poster ) { %>
+									style="background-image:url('http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/small/<%= cell.poster %>')"
 								<% } %>	><div class="resize-handle ui-resizable-handle ui-resizable-se"></div></div>
 						<% } else { %>
 							<div class="grid-cell z-behind"
@@ -67,42 +67,6 @@
 				<div class="add-col cell-adder"></div>
 				<div class="add-row cell-adder"></div>
 			</div>
-<!-- 			<table class="grid">
-				<% for ( var i = 0, iy = 0; iy < set.grid_rows; iy++ ) { %>
-					<tr>
-					<% for ( var ix = 0; ix < set.grid_cols; ix++ ) { %>
-						<% if ( grid[iy] && grid[iy][ix] ) { %>
-							<% var cell = grid[iy][ix]; %>
-							<td class="grid-cell" 
-								title="<%= cell.title %> (#<% cell.id %>), <%= cell.type %>"
-								data-id="<%= cell.id %>" 
-								data-x="<%= ix %>" 
-								data-y="<%= iy %>"
-								data-width="<%= cell.extra.width || 1 %>" 
-								data-height="<%= cell.extra.height || 1 %>"
-								<% if ( cell.preview ) { %>
-								style="background-image:url('http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/<%= cell.preview %>')"
-								<% } %>
-								><% if ( !cell.preview ) { %><%= cell.id %><% } %></td>
-						<% } else { %>
-							<td class="grid-cell" data-id="" data-x="<%= ix %>" 
-								data-y="<%= iy %>">.</td>
-						<% } %>
-						<% if ( ix === set.grid_cols-1 ) { %>
-							<td class="add-x grid-cell" data-y="<%= iy %>">+</td>
-						<% } %>
-					<% } %>
-					</tr>
-				<% } %>
-				<tr class="add-y">
-					<% for ( var ix = 0; ix < set.grid_cols; ix++ ) { %>
-						<td class="add-y grid-cell" data-x="<%= ix %>">+</td>
-					<% } %>
-					<td class="add-y add-x grid-cell" 
-						data-x="<%= set.grid_cols %>" 
-						data-y="<%= set.grid_rows %>">+</td>
-				</tr>
-			</table> -->
 		</div>
 		<div id="cells">
 			<div class="filters">Filters go here ...</div>

@@ -54,8 +54,8 @@ jQuery(function(){
 					success : function ( data ) {
 						var cell = data.cell;
 						jQuery( '.title a', $cell ).text( cell.title );
-						var img = jQuery( '.preview img', $cell );
-						img.attr( 'src', img.data('base') + (cell.preview || 'missing.jpg') );
+						var img = jQuery( '.poster img', $cell );
+						img.attr( 'src', img.data('base') + (cell.poster || 'missing.jpg') );
 						$cellEdit.hide();
 					},
 					error : function (err) {
@@ -65,10 +65,10 @@ jQuery(function(){
 				return false;
 			});
 
-			jQuery('.inp-preview', $cellEdit).change(function(evt){
+			jQuery('.inp-poster', $cellEdit).change(function(evt){
 
 				var $self = jQuery(this);
-				var $container = jQuery('.img-preview-container', $cell);
+				var $container = jQuery('.img-poster-container', $cell);
 
 				var img = new Image();
 				var $img = jQuery( 'img', $container );

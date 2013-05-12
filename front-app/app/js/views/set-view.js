@@ -101,7 +101,7 @@ var GridView = module.exports = Backbone.View.extend({
 			} catch (e) {}
 			
 			var opts = currentSet.cells[i];
-			opts['preview'] = opts['preview'] === 'missing.jpg' ? opts.type+'-'+i+'.jpg' : opts['preview'];
+			opts['poster'] = opts['poster'] === 'missing.jpg' ? opts.type+'-'+i+'.jpg' : opts['poster'];
 
 			var cv = new ( views[opts.type] || views.CellView )( opts, this );
 

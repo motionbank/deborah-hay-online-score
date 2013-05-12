@@ -20,8 +20,8 @@
 		<% } %>
 		<label for="title">Description</label>
 		<textarea name="description"><%= set.description || '' %></textarea><br/>
-		<label for="preview">Thumbnail (200px height)</label>
-		<input type="file" name="preview" /><br />
+		<label for="poster">Poster image (200px height)</label>
+		<input type="file" name="poster" /><br />
 		<input type="submit" value="Save" /> 
 		<% if (set) { %>
 			<a href="/admin/sets/<%= set.id %>/delete" confirm="Delete this set?">Delete set</a> 

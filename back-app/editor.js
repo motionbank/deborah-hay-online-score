@@ -281,10 +281,10 @@ app.post( pathBase + '/sets/new', function (req, res) {
 					}
 				});
 			}
-			if ( req.files && req.files.preview && req.files.preview.size > 0 ) {
-				s3FileUpload( req, res, req.files.preview, config.aws.basePath+'/sets/thumbs/full/', function (err, s3file) {
+			if ( req.files && req.files.poster && req.files.poster.size > 0 ) {
+				s3FileUpload( req, res, req.files.poster, config.aws.basePath+'/sets/poster/full/', function (err, s3file) {
 					if ( noError(req,res,err) ) {
-						set.thumb = s3file.name;
+						set.poster = s3file.name;
 						saveSet(set);
 					}
 				});
@@ -327,7 +327,7 @@ app.post( pathBase + '/sets/:id/save', idNumeric, function (req, res) {
 					description: req.body.description,
 					cell_width: req.body.cell_width,
 					cell_height: req.body.cell_height,
-					thumb: fileName || set.preview || 'missing.jpg'
+					poster: fileName || set.poster || 'missing.jpg'
 				},function(){
 					if (err) {
 						error( req, res, err );
@@ -337,23 +337,23 @@ app.post( pathBase + '/sets/:id/save', idNumeric, function (req, res) {
 					}
 				});
 			}
-			if ( req.files && req.files.preview && req.files.preview.size > 0 ) {
-				s3FileUpload( req, res, req.files.preview, config.aws.basePath+'/sets/thumbs/full/', function (err, s3file) {
+			if ( req.files && req.files.poster && req.files.poster.size > 0 ) {
+				s3FileUpload( req, res, req.files.poster, config.aws.basePath+'/sets/poster/full/', function (err, s3file) {
 					if ( noError(req,res,err) ) {
 						console.log( s3file );
 
 						im.resize({
-							srcPath: req.files.preview.path,
-							dstPath: req.files.preview.path + '_medium',
+							srcPath: req.files.poster.path,
+							dstPath: req.files.poster.path + '_medium',
 							height: 100
 						}, function(err, stdout, stderr){
 							if ( err ) console.log( err );
 							else {
 								s3FileUpload( req, res, {
 												name: s3file.name, 
-												path: req.files.preview.path + '_medium'
+												path: req.files.poster.path + '_medium'
 											  }, 
-											  config.aws.basePath+'/sets/thumbs/medium/', 
+											  config.aws.basePath+'/sets/poster/medium/', 
 											  function (err, s3file) {
 									if (err) console.log(err);
 									else {
@@ -530,7 +530,7 @@ app.post( pathBase + '/cells/new', function (req, res) {
 		req.models.cells.create([{
 				type: req.body.type,
 				title: req.body.title,
-				preview: req.body.preview
+				poster: req.body.poster
 		}],function(err, cells){
 			if (err) {
 				error(req,res,err);
@@ -656,7 +656,7 @@ app.post( pathBase + '/cells/:id/save', idNumeric, function(req, res){
 					cell.save({
 						title: req.body.title,
 						type: req.body.type,
-						preview: req.body.preview
+						poster: req.body.poster
 					}, function(err){
 						if ( noError(req,res,err) ) {
 							var cbs = [];

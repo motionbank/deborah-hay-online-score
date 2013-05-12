@@ -15,8 +15,10 @@
 	<% } %>
 	<div class="cell type-<%= cell.type %>" 
 		 data-id="<%= cell.id %>" 
-		 data-preview="<%= cell.preview || 'missing.jpg' %>" id="cell-<%= cell.id %>">
-		<div class="preview"><img data-base="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/" src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/<%= cell.preview || 'missing.jpg' %>"/></div>
+		 data-poster="<%= cell.poster || 'missing.jpg' %>" id="cell-<%= cell.id %>">
+		<div class="poster">
+			<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/small/<%= cell.poster %>"/>
+		</div>
 		<div class="title"><a href="/admin/cells/<%= cell.id %>"><%= cell.title %></a></div>
 		<div class="type"><%= cell.type %></div>
 		<div class="menu">

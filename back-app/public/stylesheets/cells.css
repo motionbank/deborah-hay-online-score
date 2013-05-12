@@ -58,7 +58,7 @@
 .cell div {
 	float: left;
 }
-.cell .preview {
+.cell .poster {
 	width: 30px;
 	padding-right: 9px;
 }
@@ -77,10 +77,10 @@
 .cell {
 	clear: both;
 }
-.cell .preview {
+.cell .poster {
 	width: 40px;
 }
-.cell .preview img {
+.cell .poster img {
 	max-width: 40px; 
 	max-height: 20px
 }

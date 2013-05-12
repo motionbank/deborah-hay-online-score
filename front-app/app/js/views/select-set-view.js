@@ -20,7 +20,7 @@ var SelectSetView = module.exports = Backbone.View.extend({
 			var $setContainer = jQuery( '<div class="set left" />' );
 			var $setLink = jQuery( '<a href="#set/'+path+'">'+
 										'<div class="title">'+set.title+'</div>'+
-										'<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/thumbs/medium/'+set.thumb+'" />'+
+										'<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/medium/'+set.poster+'" />'+
 									'</a>' );
 			$setContainer.append( $setLink );
 			$setLink.click(function jqClickSet (evt){

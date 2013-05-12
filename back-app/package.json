@@ -6,7 +6,7 @@
   "homepage": "http://motionbank.org/",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/motionbank/deborah-hay-online-score"
   },
   "engines": {
     "node": "~0.6.10 || 0.8 || 0.9"
@@ -14,11 +14,12 @@
   "dependencies": {
     "bcrypt":">= 0.7.5",
     "express":">= 3.2.1",
-    "ejs":"0.8.3",
+    "ejs":">= 0.8.3",
     "mysql":">= 2.0.0-alpha8",
     "orm":">= 2.0.10",
     "underscore":">= 1.4.4",
-    "validator":">= 1.1.1"
+    "validator":">= 1.1.1",
+    "aws-sdk":">= 1.0.0"
   },
   "devDependencies": {
   },

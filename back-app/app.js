@@ -166,49 +166,49 @@ app.delete( '/users/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, 
 
 // curl -X POST -d 'title=A title here&description=A longer description here' -L http://localhost:5555/sets
 
-app.post( '/sets', reqAcceptsJson, reqLoadUser, function ( req, res ) {
-	var params = req.models.sets.sanitizeInput(req.body);
-	params.creator_id = req.user.id;
-	req.models.sets.create([params],function(err,sets){
-		//console.log( sets );
-		if (err) {
-			res.json(500,{message:err.message});
-		} else if (sets.length <= 0) {
-			res.json(500,{message:'No sets created'});
-		} else {
-			res.redirect(200,'/sets/'+sets[0].id); // TODO: check
-		}
-	});
+app.post( '/sets', reqAcceptsJson, niy, reqLoadUser, function ( req, res ) {
+	// var params = req.models.sets.sanitizeInput(req.body);
+	// params.creator_id = req.user.id;
+	// req.models.sets.create([params],function(err,sets){
+	// 	//console.log( sets );
+	// 	if (err) {
+	// 		res.json(500,{message:err.message});
+	// 	} else if (sets.length <= 0) {
+	// 		res.json(500,{message:'No sets created'});
+	// 	} else {
+	// 		res.redirect(200,'/sets/'+sets[0].id); // TODO: check
+	// 	}
+	// });
 });
 
 // curl -X POST -d 'title=title=A title here&type=recording' -L http://localhost:5555/sets/1/cells
 
-app.post( '/sets/:id/cells', reqAcceptsJson, reqLoadUser, paramIdIsNumber, function ( req, res ) {
-	req.models.sets.get(req.params['id'], function (err,set) {
-		if (err) {
-			res.json(500,{message:'set does not exist'});
-		} else {
-			var params = req.models.cells.sanitizeInput(req.body);
-			params.creator_id = req.user.id;
-			req.models.cells.create([params],function(err,cells){
-				//console.log( cells );
-				if (err) {
-					res.json(500,{message:err.message});
-				} else if (cells.length <= 0) {
-					res.json(500,{message:'No cells created for set'});
-				} else {
-					set.addCells(cells);
-					set.save(function(err,set){
-						if (err) {
-							res.json(500,{message:err.message});
-						} else {
-							res.redirect(200,'/sets/'+set.id); // TODO: check
-						}
-					});
-				}
-			});
-		}
-	});
+app.post( '/sets/:id/cells', reqAcceptsJson, niy, reqLoadUser, paramIdIsNumber, function ( req, res ) {
+	// req.models.sets.get(req.params['id'], function (err,set) {
+	// 	if (err) {
+	// 		res.json(500,{message:'set does not exist'});
+	// 	} else {
+	// 		var params = req.models.cells.sanitizeInput(req.body);
+	// 		params.creator_id = req.user.id;
+	// 		req.models.cells.create([params],function(err,cells){
+	// 			//console.log( cells );
+	// 			if (err) {
+	// 				res.json(500,{message:err.message});
+	// 			} else if (cells.length <= 0) {
+	// 				res.json(500,{message:'No cells created for set'});
+	// 			} else {
+	// 				set.addCells(cells);
+	// 				set.save(function(err,set){
+	// 					if (err) {
+	// 						res.json(500,{message:err.message});
+	// 					} else {
+	// 						res.redirect(200,'/sets/'+set.id); // TODO: check
+	// 					}
+	// 				});
+	// 			}
+	// 		});
+	// 	}
+	// });
 });
 
 app.get( '/sets', reqAcceptsJson, function ( req, res ) {
@@ -259,22 +259,22 @@ app.delete( '/sets/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, r
 // curl -X POST -d 'title=A title here&type=recording' -L http://localhost:5555/cells
 
 app.post( '/cells', reqAcceptsJson, reqLoadUser, function ( req, res ) {
-	var params = req.models.cells.sanitizeInput(req.body);
-	req.models.cells.create([params],function(err,cells){
-		//console.log( cells );
-		if (err) {
-			res.json(500,{message:err.message});
-		} else if (cells.length <= 0) {
-			res.json(500,{message:'No cells created'});
-		} else {
-			res.redirect(200,'/cells/'+cells[0].id); // TODO: check
-		}
-	});
+	// var params = req.models.cells.sanitizeInput(req.body);
+	// req.models.cells.create([params],function(err,cells){
+	// 	//console.log( cells );
+	// 	if (err) {
+	// 		res.json(500,{message:err.message});
+	// 	} else if (cells.length <= 0) {
+	// 		res.json(500,{message:'No cells created'});
+	// 	} else {
+	// 		res.redirect(200,'/cells/'+cells[0].id); // TODO: check
+	// 	}
+	// });
 });
 
 // curl http://localhost:5555/cells
 app.get( '/cells', reqAcceptsJson, function ( req, res ) {
-	req.models.cells.find(function(err,cells){
+	req.models.cells.find(['type','title'],function(err,cells){
 		if ( err ) {
 			throw( err );
 		} else {

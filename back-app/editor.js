@@ -3,6 +3,8 @@ var express 	= require('express'),
 	_			= require('underscore'),
 	ejs			= require('ejs'),
 	orm 		= require('orm'),
+	aws			= require('aws-sdk'),
+	fs 			= require('fs'),
 	dbModels	= null,
 	config		= require('./config/config'),
 	app 		= express(),
@@ -72,6 +74,12 @@ app.use( function appUseCookieSessionWrapper (req, res, next) {
 	exprCookSessFn.apply(null,arguments);
 	viewOpts.messages = req.session.messages;
 	req.session.messages = [];
+});
+
+// set up Amazon S3 for uploads
+app.use( function (req, res, next) {
+	aws.config.update(config.aws);
+	next();
 });
 
 /*

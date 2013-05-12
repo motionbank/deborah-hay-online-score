@@ -284,7 +284,7 @@ app.post( pathBase + '/sets/new', function (req, res) {
 			if ( req.files && req.files.preview && req.files.preview.size > 0 ) {
 				s3FileUpload( req, res, req.files.preview, config.aws.basePath+'/sets/thumbs/full/', function (err, s3file) {
 					if ( noError(req,res,err) ) {
-						set.preview = s3file.name;
+						set.thumb = s3file.name;
 						saveSet(set);
 					}
 				});
@@ -327,7 +327,7 @@ app.post( pathBase + '/sets/:id/save', idNumeric, function (req, res) {
 					description: req.body.description,
 					cell_width: req.body.cell_width,
 					cell_height: req.body.cell_height,
-					preview: fileName || set.preview || 'missing.jpg'
+					thumb: fileName || set.preview || 'missing.jpg'
 				},function(){
 					if (err) {
 						error( req, res, err );
@@ -342,14 +342,26 @@ app.post( pathBase + '/sets/:id/save', idNumeric, function (req, res) {
 					if ( noError(req,res,err) ) {
 						console.log( s3file );
 
-						// im.resize({
-						// 	srcPath: 'kittens.jpg',
-						// 	dstPath: 'kittens-small.jpg',
-						// 	width:   256
-						// }, function(err, stdout, stderr){
-						// 	if (err) throw err;
-						// 	console.log('resized kittens.jpg to fit within 256x256px');
-						// });
+						im.resize({
+							srcPath: req.files.preview.path,
+							dstPath: req.files.preview.path + '_medium',
+							height: 100
+						}, function(err, stdout, stderr){
+							if ( err ) console.log( err );
+							else {
+								s3FileUpload( req, res, {
+												name: s3file.name, 
+												path: req.files.preview.path + '_medium'
+											  }, 
+											  config.aws.basePath+'/sets/thumbs/medium/', 
+											  function (err, s3file) {
+									if (err) console.log(err);
+									else {
+										// fine!
+									}
+								});
+							}
+						});
 
 						saveSet(set, s3file.name);
 					}

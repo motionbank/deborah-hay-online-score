@@ -13,7 +13,7 @@ module.exports = function (db, models, sync) {
 			type: 'text',
 			required: true
 		},
-		thumb : {
+		thumb : {	// TODO: "thumb" here, "preview" in cells?
 			type: 'text'
 		},
 		grid_cols : {

@@ -17,6 +17,8 @@ module.exports = {
 	aws: {
 		accessKeyId: 'AKIAIJA4RYGJMVLZ7XJA',
 		secretAccessKey: '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',
-		region: 'us-west-2'
+		region: 'us-east-1',
+		bucket: 'motionbank-media',
+		basePath: 'dh/app'
 	}
 };

@@ -5,8 +5,8 @@
 				return {
 					set : {
 						id: <%= set.id %>,
-						grid_cols: <%= set.grid_cols %>,
-						grid_rows: <%= set.grid_rows %>,
+						grid_cols: <%= set.grid_cols === 0 ? 1 : set.grid_cols %>,
+						grid_rows: <%= set.grid_rows === 0 ? 1 : set.grid_rows %>,
 						cell_width: <%= set.cell_width %>,
 						cell_height: <%= set.cell_height %>
 					},
@@ -52,9 +52,17 @@
 								data-x="<%= ix %>" 
 								data-y="<%= iy %>"
 								data-width="1" 
-								data-height="1"></div>
+								data-height="1"><div class="resize-handle ui-resizable-handle ui-resizable-se"></div></div>
 						<% } %>
 					<% } %>
+				<% } %>
+				<% if ( set.grid_rows === 0 || set.grid_cols === 0 ) { %>
+					<div class="grid-cell z-behind"
+								title="Drop cells here"
+								data-x="0" 
+								data-y="0"
+								data-width="1" 
+								data-height="1"><div class="resize-handle ui-resizable-handle ui-resizable-se"></div></div>
 				<% } %>
 				<div class="add-col cell-adder"></div>
 				<div class="add-row cell-adder"></div>

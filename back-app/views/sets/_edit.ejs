@@ -1,0 +1,31 @@
+<style type="text/css">@import url('/stylesheets/sets.css');</style>
+<div class="set-edit">
+	<form method="post" 
+		  enctype="multipart/form-data"
+		  action="/admin/sets/<% if (set) { %><%= set.id %>/save<% } else { %>new<% } %>">
+		<input type="hidden" name="user_id" value="<%= user.id %>"/>
+		<% if (set) { %>
+			<input type="hidden" name="set_id" value="<%= set.id %>"/>
+		<% } %>
+		<label for="title">Title</label>
+		<input type="text" name="title" value="<%= set.title || '' %>" /><br/>
+		<% if (set) { %>
+			<label for="title">Path (URL)</label>
+			<input type="text" name="path" value="<%= set.path || '' %>" /><br/>
+			<label for="title">Cell aspect ratio (width / height)</label>
+			<fieldset class="aspect-ratio">
+				<input type="text" name="cell_width" value="<%= set.cell_width || 320 %>" /> / 
+				<input type="text" name="cell_height" value="<%= set.cell_height || 240 %>" /><br/>
+			</fieldset>
+		<% } %>
+		<label for="title">Description</label>
+		<textarea name="description"><%= set.description || '' %></textarea><br/>
+		<label for="preview">Thumbnail (200px height)</label>
+		<input type="file" name="preview" /><br />
+		<input type="submit" value="Save" /> 
+		<% if (set) { %>
+			<a href="/admin/sets/<%= set.id %>/delete" confirm="Delete this set?">Delete set</a> 
+			<a href="/admin/sets/<%= set.id %>/layout">Edit layout</a>
+		<% } %>
+	</form>
+</div>

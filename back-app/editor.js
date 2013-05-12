@@ -5,6 +5,7 @@ var express 	= require('express'),
 	orm 		= require('orm'),
 	aws			= require('aws-sdk'),
 	fs 			= require('fs'),
+	im 			= require('imagemagick'),
 	dbModels	= null,
 	config		= require('./config/config'),
 	app 		= express(),
@@ -14,10 +15,12 @@ var express 	= require('express'),
 		messages: []
 	},
 	noop 		= function(){},
-	idNumeric = noop,
+	idNumeric 	= noop,
 	message 	= noop,
 	error 		= noop,
-	noError		= noop;
+	noError		= noop,
+	s3FileUpload = noop,
+	fixSetPath  = noop;
 
 
 // appfog settings
@@ -132,7 +135,91 @@ noError = function (req,res,err) {
 	} else {
 		return true;
 	}
-}
+};
+
+s3FileUpload = function (req,res,file,basePath,next) {
+	var s3 			= new aws.S3(),
+		s3Req 		= {Bucket: config.aws.bucket},
+		s3Client 	= s3.client;
+
+	var err = null;
+
+	var fileName = file.name.
+						toLowerCase().
+							replace(/[^-.a-z0-9]+/ig,'-').
+								replace(/^-+|-+$/,'');
+
+	if ( fileName.length < 10 ) {
+		err = new Error('That filename is too short, needs at least 10 chars');
+		next(err,null);
+		return;
+	}
+
+	var filePath = basePath + fileName;
+	var fileNameStub = fileName.replace(/\.[^.]+$/,'');
+	var retries = 0;
+
+	var step = function(next,done) {
+		s3.client.headObject(_.extend(s3Req,{
+			Key: filePath
+		}),function(err,data){
+			if ( !data ) {
+				// that's ok, nothing there yet
+				done();
+			} else {
+				retries++;
+				filePath = basePath + fileName.replace( fileNameStub, fileNameStub + '_' + retries );
+				if ( retries > 10 ) {
+					error(req,res,new Error('That file existed and automatic renaming failed, '+
+											'please try again with a different name'));
+					return;
+				}
+				next(step,done);
+			}
+		});
+	}
+
+	var done = function () {
+		fs.readFile( file.path, function (fserr, buf) {
+			s3.client.putObject(_.extend(s3Req,{
+				Key: filePath,
+				Body: buf
+			}),function (err,data) {
+				if ( noError(req,res,err) ) {
+					next(null,{
+						name: fileName,
+						path: filePath,
+						s3Data: data
+					});
+				}
+			});
+		});
+	}
+
+	step(step,done);
+};
+
+toSetPath = function (path) {
+	var nPath = '';
+	
+	if ( !path || path.replace(/[\s]+/ig,'').length == 0 ) {
+		nPath = 'generated-path-'+(new Date());
+	} else {
+		nPath = path + '';
+	}
+	
+	nPath = nPath.
+				toLowerCase().
+					replace(/[^a-z0-9]+/ig,'-').
+						replace(/-+/ig,'-').
+							replace(/^-+|-+$/,'');
+	
+	if ( nPath.length === 0 ) {
+		return toSetPath();
+	}
+
+	return nPath;
+};
 
 /*
  +	routes ...
@@ -142,7 +229,7 @@ noError = function (req,res,err) {
 // INDEX
 
 app.get( '/', function (req,res){
-	res.redirect('/admin/');
+	res.redirect( pathBase + '/');
 });
 
 app.get( pathBase, function (req, res) {
@@ -162,7 +249,8 @@ app.get( pathBase, function (req, res) {
 
 app.get( pathBase + '/sets/new', function (req, res) {
 	res.render('sets/new', _.extend(viewOpts,{
-		title: 'create new set'
+		title: 'create new set',
+		set: false
 	}));
 });
 
@@ -177,7 +265,7 @@ app.post( pathBase + '/sets/new', function (req, res) {
 	req.models.sets.create([{
 		title: req.body.title,
 		description: req.body.description,
-		path: req.body.title.toLowerCase().replace(/[^a-z0-9]+/ig,'-').replace(/-+/ig,'-'),
+		path: toSetPath(req.body.title),
 		creator_id: req.user.id
 	}],function(err, sets){
 		if (err) {
@@ -185,7 +273,24 @@ app.post( pathBase + '/sets/new', function (req, res) {
 		} else if ( sets.length == 0 ) {
 			error(req,res,'Set was not created .. hm?!');
 		} else {
-			res.redirect('/admin/sets/'+sets[0].id+'/layout');
+			var set = sets[0];
+			var saveSet = function (set) {
+				set.save(function(err){
+					if ( noError(req,res,err) ) {
+						res.redirect( pathBase + '/sets/'+set.id+'/layout');
+					}
+				});
+			}
+			if ( req.files && req.files.preview && req.files.preview.size > 0 ) {
+				s3FileUpload( req, res, req.files.preview, config.aws.basePath+'/sets/thumbs/full/', function (err, s3file) {
+					if ( noError(req,res,err) ) {
+						set.preview = s3file.name;
+						saveSet(set);
+					}
+				});
+			} else {
+				saveSet(set);
+			}
 		}
 	});
 });
@@ -214,23 +319,44 @@ app.post( pathBase + '/sets/:id/save', idNumeric, function (req, res) {
 		return;
 	}
 	req.models.sets.get(req.params.id, function(err, set){
-		if (err) {
-			error(req,res,err);
-		} else {
-			set.save({
-				title: req.body.title,
-				path: req.body.path,
-				description: req.body.description,
-				cell_width: req.body.cell_width,
-				cell_height: req.body.cell_height
-			},function(){
-				if (err) {
-					error( req, res, err );
-				} else {
-					message(req,'Set was saved!');
-					res.redirect('/admin/sets/'+set.id+'/layout');
-				}
-			});
+		if ( noError(req,res,err) ) {
+			var saveSet = function (set,fileName) {
+				set.save({
+					title: req.body.title,
+					path: toSetPath(req.body.path),
+					description: req.body.description,
+					cell_width: req.body.cell_width,
+					cell_height: req.body.cell_height,
+					preview: fileName || set.preview || 'missing.jpg'
+				},function(){
+					if (err) {
+						error( req, res, err );
+					} else {
+						message(req,'Set was saved!');
+						res.redirect( pathBase + '/sets/'+set.id+'/layout');
+					}
+				});
+			}
+			if ( req.files && req.files.preview && req.files.preview.size > 0 ) {
+				s3FileUpload( req, res, req.files.preview, config.aws.basePath+'/sets/thumbs/full/', function (err, s3file) {
+					if ( noError(req,res,err) ) {
+						console.log( s3file );
+
+						// im.resize({
+						// 	srcPath: 'kittens.jpg',
+						// 	dstPath: 'kittens-small.jpg',
+						// 	width:   256
+						// }, function(err, stdout, stderr){
+						// 	if (err) throw err;
+						// 	console.log('resized kittens.jpg to fit within 256x256px');
+						// });
+
+						saveSet(set, s3file.name);
+					}
+				});
+			} else {
+				saveSet(set,false);
+			}
 		}
 	});
 });
@@ -363,7 +489,7 @@ app.get( pathBase + '/sets/:id/delete', idNumeric, function(req, res){
 					error( req, res, err );
 				} else {
 					message(req,'Set »'+set.title+'« (#'+set.id+') was deleted!');
-					res.redirect('/admin/');
+					res.redirect( pathBase + '/');
 				}
 			});
 		}

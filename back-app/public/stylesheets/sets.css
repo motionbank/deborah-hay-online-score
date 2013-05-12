@@ -1,0 +1,22 @@
+.set-edit form {
+	padding-top: 18px
+}
+
+.set-edit form input[type=text],
+.set-edit form input[type=file],
+.set-edit form textarea {
+	width: 360px;
+	margin: 0px 0px 9px 0px
+}
+
+.set-edit form label {
+	display: block;
+}
+
+.set-edit form textarea {
+	height: 144px
+}
+
+.set-edit form .aspect-ratio input {
+	width: 170px;
+}

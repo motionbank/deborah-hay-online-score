@@ -31,9 +31,12 @@ jQuery(function(){
 		var gridHeight = $grid.height();
 		var helperSize = 15; /* see width, height in layout.css */
 
-		cellHeight = (gridHeight - helperSize) / set.grid_rows;
+		var gridCols = set.grid_cols === 0 ? 1 : set.grid_cols;
+		var gridRows = set.grid_rows === 0 ? 1 : set.grid_rows;
+
+		cellHeight = (gridHeight - helperSize) / gridRows;
 		cellWidth = (set.cell_width / set.cell_height) * cellHeight;
-		var gridWidth = cellWidth * set.grid_cols + helperSize;
+		var gridWidth = cellWidth * gridCols + helperSize;
 
 		$grid.css({
 			width: gridWidth+'px',

@@ -1,13 +1,14 @@
 
-var express 	= require('express'),
+var config		= require('./config/config'),
+	express 	= require('express'),
 	_			= require('underscore'),
 	ejs			= require('ejs'),
 	orm 		= require('orm'),
 	aws			= require('aws-sdk'),
 	fs 			= require('fs'),
 	im 			= require('imagemagick'),
+	vimeo 		= require('vimeo')(config.vimeo.apiKey, config.vimeo.apiSecret),
 	dbModels	= null,
-	config		= require('./config/config'),
 	app 		= express(),
 	pathBase 	= '/admin',
 	viewOpts 	= {
@@ -20,7 +21,8 @@ var express 	= require('express'),
 	error 		= noop,
 	noError		= noop,
 	s3FileUpload = noop,
-	fixSetPath  = noop;
+	fixSetPath  = noop,
+	vimeoAuthed = noop;
 
 
 // appfog settings
@@ -55,7 +57,7 @@ app.use( express.basicAuth( function( user, pass, cb ) {
 			if (!users[0].testPassword(pass)) cb({message:'Wrong password'},null);
 			else {
 				viewOpts.user = users[0];
-				cb( null, users[0] );
+				cb( null, users[0] ); // store this user in req.user
 			}
 		}
 	});
@@ -222,6 +224,18 @@ toSetPath = function (path) {
 	}
 
 	return nPath;
+};
+
+vimeoAuthed = function (req, res, next) {
+	if ( req.session && 
+		 req.session.vimeo && 
+		 req.session.vimeo.access &&
+		 req.session.vimeo.expires - (new Date()).getTime() > 0 ) {
+		next();
+	} else {
+		delete req.session.vimeo;
+		res.redirect( pathBase + '/vimeo/oauth' );
+	}
 };
 
 /*
@@ -865,6 +879,122 @@ app.get( pathBase + '/cells/:id/delete', idNumeric, function(req,res){
 	});
 });
 
+// VIMEO - LOGIN OAUTH
+
+app.get( pathBase + '/vimeo/oauth', function (req, res) {
+	// https://github.com/twentyrogersc/vimeo
+	vimeo.getRequestToken( req.protocol+'://'+req.host+':'+config.port+pathBase+'/vimeo/oauth_callback', 
+						   ['read'],
+						   function (err, vreq) {
+		// req.secret: store in session for vimeo.getAccessToken
+		// req.redirect: send user to this url
+		req.session.vimeo = {
+			oauth_secret: vreq.secret
+		};
+		res.redirect( vreq.redirect );
+	});
+});
+
+
+// VIMEO - OAUTH CALLBACK
+
+app.get( pathBase + '/vimeo/oauth_callback', function (req, res) {
+	console.log(req.query,req.session);
+	var oauth_token = req.query.oauth_token,
+		oauth_verifier = req.query.oauth_verifier;
+	// https://github.com/twentyrogersc/vimeo
+	vimeo.getAccessToken( oauth_token, 
+						  req.session.vimeo.oauth_secret, 
+						  oauth_verifier, 
+						  function(err, access) {
+		if ( noError(req, res, err) ) {
+			req.session.vimeo.access = access;
+			var tomorrow = new Date();
+			tomorrow.setDate(tomorrow.getDate() + 1);
+			req.session.vimeo.expires = tomorrow.getTime(); // 1 day
+	  		// access containes access token and access token secret ready for vimeo calls
+	  		vimeo.people('getInfo', {}, access, function(err, vres) {
+	    		req.session.vimeo.user = vres.person;
+	    		message('You are now logged in to Vimeo!');
+	    		res.redirect( pathBase + '/vimeo/albums' );
+	  		});
+		}
+	});
+});
+
+// VIMEO - ALBUMS
+
+app.get( pathBase + '/vimeo/albums', vimeoAuthed, function (req, res) {
+	// https://developer.vimeo.com/apis/advanced/methods/vimeo.albums.getAll
+	vimeo.albums( 'getAll', 
+		 		  { user_id:'motionbank', sort:'newest', per_page:50 }, 
+				  function( err, vres ) {
+	/*{ generated_in: '0.0350', stat: 'ok', albums: { on_this_page: '11',
+     page: '1', perpage: '50', total: '11', album: [ [Object], .. ] } }*/
+     	if ( noError(req,res,err) ) {
+			res.render('vimeo/albums',_.extend(viewOpts,{
+				albumData: vres.albums
+			}));
+     	}
+	});
+});
+
+// VIMEO - ALBUM VIEW
+
+app.get( pathBase + '/vimeo/album/:album_id', vimeoAuthed, function (req, res) {
+	try {
+		parseInt( req.params.album_id );
+	} catch (e) {
+		error(req,res,'Album id needs to be numeric');
+		return;
+	}
+	// https://developer.vimeo.com/apis/advanced/methods/vimeo.albums.getVideos
+	vimeo.albums( 'getVideos', 
+				  { album_id: req.params.album_id,
+					page: req.query.page || 1, 
+					per_page: 50, 
+					full_response: true }, 
+				  req.session.vimeo.access,
+				  function ( err, vres ) {
+		if ( noError(req,res,err) ) {
+			/*{ generated_in: '0.1490',
+  stat: 'ok',
+  videos: 
+   { on_this_page: '3',
+     page: '1',
+     perpage: '50',
+     total: '3',
+     video: [ [Object], [Object], [Object] ] } }*/
+     /*{ allow_adds: '0',
+       embed_privacy: 'approved',
+       id: '64470355',
+       is_hd: '0',
+       is_transcoding: '0',
+       is_watchlater: '0',
+       license: '0',
+       privacy: 'disable',
+       title: 'interview3-39.11-39.36.mp4',
+       description: '',
+       upload_date: '2013-04-20 20:36:47',
+       modified_date: '2013-05-13 06:04:41',
+       number_of_likes: '0',
+       number_of_plays: '3',
+       number_of_comments: '0',
+       width: '640',
+       height: '360',
+       duration: '25',
+       owner: [Object],
+       cast: [Object],
+       urls: [Object],
+       thumbnails: [Object] }*/
+			res.render('vimeo/album',_.extend(viewOpts,{
+				album_id: req.params.album_id,
+				videoData: vres.videos
+			}));
+		}
+	});
+});
+
 // LOGOUT
 
 app.get( pathBase + '/logout', function (req, res) {
@@ -872,4 +1002,4 @@ app.get( pathBase + '/logout', function (req, res) {
 	res.send(401,'Logged out!');
 });
 
-app.listen( process.env.VCAP_APP_PORT || 5556 );
+app.listen( process.env.VCAP_APP_PORT || config.port );

@@ -1,0 +1,36 @@
+<style type="text/css">
+	.vimeo-video-list {}
+	ul.pager {
+		list-style: none;
+		margin: 0px;
+		padding: 0px;
+	}
+	ul.pager li {
+		float: left;
+		padding-right: 8px;
+	}
+	ul.pager li a {
+		display: block;
+	}
+	ul.pager li.current-page a {
+		font-weight: bold;
+		color: black;
+	}
+</style>
+<% for ( var i = 0; i < videoData.video.length; i++ ) { %>
+	<% var video = videoData.video[i]; %>
+	<div class="video">
+		<%= video.title %>
+	</div>
+<% } %>
+<% if ( parseInt(videoData.total) > parseInt(videoData.on_this_page) ) { %>
+	<br/>
+	<ul class="pager">
+	<% var total = parseInt(videoData.total), 
+	       perpage = parseInt(videoData.perpage), 
+		   page = parseInt(videoData.page); %>
+	<% for ( var p = 1, t = Math.ceil(parseInt(videoData.total)/parseInt(videoData.perpage)); p <= t; p++ ) { %>
+		<li class="pager-item <%= (p === page) && 'current-page' || '' %>"><a href="?page=<%= p %>"><%= p %></a></li>
+	<% } %>
+	</ul>
+<% } %>

@@ -13,8 +13,10 @@ module.exports = function (db, models, sync) {
 			type: 'text',
 			required: true
 		},
-		poster : {	// TODO: "thumb" here, "preview" in cells?
-			type: 'text'
+		poster : {
+			type: 'text',
+			required : true,
+			defaultValue : 'missing.jpg'
 		},
 		grid_cols : {
 			type: 'number',
@@ -93,6 +95,11 @@ module.exports = function (db, models, sync) {
 		rParams.cell_height = params.cell_height;
 		return rParams;
 	}
+
+	model.posterSizes = [
+		{ name: 'medium', size: { height: 100 } },
+		{ name: 'small', size: { height: 50 } }
+	];
 
 	if ( sync === true ) {
 		model.sync(function(err){

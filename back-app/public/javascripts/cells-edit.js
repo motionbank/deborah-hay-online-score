@@ -4,8 +4,8 @@ jQuery(function(){
 
 	jQuery('.cell-edit a.add-fields:not(.cell-add-fields)').click(function(evt){
 		evt.preventDefault();
-		jQuery( '<input type="text" name="field_keys[]" value="" />'+
-				'<input type="text" name="field_values[]" value="" /><br />').insertBefore(this);
+		jQuery( '<input type="text" name="field_keys" value="" />'+
+				'<input type="text" name="field_values" value="" /><br />').insertBefore(this);
 		return false;
 	}).addClass('cell-add-fields');
 

@@ -1,5 +1,8 @@
 <script src="/javascripts/cells-edit.js" type="text/javascript"></script>
-<div class="cell-edit"><form method="post" action="/admin/cells/<% if ( cell.id ) { %><%= cell.id %>/save<% } else { %>new<% } %>">
+<div class="cell-edit">
+	<form method="post" 
+		  enctype="multipart/form-data"
+		  action="/admin/cells/<% if ( cell.id ) { %><%= cell.id %>/save<% } else { %>new<% } %>">
 	<input type="hidden" name="user_id" value="<%= user.id %>"/>
 	<% if ( cell.id ) { %>
 		<input type="hidden" name="cell_id" value="<%= cell.id %>"/>
@@ -14,7 +17,9 @@
 	<input type="text" name="title" value="<%= cell.title || '' %>" /><br/>
 
 	<label for="title">Poster image</label>
-	<input class="inp-poster" type="text" name="poster" value="<%= cell.poster || 'missing.jpg' %>" /><br/>
+		<input class="inp-poster" type="file" name="poster" value="" /><br/>
+	<% if ( !cell.poster ) { %>
+	<% } %>
 	<div class="img-poster-container">
 		<img data-base="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/" 
 		     src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/small/<%= cell.poster %>" />
@@ -25,13 +30,13 @@
 	
 	<% if ( cell.fields ) { %>
 		<% for ( var i = 0; i < cell.fields.length; i++ ) { %>
-			<input type="text" name="field_keys[]" value="<%= cell.fields[i].name %>" />
-			<input type="text" name="field_values[]" value="<%= cell.fields[i].value %>" />
+			<input type="text" name="field_keys" value="<%= cell.fields[i].name %>" />
+			<input type="text" name="field_values" value="<%= cell.fields[i].value %>" />
 			<br />
 		<% } %>
 	<% } else { %>
-		<input type="text" name="field_keys[]" value="" />
-		<input type="text" name="field_values[]" value="" />
+		<input type="text" name="field_keys" value="" />
+		<input type="text" name="field_values" value="" />
 		<br />
 	<% } %>
 

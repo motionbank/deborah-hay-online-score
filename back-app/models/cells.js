@@ -13,7 +13,9 @@ module.exports = function (db, models, sync) {
 			required: true
 		},
 		poster: {
-			type: 'text'
+			type: 'text',
+			required : true,
+			defaultValue : 'missing.jpg'
 		}
 	},{
 		cache: false,
@@ -29,6 +31,11 @@ module.exports = function (db, models, sync) {
 	model.cellTypes = function () {
 		return cellTypes;
 	}
+
+	model.posterSizes = [
+		{ name: 'medium', size: { height: 250, width: 250 } },
+		{ name: 'small',  size: { height: 75,  width: 75  } }
+	];
 
 	model.hasMany( 'fields', models.fields, {}, {
 		reverse:'cell'

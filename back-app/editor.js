@@ -126,6 +126,7 @@ error = function (req, res, error) {
 		title: 'E R R 0 R !', 
 		message: error + ''
 	}));
+	throw( error );
 };
 
 noError = function (req,res,err) {
@@ -155,7 +156,8 @@ s3FileUpload = function (req,res,file,basePath,next) {
 		return;
 	}
 
-	var filePath = basePath + fileName;
+	var fileNameUnique = fileName;
+	var filePath = basePath + fileNameUnique;
 	var fileNameStub = fileName.replace(/\.[^.]+$/,'');
 	var retries = 0;
 
@@ -168,7 +170,8 @@ s3FileUpload = function (req,res,file,basePath,next) {
 				done();
 			} else {
 				retries++;
-				filePath = basePath + fileName.replace( fileNameStub, fileNameStub + '_' + retries );
+				fileNameUnique = fileName.replace( fileNameStub, fileNameStub + '-' + retries );
+				filePath = basePath + fileNameUnique;
 				if ( retries > 10 ) {
 					error(req,res,new Error('That file existed and automatic renaming failed, '+
 											'please try again with a different name'));
@@ -187,7 +190,7 @@ s3FileUpload = function (req,res,file,basePath,next) {
 			}),function (err,data) {
 				if ( noError(req,res,err) ) {
 					next(null,{
-						name: fileName,
+						name: fileNameUnique,
 						path: filePath,
 						s3Data: data
 					});
@@ -266,6 +269,7 @@ app.post( pathBase + '/sets/new', function (req, res) {
 		title: req.body.title,
 		description: req.body.description,
 		path: toSetPath(req.body.title),
+		poster: 'missing.jpg',
 		creator_id: req.user.id
 	}],function(err, sets){
 		if (err) {
@@ -284,6 +288,29 @@ app.post( pathBase + '/sets/new', function (req, res) {
 			if ( req.files && req.files.poster && req.files.poster.size > 0 ) {
 				s3FileUpload( req, res, req.files.poster, config.aws.basePath+'/sets/poster/full/', function (err, s3file) {
 					if ( noError(req,res,err) ) {
+
+						_.each( req.models.sets.posterSizes, function(pSize){
+							im.resize( _.extend( pSize.size,{
+								srcPath: req.files.poster.path,
+								dstPath: req.files.poster.path + '_' + pSize.name
+							}), function (err, stdout, stderr) {
+								if ( err ) console.log( err );
+								else {
+									s3FileUpload( req, res, {
+													name: s3file.name, 
+													path: req.files.poster.path + '_' + pSize.name
+												  }, 
+												  config.aws.basePath+'/sets/poster/'+ pSize.name +'/',
+												  function (err, s3file) {
+										if (err) console.log(err);
+										else {
+											// fine!
+										}
+									});
+								}
+							});
+						});
+
 						set.poster = s3file.name;
 						saveSet(set);
 					}
@@ -340,27 +367,27 @@ app.post( pathBase + '/sets/:id/save', idNumeric, function (req, res) {
 			if ( req.files && req.files.poster && req.files.poster.size > 0 ) {
 				s3FileUpload( req, res, req.files.poster, config.aws.basePath+'/sets/poster/full/', function (err, s3file) {
 					if ( noError(req,res,err) ) {
-						console.log( s3file );
 
-						im.resize({
-							srcPath: req.files.poster.path,
-							dstPath: req.files.poster.path + '_medium',
-							height: 100
-						}, function(err, stdout, stderr){
-							if ( err ) console.log( err );
-							else {
-								s3FileUpload( req, res, {
-												name: s3file.name, 
-												path: req.files.poster.path + '_medium'
-											  }, 
-											  config.aws.basePath+'/sets/poster/medium/', 
-											  function (err, s3file) {
-									if (err) console.log(err);
-									else {
-										// fine!
-									}
-								});
-							}
+						_.each( req.models.sets.posterSizes, function(pSize){
+							im.resize( _.extend( pSize.size,{
+								srcPath: req.files.poster.path,
+								dstPath: req.files.poster.path + '_' + pSize.name
+							}), function (err, stdout, stderr) {
+								if ( err ) console.log( err );
+								else {
+									s3FileUpload( req, res, {
+													name: s3file.name, 
+													path: req.files.poster.path + '_' + pSize.name
+												  }, 
+												  config.aws.basePath+'/sets/poster/'+ pSize.name +'/',
+												  function (err, s3file) {
+										if (err) console.log(err);
+										else {
+											// fine!
+										}
+									});
+								}
+							});
 						});
 
 						saveSet(set, s3file.name);
@@ -496,6 +523,7 @@ app.get( pathBase + '/sets/:id/delete', idNumeric, function(req, res){
 		if (err) {
 			error( req, res, err );
 		} else {
+			// TODO remove poster images from S3!
 			set.remove(function(err){
 				if (err) {
 					error( req, res, err );
@@ -529,17 +557,22 @@ app.post( pathBase + '/cells/new', function (req, res) {
 	} else {
 		req.models.cells.create([{
 				type: req.body.type,
-				title: req.body.title,
-				poster: req.body.poster
+				title: req.body.title
 		}],function(err, cells){
 			if (err) {
 				error(req,res,err);
 			} else {
+
 				var cell = cells[0];
-				
 				var cbs = [];
+
+				if ( typeof req.body.field_keys === 'string' ) {
+					req.body.field_keys = [req.body.field_keys];
+					req.body.field_values = [req.body.field_values];
+				}
 				_.each(req.body.field_keys,function(key,i){
 					var val = req.body.field_values[i];
+					if ( val === '' && key === '' ) return;
 					cbs.push(function(next) {
 						req.models.fields.create([{
 							name: key,
@@ -554,6 +587,43 @@ app.post( pathBase + '/cells/new', function (req, res) {
 						});
 					});
 				});
+
+				if ( req.files && req.files.poster && req.files.poster.size > 0 ) {
+					cbs.push(function(next){
+						s3FileUpload( req, res, req.files.poster, 
+									  config.aws.basePath+'/cells/poster/full/', 
+									  function (err, s3file) {
+							if ( noError(req,res,err) ) {
+
+								_.each( req.models.cells.posterSizes, function(pSize){
+									im.resize( _.extend( pSize.size,{
+										srcPath: req.files.poster.path,
+										dstPath: req.files.poster.path + '_' + pSize.name
+									}), function (err, stdout, stderr) {
+										if ( err ) console.log( err );
+										else {
+											s3FileUpload( req, res, {
+															name: s3file.name, 
+															path: req.files.poster.path + '_' + pSize.name
+														  }, 
+														  config.aws.basePath+'/cells/poster/'+ pSize.name +'/',
+														  function (err, s3file) {
+												if (err) console.log(err);
+												else {
+													// fine!
+												}
+											});
+										}
+									});
+								});
+
+								cell.poster = s3file.name;
+								next();
+							}
+						});
+					});
+				}
+
 				cbs.push(function(){
 					cell.save(function(){
 						if (err) {
@@ -563,6 +633,7 @@ app.post( pathBase + '/cells/new', function (req, res) {
 						}
 					});
 				});
+
 				var cb = cbs.shift();
 				var nextCb = function () {
 					if ( cbs.length > 0 ) {
@@ -583,6 +654,20 @@ app.get( pathBase + '/cells', function (req,res){
 		if (noError(req,res,err)) {
 			res.render('cells/list',_.extend(viewOpts,{
 				title: 'All cells',
+				cells: cells
+			}));
+		}
+	});
+});
+
+// CELLS - LIST TYPE
+
+app.get( pathBase + '/cells/type/:type', function (req,res){
+	var type = req.params.type.replace(/[^a-z]+/ig,'');
+	req.models.cells.find({type:type},['type','title'],function(err,cells){
+		if (noError(req,res,err)) {
+			res.render('cells/list',_.extend(viewOpts,{
+				title: 'All cells of type »'+type+'«',
 				cells: cells
 			}));
 		}
@@ -655,13 +740,18 @@ app.post( pathBase + '/cells/:id/save', idNumeric, function(req, res){
 					}
 					cell.save({
 						title: req.body.title,
-						type: req.body.type,
-						poster: req.body.poster
+						type: req.body.type
 					}, function(err){
 						if ( noError(req,res,err) ) {
 							var cbs = [];
-							_.each(req.body.field_keys,function(key,i){
+
+							if ( typeof req.body.field_keys === 'string' ) {
+								req.body.field_keys = [req.body.field_keys];
+								req.body.field_values = [req.body.field_values];
+							}
+							_.each( req.body.field_keys, function(key,i) {
 								var val = req.body.field_values[i];
+								if ( val === '' && key === '' ) return;
 								cbs.push(function(next) {
 									req.models.fields.create([{
 										name: key,
@@ -676,6 +766,43 @@ app.post( pathBase + '/cells/:id/save', idNumeric, function(req, res){
 									});
 								});
 							});
+
+							if ( req.files && req.files.poster && req.files.poster.size > 0 ) {
+								cbs.push(function(next){
+									s3FileUpload( req, res, req.files.poster, 
+												  config.aws.basePath+'/cells/poster/full/', 
+												  function (err, s3file) {
+										if ( noError(req,res,err) ) {
+
+											_.each( req.models.cells.posterSizes, function(pSize){
+												im.resize( _.extend( pSize.size,{
+													srcPath: req.files.poster.path,
+													dstPath: req.files.poster.path + '_' + pSize.name
+												}), function (err, stdout, stderr) {
+													if ( err ) console.log( err );
+													else {
+														s3FileUpload( req, res, {
+																		name: s3file.name, 
+																		path: req.files.poster.path + '_' + pSize.name
+																	  }, 
+																	  config.aws.basePath+'/cells/poster/'+ pSize.name +'/',
+																	  function (err, s3file) {
+															if (err) console.log(err);
+															else {
+																// fine!
+															}
+														});
+													}
+												});
+											});
+
+											cell.poster = s3file.name;
+											next();
+										}
+									});
+								});
+							}
+
 							cbs.push(function(){
 								cell.save(function(){
 									if (err) {
@@ -693,6 +820,7 @@ app.post( pathBase + '/cells/:id/save', idNumeric, function(req, res){
 									}
 								});
 							});
+
 							var cb = cbs.shift();
 							var nextCb = function () {
 								if ( cbs.length > 0 ) {
@@ -723,6 +851,8 @@ app.get( pathBase + '/cells/:id/delete', idNumeric, function(req,res){
 							field.remove(/* just assume it's ok */);
 						});
 					}
+
+					// TODO: remove images from S3!
 					cell.remove(function(err){
 						if (noError(req,res,err)) {
 							message(req,'Cell deleted');

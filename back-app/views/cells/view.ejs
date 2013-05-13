@@ -8,7 +8,9 @@
 		Type: <%= cell.type %><br />
 		
 		Poster image:<br />
+		<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/full/<%= cell.poster %>" style="max-height:500px;max-width:500px" /><br />
 		<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/medium/<%= cell.poster %>" /><br />
+		<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/small/<%= cell.poster %>" /><br />
 
 		Fields:<br />
 		<% for ( var i = 0; i < cell.fields.length; i++ ) { %>

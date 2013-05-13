@@ -12,6 +12,10 @@ module.exports = function (db, models, sync) {
 			type: 'text',
 			required: true
 		},
+		description : {
+			type: 'text',
+			required: false
+		},
 		poster: {
 			type: 'text',
 			required : true,
@@ -51,6 +55,7 @@ module.exports = function (db, models, sync) {
 		var rParams = {};
 		rParams.type = params.type || 'title';
 		rParams.title = params.title;
+		rParams.description = params.description;
 		rParams.poster = params.poster;
 		return rParams;
 	}

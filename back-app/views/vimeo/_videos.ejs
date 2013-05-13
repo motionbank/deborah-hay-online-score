@@ -20,7 +20,15 @@
 <% for ( var i = 0; i < videoData.video.length; i++ ) { %>
 	<% var video = videoData.video[i]; %>
 	<div class="video">
-		<%= video.title %>
+		<% var thumbs = video.thumbnails.thumbnail; var video_thumb = thumbs[0]; %>
+		<% for ( var t = 0; t < thumbs.length; t++ ) { %>
+			<% if ( thumbs[t] !== video_thumb && 
+					(1 * thumbs[t].width + thumbs[t].height) < 
+					(1 * video_thumb.width + video_thumb.height) ) { %>
+				<% video_thumb = thumbs[t] %>
+			<% } %>
+		<% } %>
+		<img src="<%= video_thumb._content %>" /> <%= video.title %>
 	</div>
 <% } %>
 <% if ( parseInt(videoData.total) > parseInt(videoData.on_this_page) ) { %>

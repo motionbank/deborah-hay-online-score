@@ -13,8 +13,12 @@
 			<option value="<%= types[i] %>" <% if ( types[i] === cell.type ) { %>selected<% } %>><%= types[i] %></option>
 		<% } %>
 	</select>
+
 	<label for="title">Title</label>
 	<input type="text" name="title" value="<%= cell.title || '' %>" /><br/>
+
+	<label for="description">Description</label>
+	<input type="text" name="description" value="<%= cell.description || '' %>" /><br/>
 
 	<label for="title">Poster image</label>
 		<input class="inp-poster" type="file" name="poster" value="" /><br/>

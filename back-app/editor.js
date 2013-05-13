@@ -6,8 +6,11 @@ var config		= require('./config/config'),
 	orm 		= require('orm'),
 	aws			= require('aws-sdk'),
 	fs 			= require('fs'),
+	http 		= require('http'),
+	url 		= require('url'),
 	im 			= require('imagemagick'),
 	vimeo 		= require('vimeo')(config.vimeo.apiKey, config.vimeo.apiSecret),
+	vimeoStore  = {},
 	dbModels	= null,
 	app 		= express(),
 	pathBase 	= '/admin',
@@ -140,7 +143,7 @@ noError = function (req,res,err) {
 	}
 };
 
-s3FileUpload = function (req,res,file,basePath,next) {
+s3FileUpload = function ( req, res, file, basePath, next ) {
 	var s3 			= new aws.S3(),
 		s3Req 		= {Bucket: config.aws.bucket},
 		s3Client 	= s3.client;
@@ -185,10 +188,10 @@ s3FileUpload = function (req,res,file,basePath,next) {
 	}
 
 	var done = function () {
-		fs.readFile( file.path, function (fserr, buf) {
+		var uploadIt = function () {
 			s3.client.putObject(_.extend(s3Req,{
 				Key: filePath,
-				Body: buf
+				Body: file.buffer
 			}),function (err,data) {
 				if ( noError(req,res,err) ) {
 					next(null,{
@@ -198,7 +201,17 @@ s3FileUpload = function (req,res,file,basePath,next) {
 					});
 				}
 			});
-		});
+		}
+		if ( !('buffer' in file && file.buffer) ) {
+			fs.readFile( file.path, function (fserr, buf) {
+				if ( noError(req,res,err) ) {
+					file.buffer = buf;
+					uploadIt();
+				}
+			});
+		} else {
+			uploadIt();
+		}
 	}
 
 	step(step,done);
@@ -227,13 +240,13 @@ toSetPath = function (path) {
 };
 
 vimeoAuthed = function (req, res, next) {
-	if ( req.session && 
-		 req.session.vimeo && 
-		 req.session.vimeo.access &&
-		 req.session.vimeo.expires - (new Date()).getTime() > 0 ) {
+	var vSession = vimeoStore && vimeoStore[req.user.id];
+	if ( vSession && 
+		 vSession.access &&
+		 vSession.expires - (new Date()).getTime() > 0 ) {
 		next();
 	} else {
-		delete req.session.vimeo;
+		delete vimeoStore[req.user.id];
 		res.redirect( pathBase + '/vimeo/oauth' );
 	}
 };
@@ -300,7 +313,11 @@ app.post( pathBase + '/sets/new', function (req, res) {
 				});
 			}
 			if ( req.files && req.files.poster && req.files.poster.size > 0 ) {
-				s3FileUpload( req, res, req.files.poster, config.aws.basePath+'/sets/poster/full/', function (err, s3file) {
+				s3FileUpload( req, res, 
+							  {name: req.files.poster.name,
+							   path: req.files.poster.path}, 
+							  config.aws.basePath+'/sets/poster/full/', 
+							  function (err, s3file) {
 					if ( noError(req,res,err) ) {
 
 						_.each( req.models.sets.posterSizes, function(pSize){
@@ -379,7 +396,11 @@ app.post( pathBase + '/sets/:id/save', idNumeric, function (req, res) {
 				});
 			}
 			if ( req.files && req.files.poster && req.files.poster.size > 0 ) {
-				s3FileUpload( req, res, req.files.poster, config.aws.basePath+'/sets/poster/full/', function (err, s3file) {
+				s3FileUpload( req, res, {
+							   name: req.files.poster.name,
+							   path: req.files.poster.path }, 
+							  config.aws.basePath+'/sets/poster/full/', 
+							  function (err, s3file) {
 					if ( noError(req,res,err) ) {
 
 						_.each( req.models.sets.posterSizes, function(pSize){
@@ -570,8 +591,9 @@ app.post( pathBase + '/cells/new', function (req, res) {
 		error( req, res, 'That type is not allowed!' );
 	} else {
 		req.models.cells.create([{
-				type: req.body.type,
-				title: req.body.title
+			type: req.body.type,
+			title: req.body.title,
+			description: req.body.description
 		}],function(err, cells){
 			if (err) {
 				error(req,res,err);
@@ -604,7 +626,9 @@ app.post( pathBase + '/cells/new', function (req, res) {
 
 				if ( req.files && req.files.poster && req.files.poster.size > 0 ) {
 					cbs.push(function(next){
-						s3FileUpload( req, res, req.files.poster, 
+						s3FileUpload( req, res, {
+									  	name: req.files.poster.name,
+									  	path: req.files.poster.path },
 									  config.aws.basePath+'/cells/poster/full/', 
 									  function (err, s3file) {
 							if ( noError(req,res,err) ) {
@@ -754,7 +778,8 @@ app.post( pathBase + '/cells/:id/save', idNumeric, function(req, res){
 					}
 					cell.save({
 						title: req.body.title,
-						type: req.body.type
+						type: req.body.type,
+						description: req.body.description
 					}, function(err){
 						if ( noError(req,res,err) ) {
 							var cbs = [];
@@ -783,7 +808,9 @@ app.post( pathBase + '/cells/:id/save', idNumeric, function(req, res){
 
 							if ( req.files && req.files.poster && req.files.poster.size > 0 ) {
 								cbs.push(function(next){
-									s3FileUpload( req, res, req.files.poster, 
+									s3FileUpload( req, res, {
+													name: req.files.poster.name,
+													path: req.files.poster.path }, 
 												  config.aws.basePath+'/cells/poster/full/', 
 												  function (err, s3file) {
 										if ( noError(req,res,err) ) {
@@ -866,7 +893,18 @@ app.get( pathBase + '/cells/:id/delete', idNumeric, function(req,res){
 						});
 					}
 
-					// TODO: remove images from S3!
+					var s3 = new aws.S3();
+					var sizes = req.models.cells.posterSizes;
+					sizes.push({name:'full'});
+					_.each( sizes, function(pSize){
+						s3.client.deleteObject({
+							Bucket: config.aws.bucket,
+							Key: config.aws.basePath+'/cells/poster/'+ pSize.name +'/'+cell.poster
+						},function(err,data){
+							if (err) throw(err);
+						});
+					});
+
 					cell.remove(function(err){
 						if (noError(req,res,err)) {
 							message(req,'Cell deleted');
@@ -886,35 +924,33 @@ app.get( pathBase + '/vimeo/oauth', function (req, res) {
 	vimeo.getRequestToken( req.protocol+'://'+req.host+':'+config.port+pathBase+'/vimeo/oauth_callback', 
 						   ['read'],
 						   function (err, vreq) {
-		// req.secret: store in session for vimeo.getAccessToken
-		// req.redirect: send user to this url
-		req.session.vimeo = {
-			oauth_secret: vreq.secret
+		vimeoStore[req.user.id] = {
+			oauth_secret: vreq.secret,
+			cache : {}
 		};
 		res.redirect( vreq.redirect );
 	});
 });
 
-
 // VIMEO - OAUTH CALLBACK
 
 app.get( pathBase + '/vimeo/oauth_callback', function (req, res) {
-	console.log(req.query,req.session);
 	var oauth_token = req.query.oauth_token,
 		oauth_verifier = req.query.oauth_verifier;
 	// https://github.com/twentyrogersc/vimeo
+	var vSession = vimeoStore[req.user.id];
 	vimeo.getAccessToken( oauth_token, 
-						  req.session.vimeo.oauth_secret, 
+						  vSession.oauth_secret, 
 						  oauth_verifier, 
 						  function(err, access) {
 		if ( noError(req, res, err) ) {
-			req.session.vimeo.access = access;
+			vSession.access = access;
 			var tomorrow = new Date();
 			tomorrow.setDate(tomorrow.getDate() + 1);
-			req.session.vimeo.expires = tomorrow.getTime(); // 1 day
+			vSession.expires = tomorrow.getTime(); // 1 day
 	  		// access containes access token and access token secret ready for vimeo calls
 	  		vimeo.people('getInfo', {}, access, function(err, vres) {
-	    		req.session.vimeo.user = vres.person;
+	    		vSession.user = vres.person;
 	    		message('You are now logged in to Vimeo!');
 	    		res.redirect( pathBase + '/vimeo/albums' );
 	  		});
@@ -932,6 +968,12 @@ app.get( pathBase + '/vimeo/albums', vimeoAuthed, function (req, res) {
 	/*{ generated_in: '0.0350', stat: 'ok', albums: { on_this_page: '11',
      page: '1', perpage: '50', total: '11', album: [ [Object], .. ] } }*/
      	if ( noError(req,res,err) ) {
+     		var vCache = vimeoStore[req.user.id].cache;
+     		vCache.albums = vCache.albums || {};
+     		var albums = vres.albums.album;
+     		for ( var i = 0; i < albums.length; i++ ) {
+     			vCache.albums['id_'+albums[i].id] = albums[i];
+     		}
 			res.render('vimeo/albums',_.extend(viewOpts,{
 				albumData: vres.albums
 			}));
@@ -941,20 +983,22 @@ app.get( pathBase + '/vimeo/albums', vimeoAuthed, function (req, res) {
 
 // VIMEO - ALBUM VIEW
 
-app.get( pathBase + '/vimeo/album/:album_id', vimeoAuthed, function (req, res) {
+app.get( pathBase + '/vimeo/albums/:album_id', vimeoAuthed, function (req, res) {
 	try {
 		parseInt( req.params.album_id );
 	} catch (e) {
 		error(req,res,'Album id needs to be numeric');
 		return;
 	}
+	var album_id = req.params.album_id;
+    var vSession = vimeoStore[req.user.id];
 	// https://developer.vimeo.com/apis/advanced/methods/vimeo.albums.getVideos
 	vimeo.albums( 'getVideos', 
-				  { album_id: req.params.album_id,
+				  { album_id: album_id,
 					page: req.query.page || 1, 
 					per_page: 50, 
 					full_response: true }, 
-				  req.session.vimeo.access,
+				  vSession.access,
 				  function ( err, vres ) {
 		if ( noError(req,res,err) ) {
 			/*{ generated_in: '0.1490',
@@ -983,14 +1027,202 @@ app.get( pathBase + '/vimeo/album/:album_id', vimeoAuthed, function (req, res) {
        width: '640',
        height: '360',
        duration: '25',
-       owner: [Object],
-       cast: [Object],
-       urls: [Object],
-       thumbnails: [Object] }*/
+       owner: { display_name: 'motionbank',
+			     id: '7816344',
+			     is_plus: '1',
+			     is_pro: '0',
+			     is_staff: '0',
+			     profileurl: 'http://vimeo.com/motionbank',
+			     realname: 'motionbank',
+			     username: 'motionbank',
+			     videosurl: 'http://vimeo.com/motionbank/videos',
+			     portraits: { portrait: [Object] } },
+       cast: { member: 
+		      { display_name: 'motionbank',
+		        id: '7816344',
+		        role: '',
+		        username: 'motionbank' } },
+       urls: { url: [ [Object], [Object] ] },
+       thumbnails: [ { height: '75',
+				       width: '100',
+				       _content: 'http://b.vimeocdn.com/ts/409/134/409134512_100.jpg' },
+				     { height: '150',
+				       width: '200',
+				       _content: 'http://b.vimeocdn.com/ts/409/134/409134512_200.jpg' },
+				     { height: '360',
+				       width: '640',
+				       _content: 'http://b.vimeocdn.com/ts/409/134/409134512_640.jpg' } ] }*/
+       		var vCache = vimeoStore[req.user.id].cache;
+       		var album = vCache.albums && vCache.albums['id_'+album_id] || {title:'',id:album_id};
+
 			res.render('vimeo/album',_.extend(viewOpts,{
-				album_id: req.params.album_id,
-				videoData: vres.videos
+				videoData: vres.videos,
+				album: album
 			}));
+		}
+	});
+});
+
+// VIMEO - ALBUM IMPORT
+
+app.get( pathBase + '/vimeo/albums/:album_id/import', vimeoAuthed, function(req, res){
+	try {
+		parseInt( req.params.album_id );
+	} catch (e) {
+		error(req,res,'Album id needs to be numeric');
+		return;
+	}
+	var album_id = req.params.album_id;
+    var vSession = vimeoStore[req.user.id];
+	// https://developer.vimeo.com/apis/advanced/methods/vimeo.albums.getVideos
+	vimeo.albums( 'getVideos', 
+				  { album_id: album_id,
+					page: req.query.page || 1, 
+					per_page: 50, 
+					full_response: true }, 
+				  vSession.access,
+				  function ( err, vres ) {
+		if ( noError(req,res,err) ) {
+
+			var attachVimeoPoster = function ( req, res, cell, video, next ) {
+
+				var imgUrl = video.thumbnails.thumbnail;
+				imgUrl = imgUrl[imgUrl.length-1]._content;
+				var imgUrlOpts = url.parse(imgUrl);
+
+				http.get(imgUrlOpts, function(hres){
+
+					var bindex = 0;
+					var iDataLength = parseInt(hres.headers['content-length']);
+					var imageData = new Buffer(iDataLength);
+					hres.setEncoding('binary');
+					hres.on('data',function(chunk){
+						imageData.write(chunk, bindex, "binary");
+						bindex += chunk.length;
+					});
+					hres.on('end', function(){
+
+						var imgName = imgUrlOpts.pathname.split('/').pop();
+						//fs.writeFile( 'test.png', imgData, 'binary', function(err){});
+						s3FileUpload( req, res, {
+								name: 'vimeo-'+video.id+'_'+imgName, 
+								buffer: imageData
+							},
+							config.aws.basePath+'/cells/poster/full/',
+							function(err, s3file){
+								if ( noError(req,res,err) ) {
+
+									var cbs = [];
+
+									_.each( req.models.cells.posterSizes, function(pSize){
+										cbs.push(function(doNext){
+											var opts = _.extend( _.clone(pSize.size),{ srcData: imageData } );
+											console.log( opts );
+											im.resize(opts, function ( err, stdoutBuffer, stderr ) {
+												if ( err ) throw( err );
+												else {
+													s3FileUpload( req, res, {
+																	name: s3file.name, 
+																	buffer: new Buffer( stdoutBuffer, 'binary' )
+																  }, 
+																  config.aws.basePath+'/cells/poster/'+ pSize.name +'/',
+																  function (err, s3file) {
+														if (err) throw(err);
+														else {
+															doNext();
+														}
+													});
+												}
+											});
+										});
+									});
+									
+									cbs.push(function(){
+										cell.poster = s3file.name;
+										cell.save(function(err){
+											if (noError(req,res,err)) {
+												next();
+											}
+										});
+									});
+
+									var cb = cbs.shift();
+									var nextCb = function () {
+										if ( cbs.length > 0 ) {
+											cb = cbs.shift();
+											cb(nextCb);
+										}
+									}
+									cb(nextCb);
+								}
+							}
+						);
+					});
+				});
+			}
+
+			var cbs = [];
+
+			_.each(vres.videos.video,function(video){
+				cbs.push(
+					function(next){
+						var field_opts = {name:'vimeo-id',value:video.id};
+						req.models.fields.find(field_opts,function(err,fields){
+							if ( noError(req,res,err) ) {
+								if ( !fields || fields.length == 0 ) {
+									req.models.fields.create([field_opts],function(err, fields){
+										if ( noError(req,res,err) ) {
+											// if this field was not here assume we need new cell
+											req.models.cells.create([{
+												type: 'context',
+												title: video.title,
+												description: video.description
+											}],function(err,cells){
+												if ( noError(req,res,err) ) {
+													var cell = cells[0];
+													cell.addFields(fields[0]);
+													attachVimeoPoster(req, res, cell,video,next);
+												}
+											});
+										}
+									});
+								} else { // field exists ... find cell and attach
+									fields[0].getCell(function(err,cells){
+
+										var cell = cells[0];
+										cell.title = video.title;
+										cell.description = video.description;
+
+										var imgUrl = video.thumbnails.thumbnail;
+										imgUrl = imgUrl[imgUrl.length-1]._content;
+										var imgUrlOpts = url.parse(imgUrl);
+										var imgName = imgUrlOpts.pathname.split('/').pop();
+
+										if ( imgName === ('vimeo-'+video.id+'_'+imgName) ) { // img already poster
+											next();
+										} else {
+											attachVimeoPoster( req, res, cell, video, next );
+										}
+									});
+								}
+							}
+						});
+					}
+				);
+			});
+
+			cbs.push(function(){
+				res.send('ok');
+			});
+
+			var cb = cbs.shift();
+			var nextCb = function () {
+				if ( cbs.length > 0 ) {
+					cb = cbs.shift();
+					cb(nextCb);
+				}
+			}
+			cb(nextCb);
 		}
 	});
 });

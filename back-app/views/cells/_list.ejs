@@ -21,6 +21,7 @@
 		</div>
 		<div class="title"><a href="/admin/cells/<%= cell.id %>"><%= cell.title %></a></div>
 		<div class="type"><%= cell.type %></div>
+		<div class="description"><%= (cell.description && cell.description.substring(0,20) + ' ...') || '' %></div>
 		<div class="menu">
 			<a href="/admin/cells/<%= cell.id %>/edit" class="edit-link">edit</a>
 			<a href="/admin/cells/<%= cell.id %>/delete" confirm="Delete this cell?">delete</a>

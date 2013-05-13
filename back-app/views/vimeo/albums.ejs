@@ -5,7 +5,7 @@
 
 		<% for ( var i = 0, k = albumData.on_this_page; i < k; i++ ) { %>
 			<% var album = albumData.album[i]; %>
-			<div><%= album.title %> <a href="/admin/vimeo/album/<%= album.id %>">view</a> <a href="https://vimeo.com/album/<%= album.id %>">§</a></div>
+			<div><%= album.title %> <a href="/admin/vimeo/albums/<%= album.id %>">view</a> <a href="https://vimeo.com/album/<%= album.id %>">§</a></div>
 		<% } %>
 
 	</section>

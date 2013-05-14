@@ -29,7 +29,7 @@ jQuery(function(){
 			var $listItem = jQuery(v);
 			jQuery('.actions a.import-action', $listItem ).click(function(evt){
 				evt.preventDefault();
-				triggerImportAction($listItem);
+				triggerImportAction( $listItem, jQuery(this) );
 				return false;
 			});
 		});

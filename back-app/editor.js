@@ -1052,66 +1052,59 @@ app.get( pathBase + '/vimeo/albums/:album_id', vimeoAuthed, function (req, res) 
 				     { height: '360',
 				       width: '640',
 				       _content: 'http://b.vimeocdn.com/ts/409/134/409134512_640.jpg' } ] }*/
-       		var vCache = vimeoStore[req.user.id].cache;
-       		var album = vCache.albums && vCache.albums['id_'+album_id] || {title:'',id:album_id};
 
-			res.render('vimeo/album',_.extend(viewOpts,{
-				videoData: vres.videos,
-				album: album
-			}));
+			var videoIds = [];
+			_.each(vres.videos.video,function(v){
+				videoIds.push(v.id);
+			});
+
+			req.models.fields.find({name:'vimeo-id',value:videoIds},function(err,fields){
+				if ( noError(req,res,err) ) {
+
+					var cbs = [];
+					
+					var cellIdsByVideoId = {};
+					if ( fields.length > 0 ) {
+						_.each(fields,function(f){
+							cbs.push(function(next){
+								f.getCell(function(err,cells){
+									if ( noError(req,res,err) ) {
+										if ( cells.length > 0 ) {
+											cellIdsByVideoId['id-'+f.value] = cells[0].id;
+										}
+										next();
+									}
+								});
+							});
+						});
+					}
+
+					cbs.push(function(){
+						var vCache = vimeoStore[req.user.id].cache;
+			       		var album = vCache.albums && vCache.albums['id_'+album_id] || {title:'',id:album_id};
+
+						res.render('vimeo/album',_.extend(viewOpts,{
+							videoData: vres.videos,
+							album: album,
+							videoCells: cellIdsByVideoId
+						}));
+					});
+
+					var cb = cbs.shift();
+					var nextCb = function () {
+						if ( cbs.length > 0 ) {
+							cb = cbs.shift();
+							cb(nextCb);
+						}
+					}
+					cb(nextCb);
+				}
+			});
 		}
 	});
 });
 
-// VIMEO - ALBUM IMPORT
-
-app.get( pathBase + '/vimeo/albums/:album_id/import', vimeoAuthed, function(req, res){
-	try {
-		parseInt( req.params.album_id );
-	} catch (e) {
-		error(req,res,'Album id needs to be numeric');
-		return;
-	}
-	var album_id = req.params.album_id;
-    var vSession = vimeoStore[req.user.id];
-	// https://developer.vimeo.com/apis/advanced/methods/vimeo.albums.getVideos
-	vimeo.albums( 'getVideos', 
-				  { album_id: album_id,
-					page: req.query.page || 1, 
-					per_page: 50, 
-					full_response: true }, 
-				  vSession.access,
-				  function ( err, vres ) {
-		if ( noError(req,res,err) ) {
-
-			res.redirect( pathBase + '/vimeo/albums/' + album_id );
-
-			// var cbs = [];
-
-			// _.each(vres.videos.video,function(video){
-			// 	cbs.push(
-			// 		function(next){
-						
-			// 		}
-			// 	);
-			// });
-
-			// cbs.push(function(){
-			// 	res.send('ok');
-			// });
-
-			// var cb = cbs.shift();
-			// var nextCb = function () {
-			// 	if ( cbs.length > 0 ) {
-			// 		cb = cbs.shift();
-			// 		cb(nextCb);
-			// 	}
-			// }
-			// cb(nextCb);
-		}
-	});
-});
-
+// VIMEO - IMPORT VIDEOS TO CELLS
 
 app.get( pathBase + '/vimeo/video/:id/import', idNumeric, vimeoAuthed, function (req, res) {
 	

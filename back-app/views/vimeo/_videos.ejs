@@ -16,6 +16,9 @@
 		<div class="title"><%= video.title %></div>
 		<div class="actions">
 			<span class="progress"></span> 
+			<% if ( videoCells['id-'+video.id] ) { %>
+				<a class="view-cell" href="/admin/cells/<%= videoCells['id-'+video.id] %>">cell</a>
+			<% } %> 
 			<a class="import-action" href="/admin/vimeo/video/<%= video.id %>/import">import</a>
 		</div>
 	</div>

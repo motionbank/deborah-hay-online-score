@@ -1100,7 +1100,16 @@ app.get( pathBase + '/vimeo/albums/:album_id/import', vimeoAuthed, function(req,
 						imageData.write(chunk, bindex, "binary");
 						bindex += chunk.length;
 					});
+					hres.on('error',function(){
+						throw(arguments);
+					});
+					hres.on('close',function(){
+						if ( !endWasCalled ) next();
+					});
+					var endWasCalled = false;
 					hres.on('end', function(){
+						
+						endWasCalled = true;
 
 						var imgName = imgUrlOpts.pathname.split('/').pop();
 						//fs.writeFile( 'test.png', imgData, 'binary', function(err){});
@@ -1192,17 +1201,20 @@ app.get( pathBase + '/vimeo/albums/:album_id/import', vimeoAuthed, function(req,
 										var cell = cells[0];
 										cell.title = video.title;
 										cell.description = video.description;
+										cell.save(function(err){
+											if (noError(req,res,err)) {
+												var imgUrl = video.thumbnails.thumbnail;
+												imgUrl = imgUrl[imgUrl.length-1]._content;
+												var imgUrlOpts = url.parse(imgUrl);
+												var imgName = imgUrlOpts.pathname.split('/').pop();
 
-										var imgUrl = video.thumbnails.thumbnail;
-										imgUrl = imgUrl[imgUrl.length-1]._content;
-										var imgUrlOpts = url.parse(imgUrl);
-										var imgName = imgUrlOpts.pathname.split('/').pop();
-
-										if ( imgName === ('vimeo-'+video.id+'_'+imgName) ) { // img already poster
-											next();
-										} else {
-											attachVimeoPoster( req, res, cell, video, next );
-										}
+												if ( imgName === ('vimeo-'+video.id+'_'+imgName) ) { // img already poster
+													next();
+												} else {
+													attachVimeoPoster( req, res, cell, video, next );
+												}
+											}
+										});
 									});
 								}
 							}

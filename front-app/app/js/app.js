@@ -113,6 +113,15 @@ var App = module.exports = (function(){
 			nameAlias: 'event'
 		});
 
+		messenger.accept( 'http://player.vimeo.com' );
+		messenger.on({
+			matcher: 'ready', 
+			callback: function msgrVimeoFinish ( req, resp ) {
+				app.trigger('vimeo:ready', req, resp);
+			},
+			nameAlias: 'event'
+		});
+
 		/*
 		- getperformance ()
 		- performance changed (perf-id)

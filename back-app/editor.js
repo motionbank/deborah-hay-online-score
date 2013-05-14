@@ -1084,7 +1084,75 @@ app.get( pathBase + '/vimeo/albums/:album_id/import', vimeoAuthed, function(req,
 				  function ( err, vres ) {
 		if ( noError(req,res,err) ) {
 
-			var attachVimeoPoster = function ( req, res, cell, video, next ) {
+			res.redirect( pathBase + '/vimeo/albums/' + album_id );
+
+			// var cbs = [];
+
+			// _.each(vres.videos.video,function(video){
+			// 	cbs.push(
+			// 		function(next){
+						
+			// 		}
+			// 	);
+			// });
+
+			// cbs.push(function(){
+			// 	res.send('ok');
+			// });
+
+			// var cb = cbs.shift();
+			// var nextCb = function () {
+			// 	if ( cbs.length > 0 ) {
+			// 		cb = cbs.shift();
+			// 		cb(nextCb);
+			// 	}
+			// }
+			// cb(nextCb);
+		}
+	});
+});
+
+
+app.get( pathBase + '/vimeo/video/:id/import', idNumeric, vimeoAuthed, function (req, res) {
+	
+	var video_id = null;
+	try {
+		video_id = parseInt(req.params.id);
+	} catch (e) {
+		error(req,res,e);
+		return;
+	}
+
+    var vSession = vimeoStore[req.user.id];
+	vimeo.videos( 'getInfo', {video_id: video_id}, vSession.access, function (err,vres){
+		if ( noError(req,res,err) ) {
+			/*{ generated_in: '0.0525',
+  stat: 'ok',
+  video: 
+   [ { allow_adds: '0',
+       embed_privacy: 'anywhere',
+       id: '64470355',
+       is_hd: '0',
+       is_transcoding: '0',
+       is_watchlater: '0',
+       license: '0',
+       privacy: 'disable',
+       title: 'interview3-39.11-39.36.mp4',
+       description: '',
+       upload_date: '2013-04-20 20:36:47',
+       modified_date: '2013-05-14 02:30:07',
+       number_of_likes: '0',
+       number_of_plays: '3',
+       number_of_comments: '0',
+       width: '640',
+       height: '360',
+       duration: '25',
+       owner: [Object],
+       cast: [Object],
+       urls: [Object],
+       thumbnails: [Object] } ] }*/
+
+       		var attachVimeoPoster = function ( req, res, cell, video, next ) {
 
 				var imgUrl = video.thumbnails.thumbnail;
 				imgUrl = imgUrl[imgUrl.length-1]._content;
@@ -1104,10 +1172,13 @@ app.get( pathBase + '/vimeo/albums/:album_id/import', vimeoAuthed, function(req,
 						throw(arguments);
 					});
 					hres.on('close',function(){
-						if ( !endWasCalled ) next();
+						console.log( video.id + '_http:close' );
+						if ( !endWasCalled ) next(cell);
 					});
 					var endWasCalled = false;
 					hres.on('end', function(){
+
+						console.log( video.id + '_http:end' );
 						
 						endWasCalled = true;
 
@@ -1120,16 +1191,18 @@ app.get( pathBase + '/vimeo/albums/:album_id/import', vimeoAuthed, function(req,
 							config.aws.basePath+'/cells/poster/full/',
 							function(err, s3file){
 								if ( noError(req,res,err) ) {
-
+									
+									console.log( video.id + '_s3-image:full' );
 									var cbs = [];
 
 									_.each( req.models.cells.posterSizes, function(pSize){
 										cbs.push(function(doNext){
+											console.log( video.id + '_s3-image:' + pSize.name );
 											var opts = _.extend( _.clone(pSize.size),{ srcData: imageData } );
-											console.log( opts );
 											im.resize(opts, function ( err, stdoutBuffer, stderr ) {
 												if ( err ) throw( err );
 												else {
+													console.log( video.id + '_s3-image:' + pSize.name + '_resized' );
 													s3FileUpload( req, res, {
 																	name: s3file.name, 
 																	buffer: new Buffer( stdoutBuffer, 'binary' )
@@ -1138,6 +1211,7 @@ app.get( pathBase + '/vimeo/albums/:album_id/import', vimeoAuthed, function(req,
 																  function (err, s3file) {
 														if (err) throw(err);
 														else {
+															console.log( video.id + '_s3-image:' + pSize.name + '_uploaded' );
 															doNext();
 														}
 													});
@@ -1150,7 +1224,7 @@ app.get( pathBase + '/vimeo/albums/:album_id/import', vimeoAuthed, function(req,
 										cell.poster = s3file.name;
 										cell.save(function(err){
 											if (noError(req,res,err)) {
-												next();
+												next(cell);
 											}
 										});
 									});
@@ -1170,71 +1244,61 @@ app.get( pathBase + '/vimeo/albums/:album_id/import', vimeoAuthed, function(req,
 				});
 			}
 
-			var cbs = [];
-
-			_.each(vres.videos.video,function(video){
-				cbs.push(
-					function(next){
-						var field_opts = {name:'vimeo-id',value:video.id};
-						req.models.fields.find(field_opts,function(err,fields){
-							if ( noError(req,res,err) ) {
-								if ( !fields || fields.length == 0 ) {
-									req.models.fields.create([field_opts],function(err, fields){
-										if ( noError(req,res,err) ) {
-											// if this field was not here assume we need new cell
-											req.models.cells.create([{
-												type: 'context',
-												title: video.title,
-												description: video.description
-											}],function(err,cells){
-												if ( noError(req,res,err) ) {
-													var cell = cells[0];
-													cell.addFields(fields[0]);
-													attachVimeoPoster(req, res, cell,video,next);
-												}
-											});
-										}
-									});
-								} else { // field exists ... find cell and attach
-									fields[0].getCell(function(err,cells){
-
-										var cell = cells[0];
-										cell.title = video.title;
-										cell.description = video.description;
-										cell.save(function(err){
-											if (noError(req,res,err)) {
-												var imgUrl = video.thumbnails.thumbnail;
-												imgUrl = imgUrl[imgUrl.length-1]._content;
-												var imgUrlOpts = url.parse(imgUrl);
-												var imgName = imgUrlOpts.pathname.split('/').pop();
-
-												if ( imgName === ('vimeo-'+video.id+'_'+imgName) ) { // img already poster
-													next();
-												} else {
-													attachVimeoPoster( req, res, cell, video, next );
-												}
-											}
-										});
-									});
-								}
-							}
-						});
-					}
-				);
-			});
-
-			cbs.push(function(){
-				res.send('ok');
-			});
-
-			var cb = cbs.shift();
-			var nextCb = function () {
-				if ( cbs.length > 0 ) {
-					cb = cbs.shift();
-					cb(nextCb);
+			var afterImport = function ( cell ) {
+				if ( req.xhr ) {
+					res.send({
+						cell: cell
+					});
+				} else {
+					res.redirect( pathBase + '/cells/' + cell.id );
 				}
 			}
-			cb(nextCb);
+
+       		var video = vres.video[0];
+       		var field_opts = {name:'vimeo-id',value:video.id};
+			req.models.fields.find(field_opts,function(err,fields){
+				if ( noError(req,res,err) ) {
+					if ( !fields || fields.length == 0 ) {
+						req.models.fields.create([field_opts],function(err, fields){
+							if ( noError(req,res,err) ) {
+								// if this field was not here assume we need new cell
+								req.models.cells.create([{
+									type: 'context',
+									title: video.title,
+									description: video.description
+								}],function(err,cells){
+									if ( noError(req,res,err) ) {
+										var cell = cells[0];
+										cell.addFields(fields[0]);
+										attachVimeoPoster( req, res, cell, video, afterImport );
+									}
+								});
+							}
+						});
+					} else { // field exists ... find cell and attach
+						fields[0].getCell(function(err,cells){
+
+							var cell = cells[0];
+							cell.title = video.title;
+							cell.description = video.description;
+							cell.save(function(err){
+								if (noError(req,res,err)) {
+									var imgUrl = video.thumbnails.thumbnail;
+									imgUrl = imgUrl[imgUrl.length-1]._content;
+									var imgUrlOpts = url.parse(imgUrl);
+									var imgName = imgUrlOpts.pathname.split('/').pop();
+
+									if ( imgName === ('vimeo-'+video.id+'_'+imgName) ) { // img already poster
+										next();
+									} else {
+										attachVimeoPoster( req, res, cell, video, afterImport );
+									}
+								}
+							});
+						});
+					}
+				}
+			});
 		}
 	});
 });

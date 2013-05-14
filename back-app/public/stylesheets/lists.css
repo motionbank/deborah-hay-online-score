@@ -1,0 +1,58 @@
+/* ------------------ +
+ +	LISTS
+ + ------------------ */
+
+.list {
+	border-top: 1px solid #888888;
+	margin-top: 18px;
+	width: 100%;
+	float: left;
+}
+.list-item-group .group-title,
+.list-item {
+	padding: 4.5px;
+	padding-left: 9px;
+	border-bottom: 1px solid #888888;
+}
+.list-item-group .group-title a {
+	font-style: italic;
+	color: #888888;
+	text-decoration: none;
+}
+.list-item {
+	padding: 4.5px;
+	min-height: 25px;
+	overflow: auto;
+}
+.list-item:hover {
+	background-color: rgba(0,0,0,0.1);
+}
+.list-item div {
+	float: left;
+}
+.list-item .poster {
+	width: 30px;
+	padding-right: 9px;
+}
+.list-item .title {
+	min-width: 360px;
+}
+.list-item .type {
+	min-width: 270px;
+	color: #888888;
+}
+.list-item .actions {
+/*		float: right;
+	text-align: right;*/
+	width: 270px;
+}
+.list-item {
+	clear: both;
+}
+.list-item .poster {
+	width: 40px;
+}
+.list-item .poster img {
+	max-width: 40px; 
+	max-height: 20px
+}

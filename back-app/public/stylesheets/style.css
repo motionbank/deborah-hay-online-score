@@ -29,3 +29,24 @@ body {
 a, a:hover, a:active, a:link, a:visited {
 	color: #ff6644;
 }
+
+ul.pager {
+	list-style: none;
+	margin: 0px;
+	margin-bottom: 36px;
+	padding: 0px;
+}
+
+ul.pager li {
+	float: left;
+	padding-right: 8px;
+}
+
+ul.pager li a {
+	display: block;
+}
+
+ul.pager li.current-page a {
+	font-weight: bold;
+	color: black;
+}

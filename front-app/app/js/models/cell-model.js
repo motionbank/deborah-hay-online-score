@@ -16,7 +16,7 @@ var CellModel = module.exports = Backbone.Model.extend({
 			if ( self.get( f.name ) === undefined ) {
 				self.set( f.name, f.value );
 			} else {
-				console.log( 'Possible cell field conflict: ', f );
+				console.log( 'Possible cell field conflict: ', opts, f );
 			}
 		});
 	}

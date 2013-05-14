@@ -1,5 +1,14 @@
 <h1>You have <%= user.sets.length %> sets</h1>
 <br/>
+<div class="list">
 <% for ( var i = 0; i < user.sets.length; i++ ) { %>
-	<a href="/admin/sets/<%= user.sets[i].id %>/layout"><%= user.sets[i].title %></a><br />
+	<div class="list-item">
+		<div class="psoter">
+			<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/small/<%= user.sets[i].poster %>" />
+		</div>
+		<div class="title">
+			<a href="/admin/sets/<%= user.sets[i].id %>/layout"><%= user.sets[i].title %></a>
+		</div>
+	</div>
 <% } %>
+</div>

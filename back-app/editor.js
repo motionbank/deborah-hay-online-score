@@ -360,10 +360,16 @@ app.get( pathBase + '/sets/:id', idNumeric, function(req, res){
 		if (err) {
 			error( req, res, err );
 		} else {
-			res.render('sets/view',_.extend(viewOpts,{
-				title: '»'+set.title+'« (#'+set.id+')', 
-				set: set
-			}));
+			set.getCells().order('type').order('title').run(function(err,cells){
+				if ( noError(req,res,err) ) {
+					set.cells = cells;
+					res.render('sets/view',_.extend(viewOpts,{
+						title: '»'+set.title+'« (#'+set.id+')', 
+						set: set,
+						cells: cells
+					}));
+				}
+			});
 		}
 	});
 });
@@ -720,10 +726,15 @@ app.get( pathBase + '/cells/:id', idNumeric, function(req,res){
 			cell.getFields(function(err,fields){
 				if (noError(req,res,err)) {
 					cell.fields = fields;
-					res.render('cells/view',_.extend(viewOpts,{
-						title: 'cell (#'+cell.id+')',
-						cell: cell
-					}));
+					cell.getSets(function(err, sets){
+						if ( noError(req,res,err) ) {
+							cell.sets = sets;
+							res.render('cells/view',_.extend(viewOpts,{
+								title: 'cell (#'+cell.id+')',
+								cell: cell
+							}));
+						}
+					});
 				}
 			});
 		}

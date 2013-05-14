@@ -333,7 +333,10 @@ jQuery(function(){
 
 		evt.preventDefault();
 
-		var cells = [], cols = [], rows = [];
+		var cells = [];
+		var save_cols = 0;
+		var save_rows = 0;
+
 		jQuery('.grid-cell',$grid).each(function(i,e){
 			
 			$e = jQuery(e);
@@ -348,19 +351,10 @@ jQuery(function(){
 					width: $e.data('width') || 1, 
 					height: $e.data('height') || 1
 				});
-				cols[$e.data('x')] = true;
-				rows[$e.data('y')] = true;
+				save_cols = Math.max( save_cols, parseInt($e.data('x'))+1 ); // remove unneeded cols/rows
+				save_rows = Math.max( save_rows, parseInt($e.data('y'))+1 );
 			}
 		});
-
-		var save_cols = set.grid_cols;
-		if ( cols.length !== set.grid_cols ) {
-			save_cols--;
-		}
-		var save_rows = set.grid_rows;
-		if ( rows.length !== set.grid_rows ) {
-			save_rows--;
-		}
 
 		jQuery.ajax({
 			url: '/admin/sets/'+set.id+'/layout',

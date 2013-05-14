@@ -3,14 +3,21 @@
 		<style type="text/css">
 			
 		</style>
-		<h1><%= set.title %></h1>
-		<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/full/<%= set.poster %>" style="max-height:200px" /><br />
-		<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/medium/<%= set.poster %>" /><br />
-		<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/small/<%= set.poster %>" /><br />
-		<nav><ul>
-			<li><a href="/admin/sets/<%= set.id %>/edit">Edit</a></li>
-			<li><a href="/admin/sets/<%= set.id %>/layout">Layout</a></li>
-			<li><a href="/admin/sets/<%= set.id %>/delete" confirm="Delete this set?">Delete</a></li>
-		</ul></nav>
+		<h1 class="title"><%= set.title %></h1>
+		<br />
+		<div class="actions">
+			<a href="/admin/sets/<%= set.id %>/edit">Edit</a> <a href="/admin/sets/<%= set.id %>/layout">Layout</a> <a href="/admin/sets/<%= set.id %>/delete" confirm="Delete this set?">Delete</a>
+		</div>
+		<br />
+
+		<div class="poster">
+			<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/full/<%= set.poster %>" style="max-height:300px" />
+			<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/medium/<%= set.poster %>" />
+			<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/small/<%= set.poster %>" />
+		</div>
+		<br/>
+
+		<% include ../cells/_list %>
+
 	</section>
 <% include ../_footer %>

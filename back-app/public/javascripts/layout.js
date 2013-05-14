@@ -329,13 +329,18 @@ jQuery(function(){
 		});
 
 	// action for "save" button, does ajax save
-	jQuery('#actions form').submit(function(evt){
+	jQuery('#actions .save-action').click(function(evt){
 
 		evt.preventDefault();
 
 		var cells = [];
 		var save_cols = 0;
 		var save_rows = 0;
+
+		var $container = jQuery(this);
+		var $prog = jQuery('<span class="progress"></span>');
+		$prog.insertBefore( $container );
+		var tAni = new TextAnimator( $prog, 200 );
 
 		jQuery('.grid-cell',$grid).each(function(i,e){
 			
@@ -356,6 +361,8 @@ jQuery(function(){
 			}
 		});
 
+		tAni.start();
+		$container.hide();
 		jQuery.ajax({
 			url: '/admin/sets/'+set.id+'/layout',
 			data: {
@@ -376,6 +383,11 @@ jQuery(function(){
 			},
 			complete: function (){
 				// TODO: unlock interface
+				setTimeout(function(){
+					tAni.stop();
+					$container.show();
+					$prog.remove();
+				},1000);
 			}
 		});
 	});

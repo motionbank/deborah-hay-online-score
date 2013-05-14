@@ -25,11 +25,11 @@
 		<style type="text/css">@import url('/stylesheets/layout.css');</style>
 		<h1><%= set.title %></h1>
 		<div id="actions">
-		<form action="#"><input type="submit" value="Save"> 
+			<a class="save-action" href="#">Save</a> 
 			<a href="http://dhayapp.local/#set/<%= set.path %>" target="_blank">View</a> 
 			<a href="/admin/sets/<%= set.id %>/edit">Edit</a> 
 			<a href="/admin/sets/<%= set.id %>/delete" confirm="Delete this set?">Delete</a>
-		</form></div>
+		</div>
 		<div id="layout-editor">
 			<div class="grid">
 				<% for ( var i = 0, iy = 0; iy < set.grid_rows; iy++ ) { %>

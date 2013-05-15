@@ -96,11 +96,12 @@ var GridView = module.exports = Backbone.View.extend({
 		var visibleCells = gridXVisible*gridYVisible;
 		for ( var i = 0, g = visibleCells; i < currentSet.cells.length; i++ ) {
 
+			var opts = currentSet.cells[i];
+			
 			try {
 				views[opts.type] = views[opts.type] || require('js/views/cell-view-'+opts.type);
 			} catch (e) {}
 			
-			var opts = currentSet.cells[i];
 			opts['poster'] = opts['poster'] === 'missing.jpg' ? opts.type+'-'+i+'.jpg' : opts['poster'];
 
 			var cv = new ( views[opts.type] || views.CellView )( opts, this );

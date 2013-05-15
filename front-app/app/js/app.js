@@ -12,6 +12,7 @@ var App = module.exports = (function(){
 
 	var app = null;
 	var appState = null;
+	var appStarted = false;
 
 	var router = slider = null, gridView = null;
 
@@ -150,7 +151,7 @@ var App = module.exports = (function(){
 							throw( 'Duplicate path!', set.path, set.id, sets[set.path].id );
 						}
 					});
-					gridView.loadSet('overview');
+					//gridView.loadSet('overview');
 					next();
 				},
 				error:function (err) {
@@ -201,6 +202,41 @@ var App = module.exports = (function(){
 		},
 		sizeChanged : function () {
 			gridView.sizeChanged();
+		},
+		startApp : function () {
+
+			if ( appStarted ) return;
+			
+			// slides away the start screen ...
+
+			var $toolContainer = jQuery('#tool-container');
+			var $logo = jQuery('#logo');
+
+			var tcHeight = $toolContainer.outerHeight();
+			var dur = 550;
+
+			$toolContainer.animate({
+				marginTop: (-tcHeight)+'px'
+			},{
+				duration: dur, query: false,
+				complete: function enterAppAnimateSlideComplete (){
+					setTimeout(function enterAppAnimateSlider (){
+						$mainMenuSliderLink.animate({height:'8px'},{duration:100});
+					},200);
+					$toolContainer.hide();
+				}
+			});
+
+			jQuery('img',$logo).animate({
+				opacity: '0'
+			},{
+				duration: dur, query: false,
+				start: function enterAppAnimateLogoStart () {
+					$logo.css({backgroundImage:'url(imgs/logo-dark.png)'});
+				}
+			});
+
+			appStarted = true;
 		}
 	}
 	return App;

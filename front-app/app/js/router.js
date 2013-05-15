@@ -13,6 +13,8 @@ var Router = module.exports = Backbone.Router.extend({
 		'set/:setname' : 'changeset'
 	},
 
-	changeset : function () {}
+	changeset : function () {
+		app.startApp();
+	}
 	
 });

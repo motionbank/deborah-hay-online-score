@@ -20,3 +20,14 @@
 .set-edit form .aspect-ratio input {
 	width: 170px;
 }
+
+.set-list .list-item .poster {
+	width: 150px;
+	max-width: 150px;
+	overflow: hidden;
+}
+
+.set-list .list-item .poster img {
+	max-width: inherit;
+	max-height: 50px;
+}

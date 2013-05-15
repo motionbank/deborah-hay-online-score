@@ -1,9 +1,11 @@
+<style type="text/css">@import url('/stylesheets/sets.css');</style>
+
 <h1>You have <%= user.sets.length %> sets</h1>
 <br/>
-<div class="list">
+<div class="list set-list">
 <% for ( var i = 0; i < user.sets.length; i++ ) { %>
 	<div class="list-item">
-		<div class="psoter">
+		<div class="poster">
 			<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/small/<%= user.sets[i].poster %>" />
 		</div>
 		<div class="title">

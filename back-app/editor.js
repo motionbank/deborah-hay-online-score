@@ -267,6 +267,9 @@ app.get( pathBase, function (req, res) {
 		if (err) {
 			error( req, res, err );
 		} else {
+			sets.sort(function(a,b){
+				return a.title.localeCompare(b.title);
+			});
 			req.user.sets = sets;
 			res.render('index', _.extend(viewOpts,{
 				title: 'index'

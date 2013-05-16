@@ -892,6 +892,88 @@ app.post( pathBase + '/cells/:id/save', idNumeric, function(req, res){
 	});
 });
 
+// CELLS - SAVE SET FIELDS
+
+app.post( pathBase + '/cells/:id/in-sets/:set_id/fields', idNumeric, function (req, res) {
+	try {
+		var set_id = parseInt(req.params.set_id);
+	} catch (e) {
+		error(req,res,e); return;
+	}
+	req.models.cells.get(req.params.id,function(err,cell){
+		if ( noError(req,res,err) ) {
+			req.models.sets.get(set_id,function(err,set){
+				if (noError(req,res,err)) {
+					cell.getFields(function(err,fields){
+						if (noError(req,res,err)) {
+							var setFields = [];
+							_.each( fields, function (f){
+								if ( f.extra.set_id === set.id ) {
+									setFields.push( f );
+								}
+							});
+							cell.removeFields( setFields );
+
+							var cbs = [];
+
+							if ( typeof req.body.field_keys === 'string' ) {
+								req.body.field_keys = [req.body.field_keys];
+								req.body.field_values = [req.body.field_values];
+							}
+							_.each( req.body.field_keys, function(key,i) {
+								var val = req.body.field_values[i];
+								if ( val === '' && key === '' ) return;
+								cbs.push(function(next) {
+									req.models.fields.create([{
+										name: key,
+										value: val
+									}], function (err, fields) {
+										if (err) {
+											error(req,res,err);
+										} else {
+											cell.addFields(fields[0],{set_id:set.id});
+											next();
+										}
+									});
+								});
+							});
+
+							cbs.push(function(){
+								cell.save(function(err){
+									if (noError(req,res,err)) {
+										cell.getFields(function(err,fields){
+											if(noError(req,res,err)){
+												cell.fields = fields;
+												if ( req.xhr ) {
+													res.send({
+														cell: cell
+													});
+												} else {
+													message( 'Fields added' );
+													res.redirect( pathBase + '/sets/' + set.id );
+												}
+											}
+										});
+									}
+								});
+							});
+
+							var cb = cbs.shift();
+							var nextCb = function () {
+								if ( cbs.length > 0 ) {
+									var cb = cbs.shift();
+									cb(nextCb);
+								}
+							}
+							cb(nextCb);
+						}
+					});
+				}
+			});
+		}
+	});
+});
+
 // CELLS - DELETE
 
 app.get( pathBase + '/cells/:id/delete', idNumeric, function(req,res){

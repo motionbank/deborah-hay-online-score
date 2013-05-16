@@ -13,13 +13,11 @@ module.exports = function (db, models, sync) {
 		cache: false
 	});
 
-	// model.hasOne( 'cell', models.cells, {
-	// 		required: true
-	// 	},{
-	// 		reverse: 'fields'
-	// });
+	model.makeAssociations = function () {
 
-	if ( sync === true ) {
+	}
+
+	model.doSync = function () {
 		model.sync(function (err) {
 			!err && console.log( 'Table "fields" synced.' );
 		});

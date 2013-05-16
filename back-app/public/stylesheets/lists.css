@@ -46,6 +46,7 @@
 	text-align: right;*/
 	width: 270px;
 }
+.list-item .actions a {}
 .list-item {
 	clear: both;
 }

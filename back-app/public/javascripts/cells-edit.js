@@ -15,7 +15,7 @@ jQuery(function(){
 
 		var $cell = jQuery(e);
 		var id = $cell.data('id');
-		var $editLink = jQuery('a.edit-link', $cell);
+		var $editLink = jQuery('a.edit-action', $cell);
 
 		$editLink.click(function(evt){
 

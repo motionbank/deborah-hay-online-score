@@ -1,4 +1,4 @@
-module.exports = function (db, models, sync) {
+module.exports = function (db, models) {
 
 	var cellTypes = ['text','title','recording','visualization',
 					 'media','context','adaptation','resources'];
@@ -41,11 +41,20 @@ module.exports = function (db, models, sync) {
 		{ name: 'small',  size: { height: 75,  width: 75  } }
 	];
 
-	model.hasMany( 'fields', models.fields, {}, {
-		reverse:'cell'
-	});
+	model.makeAssociations = function ( models ) {
+		model.hasMany( 'fields', models.fields, {
+			sets_id: {
+				type: 'number',
+				rational: false,
+				required: true,
+				defaultValue: -1
+			}
+		}, {
+			reverse:'cell'
+		});
+	}
 
-	if ( sync === true ) {
+	model.doSync = function () {
 		model.sync(function (err) {
 			!err && console.log( 'Table "cells" synced.' );
 		});

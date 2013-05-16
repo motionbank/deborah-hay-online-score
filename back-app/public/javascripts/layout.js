@@ -70,19 +70,83 @@ jQuery(function(){
 
 	// make all list items (cells) draggable
 	$cellList.each(function(i,e){
-		var $e = jQuery(e);
-		$e.draggable({
+
+		var $cell = jQuery(e),
+			cell_id = $cell.data('id'),
+			set_id = layoutEditor.set.id;
+
+		$cell.draggable({
 			revert: true,
 			revertDuration: 20,
 			helper: function () {
-				var $e = jQuery(this);
+				var $cell = jQuery(this);
 				var $dragEl = jQuery('<div class="cell drag-helper" />');
-				$dragEl.append( jQuery( '.poster', $e ).clone() );
-				$dragEl.append( jQuery( '.title', $e ).text() );
-				$dragEl.data('id',$e.data('id'));
+				$dragEl.append( jQuery( '.poster', $cell ).clone() );
+				$dragEl.append( jQuery( '.title', $cell ).text() );
+				$dragEl.data('id',cell_id);
 				return $dragEl;
 			},
 			appendTo: '#main',
+		});
+
+		var $editSetFieldsLink = jQuery(
+			'<a href="/admin/cells/'+cell_id+'/in-sets/'+set_id+'/fields">set fields</a><span> </span>'
+		);
+		var $editSetFieldsForm = jQuery(
+			'<div style="padding-top: 18px; padding-bottom: 9px">'+
+				'<form class="set-fields-form" method="post" action="/admin/cells/'+cell_id+'/in-sets/'+set_id+'/fields">'+
+					'<input type="hidden" name="cell_id" value="'+cell_id+'" />'+
+					'<input type="hidden" name="set_id" value="'+set_id+'" />'+
+					'<fieldset class="fields">'+
+						'Fields for this set:<br />'+
+						'<a class="add-fields-action" href="#">Add fields</a><br />'+
+					'</fieldset>'+
+					'<input type="submit" value="Save" />'+
+				'</form>'+
+			'</div>'
+		);
+		var $fieldsRow = jQuery(
+			'<input type="text" name="field_keys" value="" />'+
+			'<input type="text" name="field_values" value="" /><br />'
+		);
+
+		$fieldsRow.clone().insertBefore( jQuery( '.add-fields-action', $editSetFieldsForm ) );
+		jQuery('.set-fields-form a.add-fields-action',$editSetFieldsForm).click(function(evt){
+			evt.preventDefault();
+			$fieldsRow.clone().insertBefore( jQuery( '.add-fields-action', $editSetFieldsForm ) );
+		});
+		$editSetFieldsForm.hide();
+		$cell.append($editSetFieldsForm);
+
+		$editSetFieldsLink.insertBefore( jQuery('a.edit-action',$cell) );
+
+		$editSetFieldsLink.click(function(evt){
+			evt.preventDefault();
+			$editSetFieldsForm.toggle();
+		});
+
+		$editSetFieldsForm.submit(function(evt){
+			evt.preventDefault();
+			var ta = new TextAnimator(jQuery('.action .progress',$cell),200);
+			ta.start();
+			var data = jQuery('form',$editSetFieldsForm).serialize();
+			jQuery.ajax({
+				url: '/admin/cells/'+cell_id+'/in-sets/'+set_id+'/fields',
+				dataType: 'json',
+				method: 'post',
+				data: data,
+				success : function ( data ) {
+					var cell = data.cell;
+					$editSetFieldsForm.hide();
+				},
+				error : function (err) {
+					console.log( err );
+				},
+				complete: function () {
+					ta.stop();
+				}
+			});
+			return false;
 		});
 	});
 

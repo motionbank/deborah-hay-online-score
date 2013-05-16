@@ -46,35 +46,37 @@ module.exports = function (db, models, sync) {
 		cache: false
 	});
 
-	model.hasOne( 'creator', models.users, {required: true}, {reverse: 'sets'});
+	model.makeAssociations = function ( models ) {
+		model.hasOne( 'creator', models.users, {required: true}, {reverse: 'sets'});
 
-	model.hasMany( 'cells', models.cells, {
-		/* options specific to this relation */
-		x: {
-			type: 'number',
-			rational: false,
-			required: true
-		},
-		y: {
-			type: 'number',
-			rational: false,
-			required: true
-		},
-		width: {
-			type: 'number',
-			rational: false,
-			required: true,
-			defaultValue: 1
-		},
-		height: {
-			type: 'number',
-			rational: false,
-			required: true,
-			defaultValue: 1
-		}
-	}, {
-		reverse: 'sets'
-	});
+		model.hasMany( 'cells', models.cells, {
+			/* options specific to this relation */
+			x: {
+				type: 'number',
+				rational: false,
+				required: true
+			},
+			y: {
+				type: 'number',
+				rational: false,
+				required: true
+			},
+			width: {
+				type: 'number',
+				rational: false,
+				required: true,
+				defaultValue: 1
+			},
+			height: {
+				type: 'number',
+				rational: false,
+				required: true,
+				defaultValue: 1
+			}
+		}, {
+			reverse: 'sets'
+		});
+	}
 
 	var titleToPath = function ( title ) {
 		if (!title) return undefined;
@@ -101,10 +103,11 @@ module.exports = function (db, models, sync) {
 		{ name: 'small', size: { height: 50 } }
 	];
 
-	if ( sync === true ) {
+	model.doSync = function () {
 		model.sync(function(err){
 			!err && console.log( 'Table "sets" synced.' );
 		});
 	}
+
 	return model;
 }

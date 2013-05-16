@@ -5,6 +5,7 @@
 <% var typeHeading = false; %>
 <% for ( var i = 0; i < cells.length; i++ ) { %>
 	<% var cell = cells[i]; %>
+
 	<% if ( typeHeading !== cell.type ) { %>
 		<div class="list-item-group type-<%= cell.type %>">
 			<div class="group-title">
@@ -13,6 +14,7 @@
 			</a></div>
 		<% typeHeading = cell.type; %>
 	<% } %>
+
 	<div class="cell list-item type-<%= cell.type %>" 
 		 data-id="<%= cell.id %>" 
 		 data-poster="<%= cell.poster || 'missing.jpg' %>" id="cell-<%= cell.id %>">
@@ -23,12 +25,15 @@
 		<div class="type"><%= cell.type %></div>
 		<div class="description"><%= (cell.description && cell.description.substring(0,20) + ' ...') || '' %></div>
 		<div class="actions">
-			<a href="/admin/cells/<%= cell.id %>/edit" class="edit-link">edit</a>
+			<span class="progress"></span>
+			<a href="/admin/cells/<%= cell.id %>/edit" class="edit-action">edit</a>
 			<a href="/admin/cells/<%= cell.id %>/delete" confirm="Delete this cell?">delete</a>
 		</div>
 	</div>
+
 	<% if ( i === cells.length-1 || cells[i+1].type !== cell.type ) { %>
 		</div>
 	<% } %>
+
 <% } %>
 </div>

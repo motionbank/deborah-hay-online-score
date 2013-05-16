@@ -47,8 +47,12 @@ module.exports = function (db, models, sync) {
 		return bcrypt.compareSync( pswd, hash );
 	}
 
+	model.makeAssociations = function () {
+		
+	}
+
 	// remember to drop table before
-	if ( sync === true ) {
+	model.doSync = function () {
 		model.sync(function(err){
 			if (err) {
 				throw(err);

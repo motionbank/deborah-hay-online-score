@@ -19,6 +19,7 @@ jQuery(function(){
 		parentWindowOrigin = req.message.origin;
 
 		res.send('get-config');
+		res.send('get-scene');
 	});
 
 	messenger.on('set-config',function(req,res){

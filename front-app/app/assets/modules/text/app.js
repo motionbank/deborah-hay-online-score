@@ -5,17 +5,12 @@ jQuery(function(){
 		parentWindow 	= null,
 		parentWindowOrigin = null,
 		currentScene    = null,
-		scenesByMarker 	= {},
-		$scenes 		= null;
 
-	$scenes = jQuery('.scene');
-	$scenes.each(function (i,s) {
-		var $s = jQuery(s);
-		scenesByMarker[$s.data('title')] = $s;
-		$s.hide();
-	})
-	$scenes.first().show();
-
+		$scenes 	= null,
+		scenesByMarker = {},
+		tabsByMarker = {},
+		$navTabs 	= null;
+		
 	messenger.on('connect',function(req,res){
 
 		if ( parentWindow ) return;
@@ -38,9 +33,18 @@ jQuery(function(){
 
 		if ( newScene !== currentScene ) {
 			if ( newScene in scenesByMarker ) {
+
 				$scenes.hide();
 				scenesByMarker[newScene].show();
 				currentScene = newScene;
+
+				$navTabs.removeClass("current");
+				var $tab = tabsByMarker[newScene];
+				if ( $tab ) {
+					$tab.show();
+					$tab.addClass("current");
+				}
+
 			} else {
 				console.log( 'Unable to find scene: ' + newScene );
 			}
@@ -49,4 +53,35 @@ jQuery(function(){
 			// ... like playing a Vimeo video
 		}
 	}
+
+	$scenes = jQuery('.scene');
+  
+	$scenes.each(function (i,s) {
+		var $s = jQuery(s), marker = $s.data('title');
+		scenesByMarker[marker] = $s;
+		$s.hide();
+		$tab = jQuery( '<div class="tab">' + ( i+1 ) + '</div>' );
+		jQuery( "#score-nav-tabs" ).append( $tab );
+		tabsByMarker[marker] = $tab;
+	})
+	$scenes.first().show();
+
+	$navTabs = jQuery('#score-nav-tabs > *');
+
+	$navTabs.first().addClass("current");
+	$navTabs.click(function() {
+
+		$navTabs.removeClass("current");
+
+		var $self = jQuery(this);
+		$self.addClass("current");
+
+		$scenes.hide();
+
+		$newScene = jQuery($scenes[$self.index()]);
+		$newScene.show();
+		
+		currentScene = $newScene.data('title');
+		messenger.send('set-scene',currentScene,parentWindow);
+	});
 });

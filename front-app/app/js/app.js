@@ -106,6 +106,7 @@ var App = module.exports = (function(){
 		});
 
 		messenger.accept( 'http://player.vimeo.com' );
+		
 		messenger.on({
 			matcher: 'finish', 
 			callback: function msgrVimeoFinish ( req, resp ) {
@@ -114,7 +115,6 @@ var App = module.exports = (function(){
 			nameAlias: 'event'
 		});
 
-		messenger.accept( 'http://player.vimeo.com' );
 		messenger.on({
 			matcher: 'ready', 
 			callback: function msgrVimeoFinish ( req, resp ) {

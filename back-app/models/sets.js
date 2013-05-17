@@ -51,6 +51,11 @@ module.exports = function (db, models, sync) {
 
 		model.hasMany( 'cells', models.cells, {
 			/* options specific to this relation */
+			connection_id: {
+				type: 'number',
+				rational: false,
+				required: true
+			},
 			x: {
 				type: 'number',
 				rational: false,

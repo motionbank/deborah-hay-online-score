@@ -17,6 +17,8 @@ Layout editor
 - UNDO ?!
 	x show save (ajax) is working in the back
 	x grid should not be a <table> but use the same tech as the front end .. bunch of position
+- select and remove multiple cells
+[- switch the whole thing to use backbone.js ... jQuery.data() gets out of hand]
 
 
 Sets

@@ -244,7 +244,9 @@ app.get( '/sets/:id', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 										} else {
 											var setFields = [];
 											_.each(fields,function(f){
-												if ( f.extra.sets_id === -1 || f.extra.sets_id === set.id ) {
+												if ( f.extra.connection_id === 0 || 
+													 f.extra.connection_id === c.extra.connection_id ) {
+													console.log(f.id,c.id,c.extra.connection_id);
 													setFields.push(f);
 												}
 											});

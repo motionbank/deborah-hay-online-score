@@ -43,7 +43,7 @@ module.exports = function (db, models) {
 
 	model.makeAssociations = function ( models ) {
 		model.hasMany( 'fields', models.fields, {
-			sets_id: {
+			connection_id: {
 				type: 'number',
 				rational: false,
 				required: true,

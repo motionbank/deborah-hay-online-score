@@ -906,37 +906,38 @@ app.post( pathBase + '/cells/:id/in-sets/:set_id/fields', idNumeric, function (r
 				if (noError(req,res,err)) {
 					cell.getFields(function(err,fields){
 						if (noError(req,res,err)) {
-							var setFields = [];
-							_.each( fields, function (f){
-								if ( f.extra.set_id === set.id ) {
-									setFields.push( f );
-								}
-							});
-							cell.removeFields( setFields );
+
+							// var setFields = [];
+							// _.each( fields, function (f){
+							// 	if ( f.extra.connection_id === set.id ) {
+							// 		setFields.push( f );
+							// 	}
+							// });
+							// cell.removeFields( setFields );
 
 							var cbs = [];
 
-							if ( typeof req.body.field_keys === 'string' ) {
-								req.body.field_keys = [req.body.field_keys];
-								req.body.field_values = [req.body.field_values];
-							}
-							_.each( req.body.field_keys, function(key,i) {
-								var val = req.body.field_values[i];
-								if ( val === '' && key === '' ) return;
-								cbs.push(function(next) {
-									req.models.fields.create([{
-										name: key,
-										value: val
-									}], function (err, fields) {
-										if (err) {
-											error(req,res,err);
-										} else {
-											cell.addFields(fields[0],{set_id:set.id});
-											next();
-										}
-									});
-								});
-							});
+							// if ( typeof req.body.field_keys === 'string' ) {
+							// 	req.body.field_keys = [req.body.field_keys];
+							// 	req.body.field_values = [req.body.field_values];
+							// }
+							// _.each( req.body.field_keys, function(key,i) {
+							// 	var val = req.body.field_values[i];
+							// 	if ( val === '' && key === '' ) return;
+							// 	cbs.push(function(next) {
+							// 		req.models.fields.create([{
+							// 			name: key,
+							// 			value: val
+							// 		}], function (err, fields) {
+							// 			if (err) {
+							// 				error(req,res,err);
+							// 			} else {
+							// 				cell.addFields(fields[0],{set_id:set.id});
+							// 				next();
+							// 			}
+							// 		});
+							// 	});
+							// });
 
 							cbs.push(function(){
 								cell.save(function(err){

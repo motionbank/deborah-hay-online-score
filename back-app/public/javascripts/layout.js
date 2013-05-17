@@ -193,34 +193,48 @@ jQuery(function(){
 					var cellId = $cell.data('id'),
 						itemId = $item.data('id');
 
+					var cellConnectionId = $cell.data('connection_id'),
+						itemConnectionId = $item.data('connection_id');
+
 					var cBgImg = $cell.css('background-image'),
 						iBgImg = $item.css('background-image');
 
 					$cell.data('id',itemId||null);
-					// $cell.html(iBgImg==='none'?itemId:'');
+					$cell.data('connection_id',itemConnectionId||'new');
 					$cell.css({
 						backgroundImage: iBgImg
 					});
+					if ( !itemId ) {
+						$cell.data('width', 1);
+						$cell.data('height',1);
+					}
+
 					$item.data('id',cellId||null);
-					// $item.html(cBgImg==='none'?cellId:'');
+					$item.data('connection_id',cellConnectionId||'new');
 					$item.css({
 						backgroundImage: cBgImg
 					});
+					if ( !cellId ) {
+						$item.data('width', 1);
+						$item.data('height',1);
+					}
+
+					resetGridWidth();
 
 				} else { // ... list item was dropped
 
 					var columns = set.grid_cols;
-					var rows = set.grid_rows;
+					var rows 	= set.grid_rows;
 
 					jQuery('.grid .just-dropped, .grid .drag-hover').
 						removeClass('just-dropped').
 							removeClass('drag-hover');
 					
-					var id = $item.data( 'id' ),
-						iBgImg = $item.data('poster');
+					var id 		= $item.data( 'id' ),
+						iBgImg 	= $item.data('poster');
 					
 					$cell.data( 'id', id );
-					// $cell.html( iBgImg==='none'?id:'' );
+					$cell.data( 'connection_id', 'new' );
 					$cell.addClass('just-dropped');
 					$cell.css({
 						backgroundImage: 
@@ -245,23 +259,12 @@ jQuery(function(){
 				zIndex:999
 			});
 
-			ui.helper.data('droppedOnGrid',false);
 		},
 		stop : function (evt,ui) {
 
-			var $e = jQuery(this);
-
-			$e.css({
+			jQuery(this).css({
 				zIndex: 'auto'
 			});
-
-			if ( ui.helper.data('droppedOnGrid') === false ) {
-
-				$e.data('id',null);
-				$e.css({
-					backgroundImage: 'none'
-				});
-			}
 		}
 	};
 
@@ -458,4 +461,25 @@ jQuery(function(){
 
 	// finally ... reset once at startup
 	resetGridWidth();
+
+	jQuery(document).keydown(function(evt){
+		if ( evt.which === 8 || evt.which === 46 ) {
+			if ( $selectedCell && confirm('Remove selected cell?') ) {
+				evt.preventDefault();
+
+				var $cell = $selectedCell;
+				$selectedCell = null;
+
+				$cell.data('id', null);
+				$cell.data('width',  1);
+				$cell.data('height', 1);
+				$cell.css({
+					backgroundImage: 'none'
+				});
+				$cell.removeClass('selected');
+
+				return false;
+			}
+		}
+	});
 });

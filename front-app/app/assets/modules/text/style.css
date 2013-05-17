@@ -14,5 +14,41 @@ body {
 }
 
 .scene {
-	padding: 18px;
+	padding: 18px 50px 18px 18px;
+	line-height: 1.6;
+}
+
+#score-nav-tabs {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 30px;
+  border-left: 1px solid #999;
+}
+
+#score-nav-tabs > * {
+  height: 4%;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  border-bottom: 1px solid #999;
+  cursor: pointer;
+  background: white;
+}
+
+#score-nav-tabs > *:last-child {
+  border-bottom: 0px none;
+}
+
+#score-nav-tabs > *.current {
+  font-weight: bold;
+  background: #eee;
+}
+
+#score-nav-tabs > *:hover {
+  background: #eee;
 }

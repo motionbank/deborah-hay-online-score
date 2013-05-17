@@ -61,6 +61,9 @@ jQuery(function(){
 		scenesByMarker[marker] = $s;
 		$s.hide();
 		$tab = jQuery( '<div class="tab">' + ( i+1 ) + '</div>' );
+		$tab.css({
+			height: (100.0/$scenes.length)+'%'
+		});
 		jQuery( "#score-nav-tabs" ).append( $tab );
 		tabsByMarker[marker] = $tab;
 	})

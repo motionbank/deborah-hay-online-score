@@ -3,25 +3,25 @@
  +	EDIT
  + ------------------ */
 
-.cell-edit form {
+.cell form {
 	padding-top: 18px
 }
-.cell-edit form input[type=text],
-.cell-edit form select,
-.cell-edit form textarea {
+.cell form input[type=text],
+.cell form select,
+.cell form textarea {
 	width: 360px;
 	margin: 0px 0px 9px 0px
 }
-.cell-edit form label {
+.cell form label {
 	display: block;
 }
-.cell-edit form .fields {
+.cell form .fields {
 	clear: both;
 }
-.cell-edit form .fields input {
+.cell form .fields input {
 	width: 177px;
 	margin: 0px 0px 4.5px 0px
 }
-.cell-edit form fieldset {
+.cell form fieldset {
 	margin: 0px 0px 18px 0px
 }

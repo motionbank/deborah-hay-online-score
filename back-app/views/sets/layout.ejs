@@ -10,6 +10,7 @@
 						cell_width: <%= set.cell_width %>,
 						cell_height: <%= set.cell_height %>
 					},
+					connections : <%-: connections | stringify %>,
 					types : [
 						<% for ( var i = 0; i < types.length; i++ ) { %>
 							'<%= types[i] %>',
@@ -39,7 +40,7 @@
 							<div class="grid-cell"
 								title="<%= cell.title %> (#<% cell.id %>), <%= cell.type %>"
 								data-id="<%= cell.id %>" 
-								data-connection_id="<%= cell.extra.connection_id %>" 
+								data-connection-id="<%= cell.extra.connection_id %>" 
 								data-x="<%= ix %>" 
 								data-y="<%= iy %>"
 								data-width="<%= cell.extra.width || 1 %>" 
@@ -72,5 +73,22 @@
 		<div id="cells">
 			<% include ../cells/_list %>
 		</div>
+		<script type="text/template" id="tpl-set-fields-form">
+			<div class="cell-form"><form class="set-fields-form" method="post" action="/admin/sets/[%= set.id %]/cells/[%= cell.id %]/connections/[%= connection_id %]/fields">
+				<input type="hidden" name="sets_id" value="[%= set.id %]" />
+				<input type="hidden" name="cells_id" value="[%= cell.id %]" />
+				<input type="hidden" name="connection_id" value="[%= connection_id %]" />
+				<fieldset class="fields">
+					<label for="fields">Fields</label>
+					[% for ( var i = 0; i < fields.length; i++ ) { %]
+						[% var f = fields[i]; %]
+						<input type="text" name="field_keys" value="[%= f.name %]" /><input type="text" name="field_values" value="[%= f.value %]" /><br/>
+					[% } %]
+					<input type="text" name="field_keys" value="" /><input type="text" name="field_values" value="" /><br/>
+					<a class="add-more-action" href="#">Add more</a>
+				</fieldset>
+				<input type="submit" value="Save" />
+			</form></div>
+		</script>
 	</section>
 <% include ../_footer %>

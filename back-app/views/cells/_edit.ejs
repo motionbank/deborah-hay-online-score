@@ -1,5 +1,5 @@
 <script src="/javascripts/cells-edit.js" type="text/javascript"></script>
-<div class="cell-edit">
+<div class="cell-edit cell-form">
 	<form method="post" 
 		  enctype="multipart/form-data"
 		  action="/admin/cells/<% if ( cell.id ) { %><%= cell.id %>/save<% } else { %>new<% } %>">

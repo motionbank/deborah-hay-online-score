@@ -21,7 +21,11 @@ jQuery(function(){
 
 			if ( id ) {
 				evt.preventDefault();
+
 				var $cellEdit = jQuery( '.cell-edit', $cell );
+				var $otherForm = jQuery( '.cell-form:not(.cell-edit)', $cell );
+				$otherForm.hide();
+
 				if ( $cellEdit.get(0) ) {
 					$cellEdit.toggle();
 				} else {

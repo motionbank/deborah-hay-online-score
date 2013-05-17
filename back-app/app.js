@@ -235,8 +235,37 @@ app.get( '/sets/:id', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 						if ( err ) {
 							throw(err);
 						} else {
-							set.cells = cells;
-							res.json(set);
+							var cbs = [];
+							_.each(cells,function(c){
+								cbs.push(function(next){
+									c.getFields(function(err,fields){
+										if ( err ) {
+											throw(err);
+										} else {
+											var setFields = [];
+											_.each(fields,function(f){
+												if ( f.extra.sets_id === -1 || f.extra.sets_id === set.id ) {
+													setFields.push(f);
+												}
+											});
+											c.fields = setFields;
+											next();
+										}
+									});
+								});
+							});
+							cbs.push(function(){
+								set.cells = cells;
+								res.json(set);
+							});
+							var cb = cbs.shift();
+							var nextCb = function () {
+								if (cbs.length > 0) {
+									var cb = cbs.shift();
+									cb(nextCb);
+								}
+							}
+							cb(nextCb);
 						}
 					});
 				}

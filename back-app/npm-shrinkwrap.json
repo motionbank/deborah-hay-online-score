@@ -116,6 +116,14 @@
     },
     "imagemagick": {
       "version": "0.1.3"
+    },
+    "vimeo": {
+      "version": "0.1.6",
+      "dependencies": {
+        "oauth": {
+          "version": "0.9.6"
+        }
+      }
     }
   }
 }

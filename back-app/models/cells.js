@@ -23,7 +23,7 @@ module.exports = function (db, models) {
 		}
 	},{
 		cache: false,
-		autoFetch: true,
+		//autoFetch: true,
 		validations: {
         	type: db.validators.insideList(
         		cellTypes,

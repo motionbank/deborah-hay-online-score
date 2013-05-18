@@ -36,7 +36,8 @@ var CellView = module.exports = Backbone.View.extend({
 		this.cell = new CellModel( opts );
 		this.gridView.$el.append( this.render() );
 
-		this.respondToRecordingChange = this.cell.get('per-recording') || false;
+		this.respondToRecordingChange = this.cell.get('per-recording') === 'true' ? true : false;
+		this.respondToSceneChange = this.cell.get('per-scene') === 'false' ? false : true;
 
 		var app = this.gridView.getApp();
 
@@ -91,10 +92,11 @@ var CellView = module.exports = Backbone.View.extend({
 		this.isVisible = true;
 
 		var scene = this.gridView.getApp().getScene();
+		var cellType = this.cell.get('type');
 
 		if ( this.respondToSceneChange && scene ) { 
 			this.sceneChanged( scene ); 
-		} else {
+		} else if ( cellType !== 'title' && cellType !== 'text' ) {
 			var imgSrc = this.cell.get('poster');
 			if ( this.$el.css('background-image') === 'none' && imgSrc ) {
 				imgSrc = this.cfUrl + '/cells/poster/full/' + imgSrc;

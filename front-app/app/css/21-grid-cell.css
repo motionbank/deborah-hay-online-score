@@ -56,6 +56,14 @@
 	background-size : contain;
 }
 
+#grid-view article.cell.type-title {
+	background-image: none;
+	color: black;
+}
+#grid-view article.cell.type-title .info {
+	display: block;
+}
+
 #grid-view article.cell .content {
 }
 #grid-view article.cell .content iframe {

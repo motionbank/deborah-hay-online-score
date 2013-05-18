@@ -34,6 +34,9 @@ jQuery(function(){
 						dataType: 'json',
 						success: function (data, status) {
 							$cellEdit = jQuery( data.html );
+							if ( jQuery('.cell-list') ) {
+								jQuery( '.poster-container', $cellEdit ).hide();
+							}
 							$cell.append( $cellEdit );
 							extendCellEdit($cellEdit);
 						},

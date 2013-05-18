@@ -20,14 +20,16 @@
 	<label for="description">Description</label>
 	<input type="text" name="description" value="<%= cell.description || '' %>" /><br/>
 
-	<label for="title">Poster image</label>
-		<input class="inp-poster" type="file" name="poster" value="" /><br/>
-	<% if ( !cell.poster ) { %>
-	<% } %>
-	<div class="img-poster-container">
-		<img data-base="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/" 
-		     src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/small/<%= cell.poster %>" />
-	</div><br />
+	<div class="poster-container">
+		<div class="poster-img-container">
+			<img data-base="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/" 
+			     src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/small/<%= cell.poster %>" />
+		</div>
+		<label for="title">Poster image</label>
+			<input type="file" name="poster" value="" />
+		<% if ( !cell.poster ) { %>
+		<% } %>
+	</div>
 
 	<fieldset class="fields">
 	<label for="fields">Fields</label>

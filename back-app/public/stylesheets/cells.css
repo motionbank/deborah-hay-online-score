@@ -25,3 +25,8 @@
 .cell form fieldset {
 	margin: 0px 0px 18px 0px
 }
+.cell-edit .poster-img-container {
+	float: left;
+	width: 100px;
+	margin-right: 9px;
+}

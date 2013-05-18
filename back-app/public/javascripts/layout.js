@@ -8,7 +8,7 @@ jQuery(function(){
 	var tplGridCell = '<div class="grid-cell z-behind <%= classes.join(\' \') %>" '+
 							'title="<%= title %> (#<% id %>), <%= type %>" '+
 							'data-id="<%= id %>" '+
-							'data-connection-id="new" '+
+							'data-connection-id="" '+
 						  	'data-x="<%= x %>" '+
 						  	'data-y="<%= y %>" '+
 						  	'data-width="<%= width %>" '+
@@ -143,7 +143,7 @@ jQuery(function(){
 						iBgImg = $item.css('background-image');
 
 					$cell.data('id',itemId||null);
-					$cell.data('connection_id',itemConnectionId||'new');
+					$cell.data('connection_id',itemConnectionId||null);
 					$cell.css({
 						backgroundImage: iBgImg
 					});
@@ -156,7 +156,7 @@ jQuery(function(){
 					}
 
 					$item.data('id',cellId||null);
-					$item.data('connection_id',cellConnectionId||'new');
+					$item.data('connection_id',cellConnectionId||null);
 					$item.css({
 						backgroundImage: cBgImg
 					});
@@ -183,7 +183,7 @@ jQuery(function(){
 						iBgImg 	= $item.data('poster');
 					
 					$cell.data( 'id', id );
-					$cell.data( 'connection_id', 'new' );
+					$cell.data( 'connection_id', null );
 					$cell.addClass('just-dropped');
 					$cell.css({
 						backgroundImage: 
@@ -252,7 +252,7 @@ jQuery(function(){
 					duration: 500,
 					complete : function () {
 						jQuery('.cell-form', $cell).hide();
-						showSetFieldsEditor( $cell, connection_id );
+						showSetFieldsEditor( $e, $cell, connection_id );
 					}
 				});
 
@@ -386,7 +386,8 @@ jQuery(function(){
 					x: $e.data('x'), 
 					y: $e.data('y'),
 					width: $e.data('width') || 1, 
-					height: $e.data('height') || 1
+					height: $e.data('height') || 1,
+					connection_id: $e.data('connection-id')
 				});
 				save_cols = Math.max( save_cols, parseInt($e.data('x'))+parseInt($e.data('width')) ); // remove unneeded cols/rows
 				save_rows = Math.max( save_rows, parseInt($e.data('y'))+parseInt($e.data('height')) );
@@ -460,22 +461,45 @@ jQuery(function(){
 		}
 	});
 
-	var showSetFieldsEditor = function ( $cell, connection_id ) {
+	var showSetFieldsEditor = function ( $gridCell, $cell, connection_id ) {
 
 		var set_id = layoutEditor.set.id;
 		var cell_id = $cell.data('id');
 
-		jQuery.ajax({
-			url: '/admin/sets/'+set_id+'/cells/'+cell_id+'/connections/'+connection_id+'/fields',
-			dataType: 'json',
-			success: function(resp){
-				insertSetFieldsEditor( $cell, connection_id, resp.fields );
-			},
-			error: function (err) {
-			},
-			complete: function () {
-			}
-		});
+		if ( !connection_id ) {
+
+			jQuery.ajax({
+				url: '/admin/sets/'+set_id+'/cells/'+cell_id+'/connections',
+				method: 'post',
+				dataType: 'json',
+				data: {
+					id: cell_id, x: $gridCell.data('x'), y: $gridCell.data('y'),
+					width: $gridCell.data('width'), height: $gridCell.data('height')
+				},
+				success: function (resp) {
+					console.log( resp );
+					$gridCell.data('connection-id', resp.connection_id);
+					insertSetFieldsEditor( $cell, resp.connection_id, [] );
+				},
+				error : function () {
+
+				}
+			});
+
+		} else {
+
+			jQuery.ajax({
+				url: '/admin/sets/'+set_id+'/cells/'+cell_id+'/connections/'+connection_id+'/fields',
+				dataType: 'json',
+				success: function(resp){
+					insertSetFieldsEditor( $cell, connection_id, resp.fields );
+				},
+				error: function (err) {
+				},
+				complete: function () {
+				}
+			});
+		}
 	};
 
 	var insertSetFieldsEditor = function ( $cell, connection_id, fields ) {

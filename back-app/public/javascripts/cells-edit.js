@@ -68,32 +68,6 @@ jQuery(function(){
 				});
 				return false;
 			});
-
-			jQuery('.inp-poster', $cellEdit).change(function(evt){
-
-				var $self = jQuery(this);
-				var $container = jQuery('.img-poster-container', $cell);
-
-				var img = new Image();
-				var $img = jQuery( 'img', $container );
-
-				img.onload = function () {
-					$container.css({
-						border: '0px solid transparent',
-						width: 'auto', height: 'auto'
-					});
-					$img.attr('src',img.src);
-				}
-				img.onerror = function () {
-					$container.css({
-						border: '1px solid red',
-						width: '360px', height: '72px',
-						color: 'red'
-					}).html( 'Not found ..' );
-					$img.hide();
-				}
-				img.src = $img.data('base')+$self.val();
-			});
 		};
 
 	}).addClass('cell-edit-inline');

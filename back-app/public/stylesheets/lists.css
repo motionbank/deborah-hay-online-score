@@ -30,10 +30,6 @@
 .list-item div {
 	float: left;
 }
-.list-item .poster {
-	width: 30px;
-	padding-right: 9px;
-}
 .list-item .title {
 	min-width: 270px;
 }
@@ -55,8 +51,14 @@
 }
 .list-item .poster {
 	width: 40px;
+	padding-right: 9px;
 }
 .list-item .poster img {
 	max-width: 40px; 
 	max-height: 20px
+}
+.list-item div.cell-form {
+	clear: both;
+	padding-left: 49px;
+	padding-bottom: 18px;
 }

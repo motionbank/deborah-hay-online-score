@@ -509,6 +509,7 @@ app.post( pathBase + '/sets/:id/layout', idNumeric, function(req,res){
 					error(req,res,err);
 				} else {
 
+					console.log( req.body );
 					set.removeCells();
 
 					var cellsById = {};
@@ -521,7 +522,9 @@ app.post( pathBase + '/sets/:id/layout', idNumeric, function(req,res){
 					_.each(req.body.cells,function(c){
 						cbs.push(function(next){
 							set.addCells( cellsById['id-'+c.id],
-										  { x: c.x, y: c.y, width: c.width, height: c.height } );
+										  { x: c.x, y: c.y, 
+										  	width: c.width, height: c.height,
+										  	connection_id: c.connection_id } );
 							next();
 						});
 					});
@@ -561,6 +564,52 @@ app.post( pathBase + '/sets/:id/layout', idNumeric, function(req,res){
 	});
 });
 
+// SETS - CREATE SET-CELL-CONNECTION
+
+app.post( pathBase + '/sets/:set_id/cells/:cell_id/connections', function (req, res) {
+	try {
+		var set_id  = parseInt( req.params.set_id );
+		var cell_id = parseInt( req.params.cell_id );
+	} catch (e) {
+		error(req,res,e);
+	}
+	req.models.sets.get(set_id,function(err,set){
+		if ( noError(req,res,err) ) {
+			req.models.cells.get(cell_id, function(err,cell){
+				if ( noError(req,res,err) ) {
+					var c = req.body;
+					set.addCells(cell,{
+						x: c.x, y: c.y, width: c.width, height: c.height
+					},function(err){
+						if ( noError(req,res,err) ) {
+							set.getCells(function(err,cells){
+								if ( noError(req,res,err) ) {
+									var savedCell = null;
+									_.each(cells,function(oneCell){
+										if ( savedCell ) return;
+										if ( oneCell.id == cell.id && 
+											 oneCell.extra.x == c.x &&
+											 oneCell.extra.y == c.y ) {
+											savedCell = oneCell;
+										}
+									});
+									res.send({
+										set: set,
+										cell: savedCell,
+										connection_id: savedCell.extra.connection_id
+									});
+								}
+							});
+						}
+					});
+				}
+			});
+		}
+	});
+});
+
+// SETS - GET SET-CELL-CONNECTION FIELDS
+
 app.get( pathBase + '/sets/:set_id/cells/:cell_id/connections/:connection_id/fields', 
 		 function(req,res){
 	try {
@@ -593,6 +642,9 @@ app.get( pathBase + '/sets/:set_id/cells/:cell_id/connections/:connection_id/fie
 		});
 	});
 });
+
+
+// SETS - SAVE SET-CELL-CONNECTION FIELDS
 
 app.post( pathBase + '/sets/:set_id/cells/:cell_id/connections/:connection_id/fields',
 		  function (req, res) {

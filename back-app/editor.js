@@ -854,7 +854,13 @@ app.get( pathBase + '/cells/:id', idNumeric, function(req,res){
 		if ( noError(req,res,err) ) {
 			cell.getFields(function(err,fields){
 				if (noError(req,res,err)) {
-					cell.fields = fields;
+					var noConnFields = [];
+					_.each(fields,function(f){
+						if ( f.extra.connection_id === 0 ) {
+							noConnFields.push(f);
+						}
+					});
+					cell.fields = noConnFields;
 					cell.getSets(function(err, sets){
 						if ( noError(req,res,err) ) {
 							cell.sets = sets;

@@ -135,7 +135,7 @@ jQuery(function(){
 
 	var setToScene = function ( newScene ) {
 
-		if ( !currentScene || currentScene !== newScene ) { // block own calls after initial get-scene
+		if ( !currentScene || currentScene.title !== newScene ) { // block own calls after initial get-scene
 
 			for ( var i = 0; i < sceneEvents.length; i++ ) {
 				if ( sceneEvents[i].title === newScene ) {
@@ -151,10 +151,11 @@ jQuery(function(){
 					return;
 				}
 			}
-			// not found ... play from start i guess
-			fPlayer.seek(0, function () {
-				fPlayer.resume();
-			});
+			// not found ... play from start i guess ... no better wait it out
+			// fPlayer.seek(0, function () {
+			// 	fPlayer.resume();
+			// });
+			fPlayer.pause();
 		}
 	}
 

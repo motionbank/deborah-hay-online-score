@@ -9,13 +9,9 @@ http://theforsythecompany.com/
 Frontend (in front-app/)
 ========
 
-backbone.js, ...
-
-Use brunch.io to run it.
+brunch.io to watch, backbone.js, ... just static files sitting on our motionbank.org domain.
 
 Backend (in back-app/)
 =======
 
-Node.js, express, ... running on appfog.
-
-Use nodemon to run it.
+Node.js, express, ... running on AppFog.

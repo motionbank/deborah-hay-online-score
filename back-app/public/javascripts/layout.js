@@ -136,14 +136,14 @@ jQuery(function(){
 					var cellId = $cell.data('id'),
 						itemId = $item.data('id');
 
-					var cellConnectionId = $cell.data('connection_id'),
-						itemConnectionId = $item.data('connection_id');
+					var cellConnectionId = $cell.data('connection-id'),
+						itemConnectionId = $item.data('connection-id');
 
 					var cBgImg = $cell.css('background-image'),
 						iBgImg = $item.css('background-image');
 
 					$cell.data('id',itemId||null);
-					$cell.data('connection_id',itemConnectionId||null);
+					$cell.data('connection-id',itemConnectionId||null);
 					$cell.css({
 						backgroundImage: iBgImg
 					});
@@ -156,7 +156,7 @@ jQuery(function(){
 					}
 
 					$item.data('id',cellId||null);
-					$item.data('connection_id',cellConnectionId||null);
+					$item.data('connection-id',cellConnectionId||null);
 					$item.css({
 						backgroundImage: cBgImg
 					});
@@ -183,7 +183,7 @@ jQuery(function(){
 						iBgImg 	= $item.data('poster');
 					
 					$cell.data( 'id', id );
-					$cell.data( 'connection_id', null );
+					$cell.data( 'connection-id', null );
 					$cell.addClass('just-dropped');
 					$cell.css({
 						backgroundImage: 
@@ -245,6 +245,8 @@ jQuery(function(){
 			var connection_id = $e.data('connection-id');
 			var $cell = jQuery( '.cell[data-id='+id+']', $cellList );
 
+			console.log( id, connection_id );
+
 			if ( id ) {
 				$cellList.animate({
 					scrollTop: $cellList.scrollTop() + ($cell.offset().top - $cellList.offset().top)
@@ -256,7 +258,6 @@ jQuery(function(){
 					}
 				});
 
-				var connection_id = $e.data('connection-id');
 				if ( connection_id ) {
 					deselectGridCells();
 				}

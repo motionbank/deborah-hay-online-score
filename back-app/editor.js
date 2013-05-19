@@ -1025,6 +1025,9 @@ app.post( pathBase + '/cells/:id/save', idNumeric, function(req, res){
 										if ( noError(req,res,err) ) {
 
 											_.each( req.models.cells.posterSizes, function(pSize){
+												if ( !pSize.size ) {
+													console.log( 'Something is wrong here:', pSize, req.models.cells.posterSizes );
+												}
 												im.resize( _.extend( pSize.size,{
 													srcPath: req.files.poster.path,
 													dstPath: req.files.poster.path + '_' + pSize.name

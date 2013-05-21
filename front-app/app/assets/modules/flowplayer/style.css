@@ -13,3 +13,85 @@ body {
 
 	background-color: #555555;
 }
+
+
+.flowplayer {
+  background-color: #000 !important;
+}
+
+.flowplayer .fp-ui {
+  font-family: 'Open Sans' !important;
+}
+
+.flowplayer .fp-fullscreen,
+.flowplayer .fp-embed {
+  display: none !important;
+}
+
+.flowplayer a[href="http://flowplayer.org"] {
+  display: none !important;
+}
+
+.flowplayer .fp-waiting {
+  
+}
+
+.flowplayer .fp-progress {
+  background: #000 !important;
+}
+
+.flowplayer .fp-controls {
+  background: #fff !important;
+}
+
+.flowplayer .fp-play {
+  
+}
+
+.flowplayer .fp-timeline {
+  background: #ccc;
+  top: 0 !important;
+  height: 20px !important;
+}
+
+.flowplayer .fp-timeline .fp-buffer {
+  background: #999;
+}
+
+.flowplayer .fp-timeline .fp-progress {
+  
+}
+
+.flowplayer .fp-volume {
+  
+}
+
+.flowplayer .fp-volumeslider {
+  background-color: #999 !important;
+}
+
+.flowplayer .fp-volumelevel {
+  background-color: #000 !important;
+}
+
+.flowplayer .fp-time {
+  font-weight: normal !important;
+  color: #000 !important;
+  text-shadow: none !important;
+}
+
+.flowplayer .fp-time .fp-elapsed {
+  color: #000 !important;
+}
+
+.flowplayer .fp-time .fp-remaining {
+  color: #000 !important;
+}
+
+.flowplayer .fp-time .fp-duration {
+  color: #000 !important;
+}
+
+.flowplayer .fp-mute {
+  background-image: url(img/black.png) !important;
+}

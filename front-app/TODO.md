@@ -30,6 +30,7 @@ General UX
 ==========================
 - show left / right transition
 - show keyboard shortcuts
+- keyboard shortcuts jump 1 column too far
 - animate switch set -> selector -> sets
 - a global indicator that show where you are in the recordings / time / performer dimensions
 
@@ -57,6 +58,8 @@ Flowplayer tiles
 - HTML5 video not scaled right
 - sometimes the scene does not get loaded (if it is a late scene) ... or it does change twice, just after it loaded?
 - full screen button missing
+- store sound globally?
+- ignore own messages
 
 Content
 ==========================

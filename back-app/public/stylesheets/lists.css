@@ -30,20 +30,19 @@
 .list-item div {
 	float: left;
 }
-.list-item .poster {
-	width: 30px;
-	padding-right: 9px;
-}
 .list-item .title {
-	min-width: 360px;
+	min-width: 270px;
+}
+.list-item .description {
+	min-width: 270px;
 }
 .list-item .type {
-	min-width: 270px;
+	min-width: 90px;
 	color: #888888;
 }
 .list-item .actions {
-/*		float: right;
-	text-align: right;*/
+	float: right;
+	text-align: right;
 	width: 270px;
 }
 .list-item .actions a {}
@@ -52,8 +51,14 @@
 }
 .list-item .poster {
 	width: 40px;
+	padding-right: 9px;
 }
 .list-item .poster img {
 	max-width: 40px; 
 	max-height: 20px
+}
+.list-item div.cell-form {
+	clear: both;
+	padding-left: 49px;
+	padding-bottom: 18px;
 }

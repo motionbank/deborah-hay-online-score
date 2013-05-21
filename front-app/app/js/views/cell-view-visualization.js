@@ -18,13 +18,17 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 			var scene = newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-');
 			var imgSrc = this.cfUrl + '/cells/visualization/full/'+this.cell.get('base-path');
 
+			var pathPieces = [];
+
 			if ( this.respondToRecordingChange ) {
-				imgSrc += this.currentRecording+'_';
+				pathPieces.push( this.currentRecording );
 			}
 
 			if ( this.respondToSceneChange ) {
-				imgSrc += scene;
+				pathPieces.push( scene );
 			}
+
+			imgSrc += pathPieces.join('_');
 
 			imgSrc += '.png';
 

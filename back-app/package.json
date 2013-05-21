@@ -26,6 +26,6 @@
   "devDependencies": {
   },
   "scripts": {
-      "start": "node app.js"
+      "start": "node editor.js"
   }
 }

@@ -90,6 +90,10 @@ var App = module.exports = (function(){
 			}
 		});
 
+		messenger.on( 'log', function msgrSetScene (req,resp){
+			console.log(req.data);
+		});
+
 		messenger.on( 'get-scene', function msgrGetScene (req,resp){
 			resp.send('set-scene',currentScene);
 		});
@@ -106,6 +110,7 @@ var App = module.exports = (function(){
 		});
 
 		messenger.accept( 'http://player.vimeo.com' );
+		
 		messenger.on({
 			matcher: 'finish', 
 			callback: function msgrVimeoFinish ( req, resp ) {
@@ -114,7 +119,6 @@ var App = module.exports = (function(){
 			nameAlias: 'event'
 		});
 
-		messenger.accept( 'http://player.vimeo.com' );
 		messenger.on({
 			matcher: 'ready', 
 			callback: function msgrVimeoFinish ( req, resp ) {

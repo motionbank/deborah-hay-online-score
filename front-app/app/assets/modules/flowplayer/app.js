@@ -33,6 +33,7 @@ jQuery(function(){
 
 		//api.useProxy( parentWindow, parentWindowOrigin ); // TODO: repair this sucker
 	});
+
 	messenger.on('set-scene',function(req,resp){
 		setToScene( req.data );
 	});
@@ -82,9 +83,10 @@ jQuery(function(){
 			var lastScene = currentScene;
 			for ( var i = 0; i < sceneEvents.length-1; i++ ) {
 				if ( sceneEvents[i+1].happened_at_float > now ) {
+					if ( fPlayer.seeking || !fPlayer.playing ) return;
 					if ( lastScene !== sceneEvents[i] ) {
 						currentScene = sceneEvents[i];
-						messenger.send('set-scene',currentScene.title,parentWindow);
+						messenger.send( 'set-scene', currentScene.title, parentWindow );
 					}
 					return;
 				}
@@ -133,26 +135,28 @@ jQuery(function(){
 
 	var setToScene = function ( newScene ) {
 
-		if ( currentScene ) return; // block own calls after initial get-scene
+		if ( !currentScene || currentScene.title !== newScene ) { // block own calls after initial get-scene
 
-		for ( var i = 0; i < sceneEvents.length; i++ ) {
-			if ( sceneEvents[i].title === newScene ) {
-				// if ( fPlayer.seekable ) {
-					fPlayer.seek( (sceneEvents[i].happened_at_float - currentVideo.happened_at_float) / 1000.0, function () {
-						currentScene = sceneEvents[i];
-						fPlayer.resume();
-					});
-				// } else {
-				// 	console.log( "setToScene, playing" );
-				// 	fPlayer.play(0);
-				// }
-				return;
+			for ( var i = 0; i < sceneEvents.length; i++ ) {
+				if ( sceneEvents[i].title === newScene ) {
+					// if ( fPlayer.seekable ) {
+						fPlayer.seek( (sceneEvents[i].happened_at_float - currentVideo.happened_at_float) / 1000.0, function () {
+							currentScene = sceneEvents[i];
+							fPlayer.resume();
+						});
+					// } else {
+					// 	console.log( "setToScene, playing" );
+					// 	fPlayer.play(0);
+					// }
+					return;
+				}
 			}
+			// not found ... play from start i guess ... no better wait it out
+			// fPlayer.seek(0, function () {
+			// 	fPlayer.resume();
+			// });
+			fPlayer.pause();
 		}
-		// not found ... play from start i guess
-		fPlayer.seek(0, function () {
-			fPlayer.resume();
-		});
 	}
 
 });

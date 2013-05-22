@@ -38,3 +38,8 @@ Cells
 	x upload previews directly to S3
 - test paths (in fields) on S3 / Vimeo / webserver
 - allow for input field to become textarea to be able to enter longer texts
+
+
+Vimeo
+===================
+- what happens if a video is being deleted? ... delete the cell? ask?

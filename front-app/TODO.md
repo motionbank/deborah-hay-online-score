@@ -60,6 +60,7 @@ Flowplayer tiles
 - full screen button missing
 - store sound globally?
 - ignore own messages
+- on deactivate make image show current scene, not default image
 
 Content
 ==========================

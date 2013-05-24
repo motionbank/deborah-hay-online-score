@@ -13,3 +13,480 @@ body {
 
 	background-color: #555555;
 }
+
+
+.flowplayer {
+  background-color: #000 !important;
+  font-family: 'Open Sans' !important;
+}
+.flowplayer * {
+}
+.flowplayer a:focus {
+}
+.flowplayer video {
+}
+.flowplayer.is-ipad video {
+}
+.is-ready.flowplayer.is-ipad video {
+}
+.flowplayer .fp-engine,.flowplayer .fp-ui,.flowplayer .fp-message {
+}
+.flowplayer .fp-message {
+}
+.flowplayer .fp-message h2 {
+}
+.flowplayer .fp-message p {
+}
+.flowplayer .fp-controls {
+}
+.no-background.flowplayer .fp-controls {
+}
+.is-fullscreen.flowplayer .fp-controls {
+}
+.is-mouseover.flowplayer .fp-controls {
+}
+.flowplayer .fp-waiting {
+}
+.flowplayer .fp-waiting * {
+}
+.flowplayer .fp-waiting em {
+}
+.flowplayer .fp-waiting em:nth-child(1) {
+}
+.flowplayer .fp-waiting em:nth-child(2) {
+}
+.flowplayer .fp-waiting em:nth-child(3) {
+}
+.flowplayer .fp-waiting p {
+}
+.flowplayer .fp-speed {
+}
+.flowplayer .fp-speed.fp-hilite {
+}
+.flowplayer .fp-help {
+}
+.is-help.flowplayer .fp-help {
+}
+.flowplayer .fp-help .fp-help-section {
+}
+.flowplayer .fp-help .fp-help-basics {
+}
+.flowplayer .fp-help p {
+}
+.flowplayer .fp-help em {
+}
+.flowplayer .fp-help small {
+}
+.flowplayer .fp-help .fp-close {
+}
+@media (max-width: 600px) {.flowplayer .fp-help p {
+}
+
+}
+.flowplayer .fp-subtitle {
+}
+.flowplayer .fp-subtitle p {
+}
+.flowplayer .fp-subtitle p:after {
+}
+.flowplayer .fp-subtitle.fp-active {
+}
+.flowplayer .fp-fullscreen,.flowplayer .fp-unload,.flowplayer .fp-mute,.flowplayer .fp-embed,.flowplayer .fp-close,.flowplayer .fp-play {
+}
+.is-rtl.flowplayer .fp-fullscreen,.is-rtl.flowplayer .fp-unload,.is-rtl.flowplayer .fp-mute,.is-rtl.flowplayer .fp-embed,.is-rtl.flowplayer .fp-close,.is-rtl.flowplayer .fp-play {
+}
+.color-light.flowplayer .fp-fullscreen,.color-light.flowplayer .fp-unload,.color-light.flowplayer .fp-mute,.color-light.flowplayer .fp-embed,.color-light.flowplayer .fp-close,.color-light.flowplayer .fp-play {
+}
+.is-rtl.color-light.flowplayer .fp-fullscreen,.is-rtl.color-light.flowplayer .fp-unload,.is-rtl.color-light.flowplayer .fp-mute,.is-rtl.color-light.flowplayer .fp-embed,.is-rtl.color-light.flowplayer .fp-close,.is-rtl.color-light.flowplayer .fp-play {
+}
+@media (-webkit-min-device-pixel-ratio: 2) {.color-light.flowplayer .fp-fullscreen,.color-light.flowplayer .fp-unload,.color-light.flowplayer .fp-mute,.color-light.flowplayer .fp-embed,.color-light.flowplayer .fp-close,.color-light.flowplayer .fp-play {
+}
+.is-rtl.color-light.flowplayer .fp-fullscreen,.is-rtl.color-light.flowplayer .fp-unload,.is-rtl.color-light.flowplayer .fp-mute,.is-rtl.color-light.flowplayer .fp-embed,.is-rtl.color-light.flowplayer .fp-close,.is-rtl.color-light.flowplayer .fp-play {
+}
+
+}
+@media (-webkit-min-device-pixel-ratio: 2) {.flowplayer .fp-fullscreen,.flowplayer .fp-unload,.flowplayer .fp-mute,.flowplayer .fp-embed,.flowplayer .fp-close,.flowplayer .fp-play {
+}
+.is-rtl.flowplayer .fp-fullscreen,.is-rtl.flowplayer .fp-unload,.is-rtl.flowplayer .fp-mute,.is-rtl.flowplayer .fp-embed,.is-rtl.flowplayer .fp-close,.is-rtl.flowplayer .fp-play {
+}
+
+}
+.is-splash.flowplayer .fp-ui,.is-paused.flowplayer .fp-ui {
+}
+.is-rtl.is-splash.flowplayer .fp-ui,.is-rtl.is-paused.flowplayer .fp-ui {
+}
+@media (-webkit-min-device-pixel-ratio: 2) {.is-splash.flowplayer .fp-ui,.is-paused.flowplayer .fp-ui {
+}
+.is-rtl.is-splash.flowplayer .fp-ui,.is-rtl.is-paused.flowplayer .fp-ui {
+}
+
+}
+.color-light.is-splash.flowplayer .fp-ui,.color-light.is-paused.flowplayer .fp-ui {
+}
+.is-rtl.color-light.is-splash.flowplayer .fp-ui,.is-rtl.color-light.is-paused.flowplayer .fp-ui {
+}
+@media (-webkit-min-device-pixel-ratio: 2) {.color-light.is-splash.flowplayer .fp-ui,.color-light.is-paused.flowplayer .fp-ui {
+}
+.is-rtl.color-light.is-splash.flowplayer .fp-ui,.is-rtl.color-light.is-paused.flowplayer .fp-ui {
+}
+
+}
+.is-fullscreen.flowplayer .fp-ui {
+}
+.is-seeking.flowplayer .fp-ui,.is-loading.flowplayer .fp-ui {
+}
+.flowplayer .fp-logo {
+}
+.flowplayer .fp-logo img {
+}
+.is-embedded.flowplayer .fp-logo {
+}
+.fixed-controls.flowplayer .fp-logo {
+}
+
+.flowplayer a[href="http://flowplayer.org"] {
+  display: none !important;
+}
+
+.flowplayer .fp-fullscreen,
+.flowplayer .fp-embed {
+  display: none !important;
+}
+
+.flowplayer .fp-fullscreen,.flowplayer .fp-unload,.flowplayer .fp-close {
+}
+.is-rtl.flowplayer .fp-fullscreen,.is-rtl.flowplayer .fp-unload,.is-rtl.flowplayer .fp-close {
+}
+.flowplayer .fp-unload,.flowplayer .fp-close {
+}
+.is-rtl.flowplayer .fp-unload,.is-rtl.flowplayer .fp-close {
+}
+.flowplayer .fp-play {
+}
+.is-rtl.flowplayer .fp-play {
+}
+.play-button.flowplayer .fp-play {
+}
+.is-paused.flowplayer .fp-play {
+}
+.is-rtl.is-paused.flowplayer .fp-play {
+}
+.flowplayer.is-ready.is-closeable .fp-unload {
+}
+.flowplayer.is-ready.is-closeable .fp-fullscreen {
+}
+.flowplayer.is-fullscreen .fp-fullscreen {
+}
+.is-rtl.flowplayer.is-fullscreen .fp-fullscreen {
+}
+.flowplayer.is-fullscreen .fp-unload,.flowplayer.is-fullscreen .fp-close {
+}
+.flowplayer .fp-timeline {
+  background: #ccc;
+  top: 0 !important;
+  height: 20px !important;
+}
+.no-volume.flowplayer .fp-timeline {
+}
+.no-mute.flowplayer .fp-timeline {
+}
+.play-button.flowplayer .fp-timeline {
+}
+.is-rtl.flowplayer .fp-timeline {
+}
+.no-volume.is-rtl.flowplayer .fp-timeline {
+}
+.no-mute.is-rtl.flowplayer .fp-timeline {
+}
+.play-button.is-rtl.flowplayer .fp-timeline {
+}
+.is-long.flowplayer .fp-timeline {
+}
+.no-volume.is-long.flowplayer .fp-timeline {
+}
+.no-mute.is-long.flowplayer .fp-timeline {
+}
+.play-button.is-long.flowplayer .fp-timeline {
+}
+.is-rtl.is-long.flowplayer .fp-timeline {
+}
+.no-volume.is-rtl.is-long.flowplayer .fp-timeline {
+}
+.no-mute.is-rtl.is-long.flowplayer .fp-timeline {
+}
+.play-button.is-rtl.is-long.flowplayer .fp-timeline {
+}
+.aside-time.flowplayer .fp-timeline,.no-time.flowplayer .fp-timeline {
+}
+.aside-time.no-volume.flowplayer .fp-timeline,.no-time.no-volume.flowplayer .fp-timeline {
+}
+.aside-time.no-mute.flowplayer .fp-timeline,.no-time.no-mute.flowplayer .fp-timeline {
+}
+.play-button.no-time.flowplayer .fp-timeline,.play-button.aside-time.flowplayer .fp-timeline {
+}
+.is-rtl.aside-time.flowplayer .fp-timeline,.is-rtl.no-time.flowplayer .fp-timeline {
+}
+.is-rtl.aside-time.no-volume.flowplayer .fp-timeline,.is-rtl.no-time.no-volume.flowplayer .fp-timeline {
+}
+.is-rtl.aside-time.no-mute.flowplayer .fp-timeline,.is-rtl.no-time.no-mute.flowplayer .fp-timeline {
+}
+.is-rtl.play-button.no-time.flowplayer .fp-timeline,.is-rtl.play-button.aside-time.flowplayer .fp-timeline {
+}
+.flowplayer .fp-buffer,.flowplayer .fp-progress {
+}
+.flowplayer .fp-progress {
+  background: #000 !important;
+}
+.flowplayer .fp-buffer {
+  background: #999;
+}
+.flowplayer.is-touch .fp-timeline {
+}
+.flowplayer.is-touch .fp-progress {
+}
+.flowplayer.is-touch .fp-timeline.is-dragging .fp-progress {
+}
+.flowplayer.is-touch.is-mouseover .fp-progress:after,.flowplayer.is-touch.is-mouseover .fp-progress:before {
+}
+.flowplayer.is-touch.is-rtl.is-mouseover .fp-progress:after,.flowplayer.is-touch.is-rtl.is-mouseover .fp-progress:before {
+}
+.flowplayer.is-touch.is-rtl.is-mouseover .fp-progress:after {
+}
+.flowplayer.is-touch.is-mouseover .fp-progress:before {
+}
+.flowplayer.is-touch.is-mouseover .fp-progress:after {
+}
+.flowplayer.is-touch.is-mouseover .fp-timeline.is-dragging .fp-progress:after {
+}
+.flowplayer.is-touch.is-rtl.is-mouseover .fp-timeline.is-dragging .fp-progress:after {
+}
+.flowplayer .fp-volume {
+}
+.is-rtl.flowplayer .fp-volume {
+}
+.flowplayer .fp-mute {
+}
+.is-rtl.flowplayer .fp-mute {
+}
+.no-mute.flowplayer .fp-mute {
+}
+.flowplayer .fp-volumeslider {
+  background-color: #999 !important;
+}
+.is-rtl.flowplayer .fp-volumeslider {
+}
+.no-volume.flowplayer .fp-volumeslider {
+}
+.flowplayer .fp-volumelevel {
+}
+.flowplayer .fp-time {
+  font-weight: normal !important;
+  color: #000 !important;
+  text-shadow: none !important;
+}
+.flowplayer .fp-time.is-inverted .fp-duration {
+}
+.flowplayer .fp-time.is-inverted .fp-remaining {
+}
+.flowplayer .fp-time em {
+}
+.no-time.flowplayer .fp-time {
+}
+.is-long.flowplayer .fp-time em {
+}
+.flowplayer .fp-elapsed {
+}
+.play-button.flowplayer .fp-elapsed {
+  color: #000 !important;
+}
+.is-rtl.flowplayer .fp-elapsed {
+}
+.play-button.is-rtl.flowplayer .fp-elapsed {
+}
+.flowplayer .fp-remaining,.flowplayer .fp-duration {
+  color: #000 !important;
+}
+.no-volume.flowplayer .fp-remaining,.no-volume.flowplayer .fp-duration {
+}
+.no-mute.flowplayer .fp-remaining,.no-mute.flowplayer .fp-duration {
+}
+.is-rtl.flowplayer .fp-remaining,.is-rtl.flowplayer .fp-duration {
+}
+.no-volume.is-rtl.flowplayer .fp-remaining,.no-volume.is-rtl.flowplayer .fp-duration {
+}
+.no-mute.is-rtl.flowplayer .fp-remaining,.no-mute.is-rtl.flowplayer .fp-duration {
+}
+.flowplayer .fp-remaining {
+  color: #000 !important;
+}
+.flowplayer.color-light .fp-time {
+}
+.flowplayer.color-light .fp-remaining,.flowplayer.color-light .fp-duration {
+}
+.flowplayer.aside-time .fp-time {
+}
+.flowplayer.aside-time .fp-time strong,.flowplayer.aside-time .fp-time em {
+}
+.flowplayer.aside-time .fp-time .fp-elapsed {
+}
+.is-rtl.flowplayer.aside-time .fp-time .fp-elapsed {
+}
+.flowplayer.is-long.aside-time .fp-time {
+}
+.flowplayer.is-splash,.flowplayer.is-poster {
+}
+.flowplayer.is-splash .fp-controls,.flowplayer.is-poster .fp-controls,.flowplayer.is-splash .fp-fullscreen,.flowplayer.is-poster .fp-fullscreen,.flowplayer.is-splash .fp-unload,.flowplayer.is-poster .fp-unload,.flowplayer.is-splash .fp-time,.flowplayer.is-poster .fp-time,.flowplayer.is-splash .fp-embed,.flowplayer.is-poster .fp-embed {
+}
+.flowplayer.is-poster .fp-engine {
+}
+.flowplayer.is-loading .fp-waiting {
+}
+.flowplayer.is-loading .fp-controls,.flowplayer.is-loading .fp-time {
+}
+.flowplayer.is-loading .fp-ui {
+}
+.flowplayer.is-seeking .fp-waiting {
+}
+.flowplayer.is-fullscreen {
+}
+.is-rtl.flowplayer.is-fullscreen {
+}
+.flowplayer.is-error {
+}
+.flowplayer.is-error h2 {
+}
+.flowplayer.is-error .fp-message {
+}
+.flowplayer.is-error object,.flowplayer.is-error video,.flowplayer.is-error .fp-controls,.flowplayer.is-error .fp-time,.flowplayer.is-error .fp-subtitle {
+}
+.flowplayer.is-ready.is-muted .fp-mute {
+}
+.flowplayer.is-mouseout .fp-controls {
+}
+.flowplayer.is-mouseout .fp-timeline {
+}
+.flowplayer.is-mouseout .fp-timeline {
+}
+.flowplayer.is-mouseout .fp-fullscreen,.flowplayer.is-mouseout .fp-unload,.flowplayer.is-mouseout .fp-elapsed,.flowplayer.is-mouseout .fp-remaining,.flowplayer.is-mouseout .fp-duration,.flowplayer.is-mouseout .fp-embed,.flowplayer.is-mouseout .fp-volume,.flowplayer.is-mouseout .fp-play {
+}
+.flowplayer.is-mouseover .fp-controls,.flowplayer.fixed-controls .fp-controls {
+}
+.flowplayer.is-mouseover .fp-fullscreen,.flowplayer.fixed-controls .fp-fullscreen,.flowplayer.is-mouseover .fp-unload,.flowplayer.fixed-controls .fp-unload,.flowplayer.is-mouseover .fp-elapsed,.flowplayer.fixed-controls .fp-elapsed,.flowplayer.is-mouseover .fp-remaining,.flowplayer.fixed-controls .fp-remaining,.flowplayer.is-mouseover .fp-duration,.flowplayer.fixed-controls .fp-duration,.flowplayer.is-mouseover .fp-embed,.flowplayer.fixed-controls .fp-embed,.flowplayer.is-mouseover .fp-logo,.flowplayer.fixed-controls .fp-logo,.flowplayer.is-mouseover .fp-volume,.flowplayer.fixed-controls .fp-volume,.flowplayer.is-mouseover .fp-play,.flowplayer.fixed-controls .fp-play {
+}
+.flowplayer.fixed-controls .fp-volume {
+}
+.flowplayer.fixed-controls .fp-controls {
+}
+.is-fullscreen.flowplayer.fixed-controls .fp-controls {
+}
+.flowplayer.fixed-controls .fp-time em {
+}
+.is-fullscreen.flowplayer.fixed-controls .fp-time em {
+}
+.flowplayer.is-disabled .fp-progress {
+}
+.flowplayer .fp-embed {
+}
+.is-rtl.flowplayer .fp-embed {
+}
+.flowplayer .fp-embed-code {
+}
+.flowplayer .fp-embed-code:before {
+}
+.is-rtl.flowplayer .fp-embed-code {
+}
+.is-rtl.flowplayer .fp-embed-code:before {
+}
+.flowplayer .fp-embed-code textarea {
+}
+.flowplayer .fp-embed-code label {
+}
+.flowplayer.is-embedding .fp-embed,.flowplayer.is-embedding .fp-embed-code {
+}
+.flowplayer.aside-time .fp-embed {
+}
+.is-rtl.flowplayer.aside-time .fp-embed {
+}
+.flowplayer.aside-time .fp-embed-code {
+}
+.is-rtl.flowplayer.aside-time .fp-embed-code {
+}
+.flowplayer.aside-time.is-embedding .fp-time {
+}
+.flowplayer.is-long.aside-time .fp-embed {
+}
+.is-rtl.flowplayer.is-long.aside-time .fp-embed {
+}
+.flowplayer.no-time .fp-embed {
+}
+.is-rtl.flowplayer.no-time .fp-embed {
+}
+@-moz-keyframes pulse {0% {
+}
+100% {
+}
+
+}
+@-webkit-keyframes pulse {0% {
+}
+100% {
+}
+
+}
+@-o-keyframes pulse {0% {
+}
+100% {
+}
+
+}
+@-ms-keyframes pulse {0% {
+}
+100% {
+}
+
+}
+@keyframes pulse {0% {
+}
+100% {
+}
+
+}
+.flowplayer .fp-controls {
+}
+.flowplayer.fixed-controls .fp-controls {
+}
+.flowplayer .fp-timeline {
+}
+.flowplayer .fp-buffer {
+}
+.flowplayer .fp-progress {
+}
+.flowplayer .fp-volumeslider {
+}
+.flowplayer .fp-volumelevel {
+}
+.flowplayer .fp-play {
+}
+.flowplayer.is-touch.is-mouseover .fp-progress:before {
+}
+.flowplayer.color-light .fp-controls {
+}
+.flowplayer.color-light.fixed-controls .fp-controls {
+}
+.flowplayer.color-light .fp-volumeslider {
+}
+.flowplayer.color-light .fp-volumelevel {
+}
+.flowplayer.color-alt .fp-progress {
+}
+.flowplayer.color-alt.is-touch.is-mouseover .fp-progress:before {
+}
+.flowplayer.color-alt .fp-buffer {
+}
+.flowplayer.color-alt2 .fp-progress {
+}
+.flowplayer.color-alt2.is-touch.is-mouseover .fp-progress:before {
+}
+.flowplayer .fp-controls {
+  background: #fff !important;
+}

@@ -1,3 +1,19 @@
+html, body {
+	overflow: hidden;
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+
+	background-color: #555555;
+}
+
 .flowplayer {
   background-color: #000 !important;
   font-family: 'Open Sans' !important;

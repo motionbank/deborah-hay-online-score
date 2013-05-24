@@ -1119,7 +1119,11 @@ app.get( pathBase + '/cells/:id/delete', idNumeric, function(req,res){
 					cell.remove(function(err){
 						if (noError(req,res,err)) {
 							message(req,'Cell deleted');
-							res.redirect(pathBase+'/cells');
+							if ( req.xhr ) {
+								res.send({});
+							} else {
+								res.redirect(pathBase+'/cells');
+							}
 						}
 					});
 				}
@@ -1133,7 +1137,7 @@ app.get( pathBase + '/cells/:id/delete', idNumeric, function(req,res){
 app.get( pathBase + '/vimeo/oauth', function (req, res) {
 	// https://github.com/twentyrogersc/vimeo
 	vimeo.getRequestToken( req.protocol+'://'+req.host+':'+config.port+pathBase+'/vimeo/oauth_callback', 
-						   ['read'],
+						   ['delete'],
 						   function (err, vreq) {
 		vimeoStore[req.user.id] = {
 			oauth_secret: vreq.secret,
@@ -1212,6 +1216,18 @@ app.get( pathBase + '/vimeo/albums/:album_id', vimeoAuthed, function (req, res) 
 				  vSession.access,
 				  function ( err, vres ) {
 		if ( noError(req,res,err) ) {
+
+			var vCache = vimeoStore[req.user.id].cache;
+			var album = vCache.albums && vCache.albums['id_'+album_id] || {title:'',id:album_id};
+
+			if ( !vres.videos.video || vres.videos.video.length == 0 ) {
+				res.render('vimeo/album',_.extend(viewOpts,{
+					videoData: [],
+					album: album
+				}));
+				return;
+			}
+
 			/*{ generated_in: '0.1490',
   stat: 'ok',
   videos: 
@@ -1291,9 +1307,6 @@ app.get( pathBase + '/vimeo/albums/:album_id', vimeoAuthed, function (req, res) 
 					}
 
 					cbs.push(function(){
-						var vCache = vimeoStore[req.user.id].cache;
-			       		var album = vCache.albums && vCache.albums['id_'+album_id] || {title:'',id:album_id};
-
 						res.render('vimeo/album',_.extend(viewOpts,{
 							videoData: vres.videos,
 							album: album,
@@ -1319,13 +1332,7 @@ app.get( pathBase + '/vimeo/albums/:album_id', vimeoAuthed, function (req, res) 
 
 app.get( pathBase + '/vimeo/video/:id/import', idNumeric, vimeoAuthed, function (req, res) {
 	
-	var video_id = null;
-	try {
-		video_id = parseInt(req.params.id);
-	} catch (e) {
-		error(req,res,e);
-		return;
-	}
+	var video_id = parseInt(req.params.id);
 
     var vSession = vimeoStore[req.user.id];
 	vimeo.videos( 'getInfo', {video_id: video_id}, vSession.access, function (err,vres){
@@ -1505,6 +1512,40 @@ app.get( pathBase + '/vimeo/video/:id/import', idNumeric, vimeoAuthed, function 
 			});
 		}
 	});
+});
+
+// VIMEO - DELETE VIDEO ON VIMEO.COM
+
+app.post( pathBase + '/vimeo/video/:id/delete', idNumeric, vimeoAuthed, function (req,res) {
+
+	var video_id = parseInt(req.params.id);
+    
+    var vSession = vimeoStore[req.user.id];
+	vimeo.videos( 'delete', {video_id: video_id}, vSession.access, function (err,vres){
+		if ( noError(req,res,err) ) {
+			req.models.fields.find({name:'vimeo-id',value:video_id},function(err, fields){
+				if ( noError(req,res,err) ) {
+					var respondWithCell = function (cell) {
+						if ( req.xhr && req.accepts('json') ) {
+							res.send({cell:cell});
+						} else {
+							res.send('OK!');
+						}
+					}
+					if ( fields && fields.length > 0 ) {
+						fields[0].getCell(function(err,cells){
+							if ( noError(req,res,err) ) {
+								respondWithCell(cells[0]);
+							}
+						});
+					} else {
+						respondWithCell(null);
+					}
+				}
+			});
+		}
+	});
+
 });
 
 // LOGOUT

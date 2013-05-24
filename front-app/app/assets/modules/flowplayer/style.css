@@ -14,6 +14,7 @@ body {
 	background-color: #555555;
 }
 
+
 .flowplayer {
   background-color: #000 !important;
   font-family: 'Open Sans' !important;
@@ -263,6 +264,7 @@ body {
 }
 .flowplayer .fp-volumeslider {
   background-color: #999 !important;
+  width: 60px !important;
 }
 .is-rtl.flowplayer .fp-volumeslider {
 }
@@ -447,6 +449,7 @@ body {
 .flowplayer.fixed-controls .fp-controls {
 }
 .flowplayer .fp-timeline {
+  margin: 0 120px 0 45px;
 }
 .flowplayer .fp-buffer {
 }
@@ -488,4 +491,9 @@ body {
 .flowplayer .fp-fullscreen,
 .flowplayer .fp-embed {
   display: none !important;
+}
+
+.flowplayer .fp-remaining, .flowplayer .fp-duration {
+  right: 80px;
+
 }

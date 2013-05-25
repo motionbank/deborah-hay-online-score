@@ -1553,41 +1553,6 @@ app.post( pathBase + '/vimeo/video/:id/delete', idNumeric, vimeoAuthed, function
 
 });
 
-app.get( pathBase + '/imgfetch', function (req, res) {
-
-	console.log( req.get('Referrer') );
-
-	var imgUrl 		= unescape(req.query.url);
-	var imgUrlOpts 	= url.parse(imgUrl);
-	var callback 	= unescape(req.query.callback);
-
-	console.log( imgUrl, imgUrlOpts );
-
-	http.get( imgUrlOpts, function (hres) {
-		var bindex = 0;
-		var iDataLength = parseInt(hres.headers['content-length']);
-		var imageData = new Buffer(iDataLength);
-		hres.setEncoding('binary');
-		hres.on('data',function(chunk){
-			imageData.write(chunk, bindex, "binary");
-			bindex += chunk.length;
-		});
-		hres.on('error',function(){
-			throw(arguments);
-		});
-		hres.on('close',function(){
-			console.log( 'close called!' );
-		});
-		hres.on('end', function(){
-			console.log( 'end called!' );
-			var data_uri_prefix = "data:" + 'image/png' + ";base64,";
-			var image = imageData.toString('base64');
-			image = data_uri_prefix + image;
-			res.send(callback+'('+JSON.stringify(image)+')');
-		});
-    });
-});
-
 // LOGOUT
 
 app.get( pathBase + '/logout', function (req, res) {

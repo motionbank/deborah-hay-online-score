@@ -10,3 +10,4 @@ node_modules
 *-off/
 front-app/public/*
 config.js
+config/config.js

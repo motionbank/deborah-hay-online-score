@@ -33,6 +33,7 @@ General UX
 - keyboard shortcuts jump 1 column too far
 - animate switch set -> selector -> sets
 - a global indicator that show where you are in the recordings / time / performer dimensions
+- favicon / apple icon / ...
 
 
 All tiles

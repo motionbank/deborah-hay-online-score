@@ -19,9 +19,7 @@ var CellView = module.exports = Backbone.View.extend({
 	respondToRecordingChange : false,
 
 	gridView : null,
-
-	cfBaseHTML5 : 'd35vpnmjdsiejq.cloudfront.net',
-	cfUrl : 'http://d35vpnmjdsiejq.cloudfront.net/dh/app',
+	config : null,
 
 	$h1Title : null, 
 	$container : null,
@@ -31,6 +29,8 @@ var CellView = module.exports = Backbone.View.extend({
 		var self = this;
 
 		this.gridView = gv;
+		this.config = this.gridView.getApp().getConfig();
+
 		CellModel = CellModel || require('js/models/cell-model');
 
 		this.cell = new CellModel( opts );
@@ -100,7 +100,7 @@ var CellView = module.exports = Backbone.View.extend({
 		} else if ( cellType !== 'title' && cellType !== 'text' ) {
 			var imgSrc = this.cell.get('poster');
 			if ( this.$el.css('background-image') === 'none' && imgSrc ) {
-				imgSrc = this.cfUrl + '/cells/poster/full/' + imgSrc;
+				imgSrc = 'http://' + this.config.cloudFront.fileHost + this.config.cloudFront.baseUrl + '/cells/poster/full/' + imgSrc;
 				var img = new Image();
 				img.onload = (function(cellView){return function domImgLoaded (){
 					cellView.$el.css({

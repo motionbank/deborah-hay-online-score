@@ -1,5 +1,5 @@
 
-var gridView = null, app = null, rendered = false;
+var gridView = null, app = null, rendered = false, config = null;
 
 var SelectSetView = module.exports = Backbone.View.extend({
 
@@ -8,6 +8,7 @@ var SelectSetView = module.exports = Backbone.View.extend({
 	initialize : function ( gv, mapp ) {
 		gridView = gv;
 		app = mapp;
+		config = app.getConfig();
 	},
 
 	render : function () {
@@ -20,7 +21,8 @@ var SelectSetView = module.exports = Backbone.View.extend({
 			var $setContainer = jQuery( '<div class="set left" />' );
 			var $setLink = jQuery( '<a href="#set/'+path+'">'+
 										'<div class="title">'+set.title+'</div>'+
-										'<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/medium/'+set.poster+'" />'+
+										'<img src="http://' + config.cloudFront.fileHost + config.cloudFront.baseUrl + 
+																	'/sets/poster/medium/'+set.poster+'" />'+
 									'</a>' );
 			$setContainer.append( $setLink );
 			$setLink.click(function jqClickSet (evt){

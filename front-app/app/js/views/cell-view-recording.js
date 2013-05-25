@@ -22,7 +22,7 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 			app.trigger('change:recording', self.cell.get('recording'));
 
 			messenger = app.getPostMessenger();
-			messenger.send( 'connect', null, self.iFrameWindow );
+			messenger.send( 'connect', self.gridView.getApp().getConfig(), self.iFrameWindow );
 		});
 		this.$container.empty();
 		this.$container.append(iframe);
@@ -31,7 +31,9 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 	sceneChanged : function (newScene) {
 		if ( this.isVisible ) {
 			if ( !this.isActive ) {
-				var imgSrc = this.cfUrl + '/cells/recording/full/'+this.cell.get('title')+'-'+newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-')+'.png';
+				var imgSrc = 'http://' + this.config.cloudFront.fileHost + 
+								this.config.cloudFront.baseUrl + '/cells/recording/full/' +
+								this.cell.get('title')+'-'+newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-')+'.png';
 				var img = new Image();
 				var self = this;
 				img.onload = function () {

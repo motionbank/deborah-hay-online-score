@@ -10,14 +10,16 @@ var App = module.exports = (function(){
 	 +
 	 L + + + + + + + + + + + + + + + + + + + + + + + + + + */
 
+	 // /(localhost|.+\.local)/.test(window.location.host)
+	var config = require('js/config/config');
+
 	var app = null;
 	var appState = null;
 	var appStarted = false;
 
 	var router = slider = null, gridView = null;
 
-	var onLocalhost = false;
-	var api = null;
+	var pm = null, pmCache = null;
 
 	var messenger = null;
 
@@ -52,13 +54,10 @@ var App = module.exports = (function(){
 
 		app = this;
 		_.extend( this, Backbone.Events );
-
-		onLocalhost = /(localhost|.+\.local)/.test(window.location.host);
 		
 		initializer.add( 'last', function initCreatePieceMaker (next){
-			api = new PieceMakerApi( this, "a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe", 
-									 (onLocalhost ? 'http://localhost:3000' : 'http://notimetofly.herokuapp.com') );
-	    	api.loadPiece( 3, function pmPieceLoaded (){
+			pm = new PieceMakerApi( this, config.pieceMaker.apiKey, config.pieceMaker.host );
+	    	pm.loadPiece( 3, function pmPieceLoaded (){
 	    		apiPieceLoaded.apply(this,arguments);
 	    		next();
 	    	});
@@ -68,16 +67,16 @@ var App = module.exports = (function(){
 
 		messenger.on( 'piecemakerapi', function msgrPmApi (req,resp) {
 			var cacheKey = '[' + req.data.options.type + '] ' + req.data.options.url;
-			if ( cacheKey in apiCache && apiCache[cacheKey] ) {
+			if ( cacheKey in pmCache && pmCache[cacheKey] ) {
 				resp.send('piecemakerapi',{
-					data: apiCache[cacheKey],
+					data: pmCache[cacheKey],
 					requestId: req.data.requestId
 				});
 			} else {
-				api.fetch( req.data.options, 
+				pm.fetch( req.data.options, 
 					function ( data ) {
 						if ( req.data.options.type == 'get' ) {
-							apiCache[cacheKey] = data;
+							pmCache[cacheKey] = data;
 						}
 						resp.send('piecemakerapi',{
 							data: data,
@@ -104,9 +103,7 @@ var App = module.exports = (function(){
 		});
 
 		messenger.on( 'get-config', function msgrGetScene (req,resp){
-			resp.send('set-config',{
-				onLocalhost : onLocalhost
-			});
+			resp.send('set-config',config);
 		});
 
 		messenger.accept( 'http://player.vimeo.com' );
@@ -144,7 +141,7 @@ var App = module.exports = (function(){
 
 		initializer.add( function initAppApi (next){
 			jQuery.ajax({
-				url: ( onLocalhost ? 'http://localhost:5555' : 'http://deborah-hay-app.eu01.aws.af.cm' ) + '/users/1/sets',
+				url: config.apiHost + '/users/1/sets',
 				dataType: 'json',
 				success: function jqAjaxSuccessUserSets (userWithSets) {
 					sets = {};
@@ -202,7 +199,10 @@ var App = module.exports = (function(){
 			return sets;
 		},
 		isLocal : function () {
-			return onLocalhost;
+			return config.runningLocal;
+		},
+		getConfig : function () {
+			return config;
 		},
 		sizeChanged : function () {
 			gridView.sizeChanged();

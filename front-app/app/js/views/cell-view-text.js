@@ -31,7 +31,7 @@ var CellViewText = module.exports = CellView.extend({
 			var app = self.gridView.getApp();
 			self.postmessenger = app.getPostMessenger();
 
-			self.postmessenger.send('connect',null,self.iframeWindow);
+			self.postmessenger.send( 'connect', self.gridView.getApp().getConfig(), self.iframeWindow );
 		
 		});
 

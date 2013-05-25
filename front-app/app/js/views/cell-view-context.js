@@ -14,7 +14,7 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 			var postmessenger = app.getPostMessenger();
 			app.on( 'vimeo:finish', function(req, resp){
 				if ( req.message.source === win ) {
-					self.gridView.playNext(self);
+					self.gridView.playNextByAttr('vimeo-id',self.cell.get('play-next'));
 					self.deactivate();
 				}
 			});

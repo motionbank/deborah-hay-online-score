@@ -13,10 +13,14 @@
 	font-size: 20px;
 	font-weight: 300;
 	letter-spacing: 0.1em;
-	padding: 18px;
+	margin-bottom: 0.5em;
+}
+
+#grid-view article.cell .info .description {
 }
 
 #grid-view article.cell .info {
+	padding: 18px;
 	display: none;
 }
 

@@ -43,3 +43,8 @@ Cells
 Vimeo
 ===================
 - what happens if a video is being deleted? ... delete the cell? ask?
+
+
+Title cell
+===================
+- more than varchar(255)

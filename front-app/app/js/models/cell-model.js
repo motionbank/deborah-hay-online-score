@@ -3,6 +3,7 @@ var CellModel = module.exports = Backbone.Model.extend({
 
 	defaults : {
 		title : 'Missing Title Here',
+		description: '',
 		type : 'missing-type',
 		poster : null,
 		/* each field in fields [] will be mapped to this.field_key = field_value */

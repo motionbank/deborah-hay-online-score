@@ -59,7 +59,8 @@ var CellView = module.exports = Backbone.View.extend({
 		var elHtml = _.template( require('js/templates/cell-view-tmpl'), {
 			title : this.cell.get('title'),
 			link : this.cell.get('link'),
-			content : ''
+			description : this.cell.get('description') || '',
+			content : this.cell.get('content') || '',
 		});
 
 		this.$el.html( elHtml );

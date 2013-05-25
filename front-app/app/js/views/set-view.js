@@ -229,7 +229,18 @@ var GridView = module.exports = Backbone.View.extend({
 		clickedCell = cell.cid;
 	},
 
+	playNextByAttr : function ( key, value ) {
+		for ( var i = 0; i < cellViewsArr.length; i++ ) {
+			var cell = cellViewsArr[i];
+			if ( cell.cell.get(key) === value ) {
+				cell.activate();
+				return;
+			}
+		}
+	},
+
 	playNext : function ( prevCellView ) {
+
 		var i = cellViewsArr.indexOf( prevCellView );
 		if ( i === -1 ) return;
 		var n = i+1;

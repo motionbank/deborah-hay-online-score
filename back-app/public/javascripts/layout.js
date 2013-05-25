@@ -422,6 +422,8 @@ jQuery(function(){
 					$cell.data('connection-id',c.extra.connection_id);
 					$listItem = jQuery('.cell-list .cell[data-id='+c.id+']');
 				});
+
+				savePreview();
 			},
 			error : function () {
 				console.log( arguments );
@@ -437,6 +439,19 @@ jQuery(function(){
 			}
 		});
 	});
+
+	var savePreview = function () {
+		html2canvas( $grid.get(0), {
+			onrendered: function(canvas) {
+				var imgSrc = canvas.toDataURL("image/png");
+				document.body.appendChild( canvas );
+			},
+			proxy: '/admin/imgfetch',
+			//useCORS: true,
+			//width: 300, height: 300,
+			logging: true
+		});
+	}
 
 	// finally ... reset once at startup
 	resetGridWidth();

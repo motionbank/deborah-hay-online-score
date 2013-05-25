@@ -38,6 +38,10 @@ if ( process.env.VCAP_SERVICES
   config.db.database = config.db.name;
 }
 
+if ( process.env.VCAP_APP_PORT ) {
+	config.port = false;
+}
+
 // adding stringify filter to ejs
 
 ejs.filters.stringify = function( obj ) {
@@ -483,7 +487,8 @@ app.get( pathBase + '/sets/:id/layout', idNumeric, function(req, res){
 							grid: grid,
 							cells: cells,
 							types: types,
-							connections: connections
+							connections: connections,
+							front_url : 'http://' + config.front.host + config.front.basePath
 						}));
 					});
 				}
@@ -1136,7 +1141,7 @@ app.get( pathBase + '/cells/:id/delete', idNumeric, function(req,res){
 
 app.get( pathBase + '/vimeo/oauth', function (req, res) {
 	// https://github.com/twentyrogersc/vimeo
-	vimeo.getRequestToken( req.protocol+'://'+req.host+':'+config.port+pathBase+'/vimeo/oauth_callback', 
+	vimeo.getRequestToken( req.protocol+'://'+req.host+(config.port?':'+config.port:'')+pathBase+'/vimeo/oauth_callback', 
 						   ['delete'],
 						   function (err, vreq) {
 		vimeoStore[req.user.id] = {
@@ -1546,6 +1551,41 @@ app.post( pathBase + '/vimeo/video/:id/delete', idNumeric, vimeoAuthed, function
 		}
 	});
 
+});
+
+app.get( pathBase + '/imgfetch', function (req, res) {
+
+	console.log( req.get('Referrer') );
+
+	var imgUrl 		= unescape(req.query.url);
+	var imgUrlOpts 	= url.parse(imgUrl);
+	var callback 	= unescape(req.query.callback);
+
+	console.log( imgUrl, imgUrlOpts );
+
+	http.get( imgUrlOpts, function (hres) {
+		var bindex = 0;
+		var iDataLength = parseInt(hres.headers['content-length']);
+		var imageData = new Buffer(iDataLength);
+		hres.setEncoding('binary');
+		hres.on('data',function(chunk){
+			imageData.write(chunk, bindex, "binary");
+			bindex += chunk.length;
+		});
+		hres.on('error',function(){
+			throw(arguments);
+		});
+		hres.on('close',function(){
+			console.log( 'close called!' );
+		});
+		hres.on('end', function(){
+			console.log( 'end called!' );
+			var data_uri_prefix = "data:" + 'image/png' + ";base64,";
+			var image = imageData.toString('base64');
+			image = data_uri_prefix + image;
+			res.send(callback+'('+JSON.stringify(image)+')');
+		});
+    });
 });
 
 // LOGOUT

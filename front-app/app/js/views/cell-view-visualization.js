@@ -16,7 +16,9 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 			var self = this;
 
 			var scene = newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-');
-			var imgSrc = this.cfUrl + '/cells/visualization/full/'+this.cell.get('base-path');
+			var imgSrc = 'http://' + this.config.cloudFront.fileHost + 
+							this.config.cloudFront.baseUrl + 
+								'/cells/visualization/full/'+this.cell.get('base-path');
 
 			var pathPieces = [];
 

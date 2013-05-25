@@ -28,7 +28,7 @@ jQuery(function(){
 		parentWindowOrigin = req.message.origin;
 
 		config = req.data;
-		api = new PieceMakerApi( this, config.pieceMaker.apiKey, config.pieceMaker.host );
+		api = new PieceMakerApi( this, config.pieceMaker.apiKey, 'http://' + config.pieceMaker.host );
 
 		initFully();
 

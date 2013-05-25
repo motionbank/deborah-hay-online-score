@@ -1,6 +1,7 @@
 module.exports = {
-	host : 'http://scores.motionbank.org',
-	apiHost : 'http://deborah-hay-app.eu01.aws.af.cm',
+	host : 'scores.motionbank.org',
+	apiHost : 'deborah-hay-app.eu01.aws.af.cm',
+	adminHost : 'deborah-hay-app-admin.eu01.aws.af.cm',
 	baseUrl : '/dh',
 	runningLocal : true,
 	cloudFront : {
@@ -10,6 +11,6 @@ module.exports = {
 	},
 	pieceMaker : {
 		apiKey : 'a79c66c0bb4864c06bc44c0233ebd2d2b1100fbe',
-		host : 'http://notimetofly.herokuapp.com'
+		host : 'notimetofly.herokuapp.com'
 	}
 };

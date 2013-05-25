@@ -56,7 +56,7 @@ var App = module.exports = (function(){
 		_.extend( this, Backbone.Events );
 		
 		initializer.add( 'last', function initCreatePieceMaker (next){
-			pm = new PieceMakerApi( this, config.pieceMaker.apiKey, config.pieceMaker.host );
+			pm = new PieceMakerApi( this, config.pieceMaker.apiKey, 'http://' + config.pieceMaker.host );
 	    	pm.loadPiece( 3, function pmPieceLoaded (){
 	    		apiPieceLoaded.apply(this,arguments);
 	    		next();
@@ -141,7 +141,7 @@ var App = module.exports = (function(){
 
 		initializer.add( function initAppApi (next){
 			jQuery.ajax({
-				url: config.apiHost + '/users/1/sets',
+				url: 'http://' + config.apiHost + '/users/1/sets',
 				dataType: 'json',
 				success: function jqAjaxSuccessUserSets (userWithSets) {
 					sets = {};

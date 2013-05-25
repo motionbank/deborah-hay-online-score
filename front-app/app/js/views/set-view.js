@@ -12,7 +12,7 @@ var gridXVisible = 4, gridYVisible = 3;
 var cellWidth, cellHeight;
 var lastRatio = 0.0;
 
-var app = null, setSelectorView = null;
+var app = null, config = null, setSelectorView = null;
 $mainTitleLink = null;
 
 var clickedCell = null;
@@ -25,6 +25,7 @@ var GridView = module.exports = Backbone.View.extend({
 
 		var self = this;
 		app = mainapp;
+		config = app.getConfig();
 
 		$mainTitleLink = jQuery('#main-title a');
 
@@ -65,7 +66,7 @@ var GridView = module.exports = Backbone.View.extend({
 		if ( !set.cells ) {
 			var self = this;
 			jQuery.ajax({
-				url: (app.isLocal() ? 'http://localhost:5555' : 'http://deborah-hay-app.eu01.aws.af.cm') + '/sets/' + set.id,
+				url: 'http://' + config.apiHost + '/sets/' + set.id,
 				dataType:'json',
 				success:function(data){
 					set.cells = data.cells;

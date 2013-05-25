@@ -1,14 +1,16 @@
+
 General content
 ==========================
 - front page ... questions usage undecided, backgrounds
 - final title? .. where does it go?
 - make about / team / ... a set linked to from logo?
 - generative logo
+- select default content / recording / scene when entering
 
 
 General code
 ==========================
-- make global settings to be besed on one config file (streamer urls, server addresses, keys, ...), check module code as well!
+	x make global settings to be besed on one config file (streamer urls, server addresses, keys, ...), check module code as well!
 
 
 General style

@@ -18,7 +18,7 @@ Layout editor
 	x show save (ajax) is working in the back
 	x grid should not be a <table> but use the same tech as the front end .. bunch of position
 - select and remove multiple cells
-[- switch the whole thing to use backbone.js ... jQuery.data() gets out of hand]
+[- switch the whole thing to use backbone.js ... jQuery().data() gets out of hand]
 
 
 Sets
@@ -29,6 +29,7 @@ Sets
 	x edit aspect size
 	x can not drag grid cell to "add-xy" and make more rows / cols
 	x when moving grid cells around they loose their double click / hover feats.
+- easy way to interlink context (vimeo) cells (drag-n-drop)
 
 
 Cells

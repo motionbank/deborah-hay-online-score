@@ -5,7 +5,7 @@ This is the front of the Deborah Hay "online score" within Motion Bank
 
 Copy and rename `config-default.js` to `config.js` (in app/js/config/).
 
-Install (brunch)[http://brunch.io/]
+Install [brunch](http://brunch.io/)
 ```
 $ npm install brunch
 ```

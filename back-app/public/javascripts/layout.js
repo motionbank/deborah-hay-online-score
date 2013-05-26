@@ -201,7 +201,7 @@ jQuery(function(){
 							} else {
 								cbs.push(function(next){
 									jQuery.ajax({
-										url: '/admin/sets/'+set.id+'/cells/'+cellId+'/connections/'+itemConnectionId+'/fields',
+										url: '/admin/sets/'+set.id+'/cells/'+itemId+'/connections/'+itemConnectionId+'/fields',
 										dataType: 'json',
 										success: function (resp) {
 											dbItem = resp.cell;
@@ -234,9 +234,13 @@ jQuery(function(){
 										};
 										for ( var fi = 0; fi < dbItemConnectionFields.length; fi++ ) {
 											var f = dbItemConnectionFields[fi];
-											if ( f.name === 'play-next' && f.value === cellVimeoId ) {
-												alert('Already linked, nothing to do here');
-												return;
+											if ( f.name === 'play-next' ) {
+												if ( f.value === cellVimeoId ) {
+													alert('Already linked, nothing to do here');
+													return;
+												} else {
+													continue; // remove any previous linkage
+												}
 											}
 											data.field_keys.push( f.name );
 											data.field_values.push( f.value );
@@ -671,7 +675,6 @@ jQuery(function(){
 		$form.submit(function(evt){
 			evt.preventDefault();
 			var data = $form.serialize();
-			console.log( data );
 			jQuery.ajax({
 				url: '/admin/sets/'+set_id+'/cells/'+cell_id+'/connections/'+connection_id+'/fields',
 				method: 'post',

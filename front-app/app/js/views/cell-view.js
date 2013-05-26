@@ -99,6 +99,7 @@ var CellView = module.exports = Backbone.View.extend({
 			this.sceneChanged( scene ); 
 		} else if ( cellType !== 'title' && cellType !== 'text' ) {
 			var imgSrc = this.cell.get('poster');
+
 			if ( this.$el.css('background-image') === 'none' && imgSrc ) {
 				imgSrc = 'http://' + this.config.cloudFront.fileHost + this.config.cloudFront.baseUrl + '/cells/poster/full/' + imgSrc;
 				var img = new Image();

@@ -21,7 +21,7 @@ var GridView = module.exports = Backbone.View.extend({
 
 	el : '#grid-view',
 
-	initialize : function ( mainapp ) {
+	initialize : function ( _, mainapp ) {
 
 		var self = this;
 		app = mainapp;
@@ -31,24 +31,24 @@ var GridView = module.exports = Backbone.View.extend({
 
 		this.$elParent = this.$el.parent();
 		
-		app.getSlider().on( 'change:slider',function bbChangeSliderCB (val){
-			self.setRatio( val );
+		app.on( 'change:slider', function bbChangeSliderCB (val) {
+			self.setPosition( val );
 		});
 
-		app.getRouter().on( 'route:changeset',function bbRouteChangeSetCB (nextSetName){
+		app.on( 'route:changeset', function bbRouteChangeSetCB (nextSetName){
 			self.loadSet(nextSetName);
 		});
 
-		setSelectorView = new (require('js/views/select-set-view'))(self, app);
+		setSelectorView = new (require('js/views/select-set-view'))({}, self, app);
 
 		var touchEventManager = this.$el.hammer();
 		touchEventManager.on('swiperight', function (event) {
 			event.stopPropagation();
-			app.getSlider().backwards();
+			app.trigger('change:position','backwards');
 		});
 		touchEventManager.on('swipeleft', function (event) {
 			event.stopPropagation();
-			app.getSlider().forwards();
+			app.trigger('change:position','forwards');
 		});
 	},
 
@@ -120,7 +120,7 @@ var GridView = module.exports = Backbone.View.extend({
 		this.updateVisibleCells();
 	},
 
-	setRatio : function ( ratio ) {
+	setPosition : function ( ratio ) {
 
 		if ( !cellData || !currentSet ) return;
 
@@ -132,6 +132,9 @@ var GridView = module.exports = Backbone.View.extend({
 	updateVisibleCells : function () {
 
 		if ( !cellData || !currentSet ) return;
+
+		var w = this.$el.width();
+		var h = this.$el.height();
 
 		var gridWidth = currentSet.grid_cols;
 		var xFrom = Math.round( lastRatio * (gridWidth-gridXVisible) );
@@ -152,6 +155,9 @@ var GridView = module.exports = Backbone.View.extend({
 					width: 	(cw*cellDim.width)+'%',
 					height: (ch*cellDim.height)+'%'
 				});
+				cv.$el.attr( 'class', cv.$el.attr('class').replace(/cell-(width|height)-[0-9]+/ig,'') );
+				cv.$el.addClass( 'cell-width-'+ (parseInt(((w/gridXVisible)*cellDim.width) /50)*50) ).
+					   addClass( 'cell-height-'+(parseInt(((h/gridYVisible)*cellDim.height)/50)*50) );
 			} else {
 				cv.hide();
 			}
@@ -164,7 +170,7 @@ var GridView = module.exports = Backbone.View.extend({
 		} else {
 
 			app.getSlider().setSize( ((gridXVisible * gridYVisible) * 1.0) / currentSet.cells.length );
-			app.getSlider().setRatio( lastRatio, false );
+			app.getSlider().setPosition( lastRatio, false );
 			app.getSlider().show();
 		}
 	},
@@ -192,6 +198,7 @@ var GridView = module.exports = Backbone.View.extend({
 	},
 
 	toggleSetSelector : function () {
+
 		if ( this.$elParent.css('display') === 'block' ) {
 			app.getSlider().hide();
 			setSelectorView.show();
@@ -199,7 +206,6 @@ var GridView = module.exports = Backbone.View.extend({
 		} else {
 			setSelectorView.hide();
 			app.getSlider().show();
-			this.setRatio(0);
 			this.$elParent.show();
 		}
 	},
@@ -217,6 +223,7 @@ var GridView = module.exports = Backbone.View.extend({
 		if ( cellData.cells && cellData.cells.length > (gridXVisible * gridYVisible) ) { // if returning to same as before
 			app.getSlider().show();
 		}
+		this.setPosition(0);
 	},
 
 	deactivateAll : function () {

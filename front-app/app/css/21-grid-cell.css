@@ -24,13 +24,13 @@
 #grid-view article.cell .info {
 	background-color: white;
 	color: black;
-	padding: 1em;
+	padding: 1.5em;
 	overflow: hidden;
 	position: absolute;
-	top: 2em;
-	left: 2em;
-	right: 2em;
-	bottom: 2em;
+	top: 3em;
+	left: 3em;
+	right: 3em;
+	bottom: 3em;
 	display: none;
 }
 
@@ -53,6 +53,42 @@
 	display: none;
 }
 
+#grid-view article.cell.cell-width-0 .info, 
+#grid-view article.cell.cell-width-50 .info {
+	padding: 0.5em;
+	font-size: 25%;
+}
+#grid-view article.cell.cell-width-100 .info {
+	padding: 0.5em;
+	font-size: 50%;
+}
+#grid-view article.cell.cell-width-150 .info {
+	padding: 0.75em;
+	font-size: 58%;
+}
+#grid-view article.cell.cell-width-200 .info {
+	padding: 1em;
+	font-size: 66%;
+}
+#grid-view article.cell.cell-width-250 .info {
+	padding: 1em;
+	font-size: 74%;
+}
+#grid-view article.cell.cell-width-300 .info {
+	padding: 1.25em;
+	font-size: 82%;
+}
+#grid-view article.cell.cell-width-350 .info {
+	padding: 1.25em;
+	font-size: 90%;
+}
+
+#grid-view article.cell.cell-width-0 .info .description,
+#grid-view article.cell.cell-width-50 .info .description,
+#grid-view article.cell.cell-width-100 .info .description {
+	display: none;
+}
+
 #grid-view article.cell {
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -72,10 +108,15 @@
 
 #grid-view article.cell.type-title {
 	background-image: none;
+	background-color: white;
 	color: black;
 }
 #grid-view article.cell.type-title .info {
 	display: block;
+/*	top: 0em;
+	left: 0em;
+	right: 0em;
+	bottom: 0em;*/
 }
 
 #grid-view article.cell .content {

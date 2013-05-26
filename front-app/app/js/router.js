@@ -1,20 +1,17 @@
-/**
- */
-
-var app = null;
+/*
+ +	A quite standard backbone router .. 
+ +
+ L + + + + + + + + + + + + + + + + + + + + + + + + */
 
 var Router = module.exports = Backbone.Router.extend({
 
-	initialize : function ( mainApp ) {
-		app = mainApp;
+	initialize : function () {
 	},
 
 	routes : {
 		'set/:setname' : 'changeset'
 	},
 
-	changeset : function () {
-		app.startApp();
-	}
+	changeset : function () {}
 	
 });

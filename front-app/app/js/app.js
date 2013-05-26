@@ -17,7 +17,7 @@ var App = module.exports = (function(){
 	var appState = null;
 	var appStarted = false;
 
-	var router = slider = null, gridView = null;
+	var router = null, slider = null, setView = null;
 
 	var pm = null, pmCache = null;
 
@@ -133,11 +133,23 @@ var App = module.exports = (function(){
 		- next in line (line-id)
 		*/
 
-		slider = new (require('js/slider'))();
+		slider = new (require('js/slider'))( app );
 
-		router = new (require('js/router'))( app );
+		slider.on('all',function(){
+			app.trigger.apply(app,arguments);
+		});
 
-		gridView = new (require('js/views/set-view'))( app );
+		router = new (require('js/router'))();
+
+		router.on('all',function(){
+			app.trigger.apply(app,arguments);
+		});
+		
+		router.on('route:changeset',function(){
+			app.startApp();
+		});
+
+		setView = new (require('js/views/set-view'))( {}, app );
 
 		initializer.add( function initAppApi (next){
 			jQuery.ajax({
@@ -152,7 +164,7 @@ var App = module.exports = (function(){
 							throw( 'Duplicate path!', set.path, set.id, sets[set.path].id );
 						}
 					});
-					//gridView.loadSet('overview');
+					//setView.loadSet('overview');
 					next();
 				},
 				error:function (err) {
@@ -163,26 +175,20 @@ var App = module.exports = (function(){
 
 		jQuery( '#change-set-item a' ).click(function jqClickChangeSet (evt){
 			evt.preventDefault();
-			gridView.toggleSetSelector();
+			setView.toggleSetSelector();
 		});
 		jQuery( '#link-to-set-item a' ).click(function jqClickGetLink (evt){
 			evt.preventDefault();
-			gridView.toggleLink();
+			setView.toggleLink();
 		});
 		jQuery( '#edit-set-item a' ).click(function jqClickEditSet (evt){
 			evt.preventDefault();
-			gridView.toggleSetEditor();
+			setView.toggleSetEditor();
 		});
 
 		appState = new (require('js/models/appstate'))({id:1});
 	}
 	App.prototype = {
-		// setRatio : function (r) {
-		// 	gridView.setRatio(r);
-		// },
-		getRouter : function () {
-			return router;
-		},
 		getSlider : function () {
 			return slider;
 		},
@@ -205,7 +211,7 @@ var App = module.exports = (function(){
 			return config;
 		},
 		sizeChanged : function () {
-			gridView.sizeChanged();
+			setView.sizeChanged();
 		},
 		startApp : function () {
 
@@ -224,9 +230,9 @@ var App = module.exports = (function(){
 			},{
 				duration: dur, query: false,
 				complete: function enterAppAnimateSlideComplete (){
-					setTimeout(function enterAppAnimateSlider (){
-						$mainMenuSliderLink.animate({height:'8px'},{duration:100});
-					},200);
+					// setTimeout(function enterAppAnimateSlider (){
+					// 	$mainMenuSliderLink.animate({height:'8px'},{duration:100});
+					// },200);
 					$toolContainer.hide();
 				}
 			});

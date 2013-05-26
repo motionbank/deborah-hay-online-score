@@ -1,13 +1,22 @@
 
-var app = null;
-var $mainMenuContainer = $mainMenuSlider = $mainMenuSliderLink = null;
-var currentRatio = 0;
+var $mainMenuContainer 		= null,
+	$mainMenuSlider 		= null,
+	$mainMenuSliderLink 	= null,
+	currentRatio 			= 0;
 
 var SliderController = function( app ) {
 
 	_.extend( this, Backbone.Events );
 
 	var self = this;
+
+	app.on( 'change:position', function (direction) {
+		if ( direction === 'backwards' ) {
+			self.backwards();
+		} else {
+			self.forewards();
+		}
+	});
 
 	$mainMenuContainer = jQuery('#main-menu-container');
 	$mainMenuSlider = jQuery( '#slider', $mainMenuContainer ); // TODO: safari insists on the line being inside ul
@@ -25,7 +34,7 @@ var SliderController = function( app ) {
 			isDragging = true;
 		},
 		drag : function (evt, drag) {
-			self.setRatio( drag.position.left / dragAreaWidth );
+			self.setPosition( drag.position.left / dragAreaWidth );
 		},
 		stop: function (evt, drag) {
 			isDragging = false;
@@ -60,9 +69,9 @@ var SliderController = function( app ) {
 };
 
 SliderController.prototype = {
-	setRatio : function (r,trigger) {
+	setPosition : function (r,trigger) {
 		if ( r < 0 || r > 1 ) {
-			throw( 'Bad parameter for setRatio()' ); return;
+			throw( 'Bad parameter for setPosition()' ); return;
 		}
 		$mainMenuSlider.css({
 			left: (r * ($mainMenuContainer.width() - $mainMenuSliderLink.width())) + 'px'
@@ -91,18 +100,18 @@ SliderController.prototype = {
 		var step = $mainMenuSliderLink.width() / ($mainMenuContainer.width() - $mainMenuSliderLink.width());
 		var nextRatio = currentRatio + step;
 		if ( nextRatio <= 1 ) {
-			this.setRatio( nextRatio );
+			this.setPosition( nextRatio );
 		} else if ( currentRatio !== 1 ) {
-			this.setRatio( 1 );
+			this.setPosition( 1 );
 		}
 	},
 	backwards : function () {
 		var step = $mainMenuSliderLink.width() / ($mainMenuContainer.width() - $mainMenuSliderLink.width());
 		var nextRatio = currentRatio - step;
 		if ( nextRatio >= 0 ) {
-			this.setRatio( nextRatio );
+			this.setPosition( nextRatio );
 		} else if ( currentRatio !== 0 ) {
-			this.setRatio( 0 );
+			this.setPosition( 0 );
 		}
 	},
 	show : function () {

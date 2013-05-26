@@ -24,8 +24,7 @@ jQuery(function(){
 			return false;
 		});
 		initializer.add( 'last', function initRandomSliderPosition (next) {
-			//app.getSlider().setRatio( 0.25 + Math.random() * 0.5 );
-			//enterApp();
+			
 			next();
 		});
 		next();

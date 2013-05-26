@@ -1,5 +1,14 @@
 
-var CellView = module.exports = require('js/views/cell-view').extend({
+var CellView = require('js/views/cell-view');
+var CellViewContext = module.exports = require('js/views/cell-view').extend({
+	
+	initialize: function () {
+
+		// call initialize on super!
+		CellView.prototype.initialize.apply(this,arguments);
+
+		this.respondToSceneChange = this.respondToRecordingChange = false;
+	},
 
 	activate : function () {
 		this.$el.addClass( 'active' );

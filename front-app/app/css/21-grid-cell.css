@@ -1,26 +1,36 @@
 
 #grid-view article.cell {
 	position: absolute;
-	padding: 1px;
 	color: white;
 }
+
 #grid-view article.cell.no-img {
 	color: black;
 }
 
 #grid-view article.cell h1.title {
 	text-transform: uppercase;
-	font-size: 20px;
+	font-size: 1.4em;
 	font-weight: 300;
 	letter-spacing: 0.1em;
 	margin-bottom: 0.5em;
+	overflow: hidden;
+	line-height: 1.3;
 }
 
 #grid-view article.cell .info .description {
 }
 
 #grid-view article.cell .info {
-	padding: 18px;
+	background-color: white;
+	color: black;
+	padding: 1em;
+	overflow: hidden;
+	position: absolute;
+	top: 2em;
+	left: 2em;
+	right: 2em;
+	bottom: 2em;
 	display: none;
 }
 
@@ -29,7 +39,7 @@
 	display: block;
 }
 
-#grid-view article.cell:hover {
+/*#grid-view article.cell:hover {
 	border: 1px solid white;
 	padding: 0px;
 }
@@ -37,7 +47,7 @@
 #grid-view article.cell.active {
 	border: 1px solid black;
 	padding: 0px;
-}
+}*/
 
 #grid-view article.cell.active .info {
 	display: none;

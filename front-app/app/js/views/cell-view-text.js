@@ -21,16 +21,15 @@ var CellViewText = module.exports = CellView.extend({
 		this.isActive = true;
 
 		var self = this;
+		var app = self.gridView.getApp();
+		self.postmessenger = app.getPostMessenger();
+		
 		this.iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
 									 'src="'+this.cell.get('content-url')+'" '+
 									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
 		this.iframe.load(function(){
 			
 			self.iframeWindow = document.getElementById('iframe-'+self.cid).contentWindow;
-			
-			var app = self.gridView.getApp();
-			self.postmessenger = app.getPostMessenger();
-
 			self.postmessenger.send( 'connect', self.gridView.getApp().getConfig(), self.iframeWindow );
 		
 		});

@@ -6,7 +6,8 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 		this.isActive = true;
 
 		var self = this;
-		var iframe = jQuery( '<iframe id="iframe-'+this.cid+'" src="http://player.vimeo.com/video/'+this.cell.get('vimeo-id')+'?api=1" '+
+		var iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
+									 'src="http://player.vimeo.com/video/'+this.cell.get('vimeo-id')+'?api=1" '+
 									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
 		iframe.load(function(){
 			var win = document.getElementById('iframe-'+self.cid).contentWindow;

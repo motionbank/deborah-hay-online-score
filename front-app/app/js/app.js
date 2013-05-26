@@ -23,7 +23,7 @@ var App = module.exports = (function(){
 
 	var messenger = null;
 
-	var currentScene = '';
+	var currentScene = 'fred + ginger';
 	var currentPerformance = '';
 
 	var sets = {};

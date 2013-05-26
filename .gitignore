@@ -11,3 +11,5 @@ node_modules
 front-app/public/*
 config.js
 config/config.js
+config/config-local.js
+config-local.js

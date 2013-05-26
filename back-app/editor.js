@@ -598,10 +598,19 @@ app.post( pathBase + '/sets/:set_id/cells/:cell_id/connections', function (req, 
 											savedCell = oneCell;
 										}
 									});
-									res.send({
-										set: set,
-										cell: savedCell,
-										connection_id: savedCell.extra.connection_id
+									savedCell.getFields(function(err,fields){
+										var cellFields = [];
+										_.each( fields, function(field){
+											if ( field.extra.connection_id === 0 ) {
+												cellFields.push( field );
+											}
+										});
+										savedCell.fields = cellFields;
+										res.send({
+											set: set,
+											cell: savedCell,
+											connection_id: savedCell.extra.connection_id
+										});
 									});
 								}
 							});
@@ -627,16 +636,21 @@ app.get( pathBase + '/sets/:set_id/cells/:cell_id/connections/:connection_id/fie
 	req.models.sets.get(set_id,function(err,set){
 		req.models.cells.get(cell_id,function(err,cell){
 			cell.getFields(function(err,fields){
-				cell.fields = fields;
 				var connectionFields = [];
+				var cellFields = [];
 				_.each(fields,function(f){
 					if ( f.extra.connection_id === connection_id ) {
 						connectionFields.push(f);
+					} else if ( f.extra.connection_id === 0 ) {
+						cellFields.push(f);
 					}
 				});
+				cell.fields = cellFields;
 				if ( req.xhr ) {
 					res.send({
-						set_id: set_id, cell_id: cell_id,
+						cell: cell,
+						set_id: set_id, 
+						cell_id: cell_id,
 						connection_id: connection_id,
 						fields: connectionFields
 					});

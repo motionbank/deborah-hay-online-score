@@ -131,44 +131,180 @@ jQuery(function(){
 
 				// if it's a grid-cell that was dropped
 				if ( $item.hasClass('grid-cell') ) {
-					
-					// swap IDs, backgrounds, content
+
 					var cellId = $cell.data('id'),
 						itemId = $item.data('id');
 
 					var cellConnectionId = $cell.data('connection-id'),
 						itemConnectionId = $item.data('connection-id');
+					
+					if ( evt.metaKey ) {
 
-					var cBgImg = $cell.css('background-image'),
-						iBgImg = $item.css('background-image');
+						if ( cellId && itemId /* TODO cell type check here */ ) {
+							
+							var cbs = [];
+							var dbCell = null, dbItem = null;
+							var dbItemConnectionFields = [];
 
-					$cell.data('id',itemId||null);
-					$cell.data('connection-id',itemConnectionId||null);
-					$cell.css({
-						backgroundImage: iBgImg
-					});
-					if ( !itemId ) {
-						$cell.data('width', 1);
-						$cell.data('height',1);
+							if ( !cellConnectionId ) {
+								cbs.push(function (next) {
+									jQuery.ajax({
+										url: '/admin/sets/'+set.id+'/cells/'+cellId+'/connections',
+										method: 'post', dataType: 'json',
+										data: {
+											id: cellId, x: $cell.data('x'), y: $cell.data('y'),
+											width: $cell.data('width'), height: $cell.data('height')
+										},
+										success: function (resp) {
+											$cell.data('connection-id', resp.connection_id);
+											cellConnectionId = resp.connection_id;
+											dbCell = resp.cell;
+											next();
+										},
+										error: function () { throw(err); }
+									});
+								});
+							} else {
+								cbs.push(function(next){
+									jQuery.ajax({
+										url: '/admin/sets/'+set.id+'/cells/'+cellId+'/connections/'+cellConnectionId+'/fields',
+										dataType: 'json',
+										success: function (resp) {
+											dbCell = resp.cell;
+											next();
+										},
+										error: function () { throw(err); }
+									});
+								});
+							}
+							if ( !itemConnectionId ) {
+								cbs.push(function (next) {
+									jQuery.ajax({
+										url: '/admin/sets/'+set.id+'/cells/'+itemId+'/connections',
+										method: 'post',
+										dataType: 'json',
+										data: {
+											id: itemId, x: $item.data('x'), y: $item.data('y'),
+											width: $item.data('width'), height: $item.data('height')
+										},
+										success: function (resp) {
+											$item.data('connection-id', resp.connection_id);
+											itemConnectionId = resp.connection_id;
+											dbItem = resp.cell;
+											next();
+										},
+										error: function (err) {
+											throw(err);
+										}
+									});
+								});
+							} else {
+								cbs.push(function(next){
+									jQuery.ajax({
+										url: '/admin/sets/'+set.id+'/cells/'+cellId+'/connections/'+itemConnectionId+'/fields',
+										dataType: 'json',
+										success: function (resp) {
+											dbItem = resp.cell;
+											dbItemConnectionFields = resp.fields;
+											next();
+										},
+										error: function () { throw(err); }
+									});
+								});
+							}
+
+							cbs.push(function(){
+								if ( dbCell && dbItem && dbCell.type === 'context' && dbItem.type === 'context' ) {
+									var cellVimeoId = null;
+									_.each( dbCell.fields, function(f){
+										if ( f.name === 'vimeo-id' && f.value ) {
+											cellVimeoId = f.value;
+										}
+									});
+									if ( !cellVimeoId ) {
+										alert( 'Huh, missing the vimeo-id. Strange.' );
+										console.log( dbCell, dbItem, $cell, $item );
+									} else {
+										var data = {
+											set_id: 		set.id, 
+											cell_id: 		itemId,
+											connection_id: 	itemConnectionId,
+											field_keys: 	[],
+											field_values: 	[]
+										};
+										for ( var fi = 0; fi < dbItemConnectionFields.length; fi++ ) {
+											var f = dbItemConnectionFields[fi];
+											if ( f.name === 'play-next' && f.value === cellVimeoId ) {
+												alert('Already linked, nothing to do here');
+												return;
+											}
+											data.field_keys.push( f.name );
+											data.field_values.push( f.value );
+										};
+										data.field_keys.push('play-next');
+										data.field_values.push(cellVimeoId);
+										jQuery.ajax({
+											url : '/admin/sets/'+set.id+'/cells/'+itemId+'/connections/'+itemConnectionId+'/fields',
+											dataType : 'json', method: 'post',
+											data : data,
+											success : function ( resp ) {
+												alert('Linked!');
+											},
+											error : function (err) { throw(err); }
+										});
+									}
+								} else {
+									alert( 'Uh .. something went wrong!' );
+									console.log( dbCell, dbItem, $cell, $item );
+								}
+							});
+
+							var nextCb = function () {
+								if ( cbs.length > 0 ) {
+									var cb = cbs.shift();
+									cb(nextCb);
+								}
+							}
+							nextCb();
+						}
+
+					} else {
+
+						// swap IDs, backgrounds, content
+
+						var cBgImg = $cell.css('background-image'),
+							iBgImg = $item.css('background-image');
+
+						$cell.data('id',itemId||null);
+						$cell.data('connection-id',itemConnectionId||null);
 						$cell.css({
-							backgroundColor: '#c7dddd'
+							backgroundImage: iBgImg
 						});
-					}
+						if ( !itemId ) {
+							$cell.data('width', 1);
+							$cell.data('height',1);
+							$cell.css({
+								backgroundColor: '#c7dddd'
+							});
+							$cell.addClass('z-behind');
+						}
 
-					$item.data('id',cellId||null);
-					$item.data('connection-id',cellConnectionId||null);
-					$item.css({
-						backgroundImage: cBgImg
-					});
-					if ( !cellId ) {
-						$item.data('width', 1);
-						$item.data('height',1);
+						$item.data('id',cellId||null);
+						$item.data('connection-id',cellConnectionId||null);
 						$item.css({
-							backgroundColor: '#c7dddd'
+							backgroundImage: cBgImg
 						});
-					}
+						if ( !cellId ) {
+							$item.data('width', 1);
+							$item.data('height',1);
+							$item.css({
+								backgroundColor: '#c7dddd'
+							});
+							$item.addClass('z-behind');
+						}
 
-					resetGridWidth();
+						resetGridWidth();
+					}
 
 				} else { // ... list item was dropped
 
@@ -244,8 +380,6 @@ jQuery(function(){
 			var id = $e.data('id');
 			var connection_id = $e.data('connection-id');
 			var $cell = jQuery( '.cell[data-id='+id+']', $cellList );
-
-			console.log( id, connection_id );
 
 			if ( id ) {
 				$cellList.animate({
@@ -469,6 +603,7 @@ jQuery(function(){
 
 		if ( !connection_id ) {
 
+			// add connection
 			jQuery.ajax({
 				url: '/admin/sets/'+set_id+'/cells/'+cell_id+'/connections',
 				method: 'post',
@@ -478,7 +613,7 @@ jQuery(function(){
 					width: $gridCell.data('width'), height: $gridCell.data('height')
 				},
 				success: function (resp) {
-					console.log( resp );
+					//console.log( resp );
 					$gridCell.data('connection-id', resp.connection_id);
 					insertSetFieldsEditor( $cell, resp.connection_id, [] );
 				},
@@ -536,13 +671,14 @@ jQuery(function(){
 		$form.submit(function(evt){
 			evt.preventDefault();
 			var data = $form.serialize();
+			console.log( data );
 			jQuery.ajax({
 				url: '/admin/sets/'+set_id+'/cells/'+cell_id+'/connections/'+connection_id+'/fields',
 				method: 'post',
 				data: data,
 				dataType: 'json',
 				success: function (resp) {
-					console.log(resp);
+					//console.log(resp);
 				},
 				error: function (err) {
 					console.log(err);

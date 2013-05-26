@@ -1,10 +1,11 @@
 
 #select-set-view {
-	padding: 18px;
-	padding-top: 24px;
 	background-color: #eeeeee;
-	width: 100%;
+	margin-top: -72px;
+	padding-top: 72px;
+	padding-bottom: 36px;
 	height: 100%;
+	width: 100%;
 }
 
 #select-set-view h1 {

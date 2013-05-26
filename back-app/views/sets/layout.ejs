@@ -71,6 +71,10 @@
 			</div>
 		</div>
 		<div id="cells">
+			<div class="filters"><% for ( var t = 0; t < types.length; t++ ) { %>
+				<% var type = types[t]; %>
+				<a href="/admin/cells/type/<%= type %>" class="action-type-filter" data-type="<%= type %>"><%= type.toUpperCase() %></a>
+			<% } %></div>
 			<% include ../cells/_list %>
 		</div>
 		<script type="text/template" id="tpl-set-fields-form">

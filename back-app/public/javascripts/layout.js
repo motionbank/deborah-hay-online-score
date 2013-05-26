@@ -555,4 +555,21 @@ jQuery(function(){
 
 		$cell.append( tplHtml );
 	}
+
+	jQuery('.filters a.action-type-filter').each(function(i,e){
+		var $filter = jQuery(e);
+		$filter.click(function(evt){
+			evt.preventDefault();
+			var type = $filter.data('type');
+			var $heading = jQuery( '.list-item-group.type-'+type, $cellList );
+			//jQuery('.cell-list .cell.type-'+type).show();
+			$cellList.animate({
+				scrollTop: $cellList.scrollTop() + ($heading.offset().top - $cellList.offset().top)
+			}, {
+				duration: 500,
+				complete : function () {
+				}
+			});
+		});
+	});
 });

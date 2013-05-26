@@ -125,6 +125,8 @@ var CellView = module.exports = Backbone.View.extend({
 		this.$el.removeClass( 'active' );
 		this.isActive = false;
 
+		this.sceneChanged( this.gridView.getApp().getScene() );
+
 		this.$container.html('');
 	},
 

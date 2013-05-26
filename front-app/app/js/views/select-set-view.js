@@ -27,6 +27,7 @@ var SelectSetView = module.exports = Backbone.View.extend({
 			$setContainer.append( $setLink );
 			$setLink.click(function jqClickSet (evt){
 				self.hide();
+				gridView.setRatio(0);
 				gridView.show();
 			});
 			$sets.append( $setContainer );

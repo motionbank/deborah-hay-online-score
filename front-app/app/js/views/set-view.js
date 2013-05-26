@@ -199,6 +199,7 @@ var GridView = module.exports = Backbone.View.extend({
 		} else {
 			setSelectorView.hide();
 			app.getSlider().show();
+			this.setRatio(0);
 			this.$elParent.show();
 		}
 	},

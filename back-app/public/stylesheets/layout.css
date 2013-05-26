@@ -116,6 +116,12 @@
  +	CELL LIST
  + -------------- */
 
+.filters a.action-type-filter {
+	font-style: italic;
+	color: #888888;
+	text-decoration: none;
+}
+
 #cells .filters {
 	padding: 4.5px;
 }

@@ -12,11 +12,24 @@ var SliderController = function( app ) {
 
 	app.on( 'change:position', function (direction) {
 		if ( direction === '<<' ) {
-			self.backwards();
+			stepOnce( 0.5, -1 );
 		} else {
-			self.forewards();
+			stepOnce( 0.5,  1 );
 		}
 	});
+
+	var stepOnce = function ( len, dir ) {
+		var sliderWidth = $mainMenuSliderLink.width();
+		var step = sliderWidth / ($mainMenuContainer.width() * 1.0 - sliderWidth);
+		var nextRatio = currentRatio + (step * len) * dir;
+		if ( nextRatio >= 0 && nextRatio <= 1 ) {
+			self.setPosition( nextRatio );
+		} else if ( nextRatio > 1 && currentRatio !== 1 ) {
+			self.setPosition( 1 );
+		}  else if ( nextRatio < 0 && currentRatio !== 0 ) {
+			self.setPosition( 0 );
+		}
+	};
 
 	$mainMenuContainer = jQuery('#main-menu-container');
 	$mainMenuSlider = jQuery( '#slider', $mainMenuContainer ); // TODO: safari insists on the line being inside ul
@@ -59,9 +72,9 @@ var SliderController = function( app ) {
 
 	jQuery(window).keydown(function(evt){
 		if ( evt.which == 37 ) {
-			self.backwards();
+			stepOnce( 0.5, -1 );
 		} else if ( evt.which == 39 ) {
-			self.forwards();
+			stepOnce( 0.5,  1 );
 		}
 	});
 
@@ -95,24 +108,6 @@ SliderController.prototype = {
 		$mainMenuSliderLink.css({width: sizePx});
 
 		// TODO: reset ratio
-	},
-	forwards : function () {
-		var step = $mainMenuSliderLink.width() / ($mainMenuContainer.width() - $mainMenuSliderLink.width());
-		var nextRatio = currentRatio + step;
-		if ( nextRatio <= 1 ) {
-			this.setPosition( nextRatio );
-		} else if ( currentRatio !== 1 ) {
-			this.setPosition( 1 );
-		}
-	},
-	backwards : function () {
-		var step = $mainMenuSliderLink.width() / ($mainMenuContainer.width() - $mainMenuSliderLink.width());
-		var nextRatio = currentRatio - step;
-		if ( nextRatio >= 0 ) {
-			this.setPosition( nextRatio );
-		} else if ( currentRatio !== 0 ) {
-			this.setPosition( 0 );
-		}
 	},
 	show : function () {
 		$mainMenuSlider.show();

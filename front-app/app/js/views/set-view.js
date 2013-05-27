@@ -69,7 +69,10 @@ var GridView = module.exports = Backbone.View.extend({
 			return;
 		}
 
-		if ( currentSet === set ) return;
+		if ( currentSet === set ) {
+			this.show();
+			return;
+		}
 
 		if ( !set.cells ) {
 			var self = this;

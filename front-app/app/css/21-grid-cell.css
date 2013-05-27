@@ -21,16 +21,27 @@
 #grid-view article.cell .info .description {
 }
 
+#grid-view article.cell .info-wrapper {
+	position: absolute;
+	top: 0px; left: 0px;
+	right: 0px; bottom: 0px;
+	background-color: rgba(0,0,0,0.5);
+	display: none;
+}
+
+#grid-view article.cell:hover .info-wrapper {
+	display: block;
+}
+
 #grid-view article.cell .info {
+	position: absolute;
+	top: 3em; left: 3em;
+	right: 3em; bottom: 3em;
+
 	background-color: white;
 	color: black;
 	padding: 1.5em;
 	overflow: hidden;
-	position: absolute;
-	top: 3em;
-	left: 3em;
-	right: 3em;
-	bottom: 3em;
 	display: none;
 }
 
@@ -49,6 +60,7 @@
 	padding: 0px;
 }*/
 
+#grid-view article.cell.active .info-wrapper,
 #grid-view article.cell.active .info {
 	display: none;
 }
@@ -111,12 +123,18 @@
 	background-color: white;
 	color: black;
 }
+
 #grid-view article.cell.type-title .info {
 	display: block;
 /*	top: 0em;
 	left: 0em;
 	right: 0em;
 	bottom: 0em;*/
+}
+
+#grid-view article.cell.type-title .info-wrapper,
+#grid-view article.cell.type-text .info-wrapper {
+	display: none;
 }
 
 #grid-view article.cell .content {

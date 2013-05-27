@@ -35,10 +35,11 @@ Sets
 
 Cells
 ==================
-- preview / test cells
+- cell types could be media-based rather than content based
+- more cell types: text-only (html?), title + text, photo / media
+- preview / test cells ad hoc
 - test paths (in fields) on S3 / Vimeo / webserver
 - allow for input field to become textarea to be able to enter longer texts
-- more cell types: text-only (html?), title + text, photo / media
 	x upload previews directly to S3
 
 

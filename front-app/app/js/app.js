@@ -24,7 +24,7 @@ var App = module.exports = (function(){
 	var messenger = null;
 
 	var currentScene = 'fred + ginger';
-	var currentPerformance = '';
+	var currentPerformance = 'D02T03';
 
 	var sets = {};
 

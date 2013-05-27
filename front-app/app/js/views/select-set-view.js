@@ -1,6 +1,5 @@
 
-var gridView 	= null, 
-	app 		= null, 
+var app 		= null, 
 	rendered 	= false, 
 	config 		= null;
 
@@ -10,7 +9,6 @@ var SelectSetView = module.exports = Backbone.View.extend({
 
 	initialize : function ( _, gv, mapp ) {
 
-		gridView = gv;
 		app = mapp;
 		config = app.getConfig();
 
@@ -35,8 +33,6 @@ var SelectSetView = module.exports = Backbone.View.extend({
 			$setContainer.append( $setLink );
 			$setLink.click(function jqClickSet (evt){
 				self.hide();
-				gridView.setPosition(0);
-				gridView.show();
 			});
 			$sets.append( $setContainer );
 		});

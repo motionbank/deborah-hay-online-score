@@ -3,7 +3,7 @@
 
 	position: relative;
 
-	height: 72px;
+	height: 58px;
 
 	background-color: rgb(238, 238, 238); /* make this the stop color of the start page gradient bottom */
 	background-image: linear-gradient(bottom, rgb(210, 210, 210) 11%, rgb(238, 238, 238) 77%);
@@ -27,7 +27,7 @@
 }
 
 #main-menu-container .menu {
-	padding-top: 26px;
+	padding-top: 19px;
 }
 
 #main-menu-container .menu li {
@@ -39,7 +39,7 @@
 }
 
 #main-menu li {
-	padding-right: 36px;
+	padding-right: 9px;
 }
 
 #main-menu li:last-child {
@@ -47,13 +47,13 @@
 }
 
 #main-title {
-	font-weight: 300;
-	padding-top: 25px;
-	padding-right: 26px;
+	padding-top: 18px;
+	padding-right: 18px;
 	float: right;
+	min-width: 500px;
+	font-weight: 300;
 	text-transform: uppercase;
 	font-size: 15px;
-	min-width: 500px;
 	text-align: right;
 }
 
@@ -74,23 +74,25 @@
 	position: relative; /* allow for slider to be positioned */
 }
 
-#slider {
-	position: absolute;
-	bottom: 0px;
-	padding-top: 20px;
-}
-
-#slider a {
-	display: block;
-	background-color: rgba(0,0,0,0.3);
-	width: 100px;
-	height: 8px;
-}
-
 #secondary-menu li {
 }
 
 #secondary-menu {
 	float: right;
-	padding-right: 26px;
+	padding-right: 18px;
+}
+
+#slider {
+	position: absolute;
+	bottom: 0px;
+}
+
+#slider a {
+	display: block;
+	background-color: rgba(0,0,0,0.1);
+	width: 100px;
+	height: 8px;
+}
+#slider a:hover {
+	background-color: rgba(0,0,0,0.2);
 }

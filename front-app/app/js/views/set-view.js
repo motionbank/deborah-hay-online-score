@@ -36,8 +36,9 @@ var GridView = module.exports = Backbone.View.extend({
 		});
 
 		app.on( 'route:changeset', function bbRouteChangeSetCB (nextSetName){
-			self.loadSet(nextSetName);
-		});
+			this.loadSet(nextSetName);
+			this.show();
+		}, this);
 
 		app.on( 'route:selectset', function () {
 			this.$elParent.hide();

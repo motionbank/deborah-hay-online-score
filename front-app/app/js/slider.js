@@ -11,7 +11,7 @@ var SliderController = function( app ) {
 	var self = this;
 
 	app.on( 'change:position', function (direction) {
-		if ( direction === 'backwards' ) {
+		if ( direction === '<<' ) {
 			self.backwards();
 		} else {
 			self.forewards();
@@ -39,7 +39,7 @@ var SliderController = function( app ) {
 		stop: function (evt, drag) {
 			isDragging = false;
 			if ( !isHover ) {
-				$mainMenuSliderLink.animate({height: '8px'},{duration:100});
+				//$mainMenuSliderLink.animate({height: '8px'},{duration:100});
 				$mainMenuSliderLink.css({cursor:'default'});
 			}
 		}
@@ -47,12 +47,12 @@ var SliderController = function( app ) {
 
 	$mainMenuSlider.hover(function(evt){
 		isHover = true;
-		$mainMenuSliderLink.animate({height: '72px'},{duration:100});
+		//$mainMenuSliderLink.animate({height: '72px'},{duration:100});
 		$mainMenuSliderLink.css({cursor:'move'});
 	},function(evt){
 		isHover = false;
 		if ( !isDragging ) {
-			$mainMenuSliderLink.animate({height: '8px'},{duration:100});
+			//$mainMenuSliderLink.animate({height: '8px'},{duration:100});
 			$mainMenuSliderLink.css({cursor:'default'});
 		}
 	});

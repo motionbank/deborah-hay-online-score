@@ -142,11 +142,8 @@ var App = module.exports = (function(){
 		router = new (require('js/router'))();
 
 		router.on('all',function(){
-			app.trigger.apply(app,arguments);
-		});
-		
-		router.on('route:changeset',function(){
-			app.startApp();
+			if ( !appStarted ) app.startApp();
+ 			app.trigger.apply(app,arguments);
 		});
 
 		setView = new (require('js/views/set-view'))( {}, app );
@@ -173,10 +170,6 @@ var App = module.exports = (function(){
 			});
 		}, this);
 
-		jQuery( '#change-set-item a' ).click(function jqClickChangeSet (evt){
-			evt.preventDefault();
-			setView.toggleSetSelector();
-		});
 		jQuery( '#link-to-set-item a' ).click(function jqClickGetLink (evt){
 			evt.preventDefault();
 			setView.toggleLink();

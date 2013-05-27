@@ -5,7 +5,7 @@ General content
 - final title? .. where does it go?
 - make about / team / ... a set linked to from logo?
 - generative logo
-- select default content / recording / scene when entering
+	x select default content / recording / scene when entering
 
 
 General code
@@ -33,14 +33,13 @@ General UX
 - show left / right transition
 - show keyboard shortcuts
 - keyboard shortcuts jump 1 column too far
-- animate switch set -> selector -> sets
+- animate switch set -> selector -> set
 - a global indicator that show where you are in the recordings / time / performer dimensions
 - favicon / apple icon / ...
 
 
 All tiles
 ==========================
-- info hover
 - indicate which "is playing"
 - slider: indicate where playing tile is in set
 - make sure content is visible
@@ -65,7 +64,10 @@ Flowplayer tiles
 - ignore own messages
 - on deactivate make image show current scene, not default image
 
+
 Content
 ==========================
 - optimize content for cell sizes
 - compress static content
+- missing.jpg needs replacement (per cell type? -> recording empty studio)
+

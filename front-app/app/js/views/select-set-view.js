@@ -9,9 +9,14 @@ var SelectSetView = module.exports = Backbone.View.extend({
 	el : '#select-set-view',
 
 	initialize : function ( _, gv, mapp ) {
+
 		gridView = gv;
 		app = mapp;
 		config = app.getConfig();
+
+		app.on( 'route:selectset', function () {
+			this.show();
+		}, this);
 	},
 
 	render : function () {

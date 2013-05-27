@@ -22,6 +22,7 @@ Layout editor
 
 Sets
 ==================
+- make sure set paths are unique!
 - do they need an order?
 - hidden / private sets?
 - set categories?
@@ -37,11 +38,13 @@ Cells
 - preview / test cells
 - test paths (in fields) on S3 / Vimeo / webserver
 - allow for input field to become textarea to be able to enter longer texts
+- more cell types: text-only (html?), title + text, photo / media
 	x upload previews directly to S3
 
 
 Vimeo
 ===================
+- import title and description from vimeo video info
 	x what happens if a video is being deleted? ... delete the cell? ask?
 		yes, we ask.
 

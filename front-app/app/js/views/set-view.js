@@ -39,16 +39,20 @@ var GridView = module.exports = Backbone.View.extend({
 			self.loadSet(nextSetName);
 		});
 
+		app.on( 'route:selectset', function () {
+			this.$elParent.hide();
+		}, this);
+
 		setSelectorView = new (require('js/views/select-set-view'))({}, self, app);
 
 		var touchEventManager = this.$el.hammer();
 		touchEventManager.on('swiperight', function (event) {
 			event.stopPropagation();
-			app.trigger('change:position','backwards');
+			app.trigger('change:position','<<');
 		});
 		touchEventManager.on('swipeleft', function (event) {
 			event.stopPropagation();
-			app.trigger('change:position','forwards');
+			app.trigger('change:position','>>');
 		});
 	},
 
@@ -89,27 +93,21 @@ var GridView = module.exports = Backbone.View.extend({
 		this.$el.html(''); // TODO: more sane way of cleaning up?
 
 		$mainTitleLink.html( currentSet.title );
+		$mainTitleLink.attr( 'href', '#set/'+currentSet.path );
 
 		cellViews = {};
 		cellViewsArr = [];
 		clickedCell = null;
 
-		var visibleCells = gridXVisible*gridYVisible;
-		for ( var i = 0, g = visibleCells; i < currentSet.cells.length; i++ ) {
+		for ( var i = 0; i < currentSet.cells.length; i++ ) {
 
 			var opts = currentSet.cells[i];
 			
 			try {
 				views[opts.type] = views[opts.type] || require('js/views/cell-view-'+opts.type);
-			} catch (e) {}
-			
-			opts['poster'] = opts['poster'] === 'missing.jpg' ? opts.type+'-'+i+'.jpg' : opts['poster'];
+			} catch (e) { /* ignore */ }
 
 			var cv = new ( views[opts.type] || views.CellView )( opts, this );
-
-			if ( i < g ) {
-				cv.show();
-			}
 
 			cellViews[opts.type] = cellViews[opts.type] || [];
 			cellViews[opts.type].push( cv );
@@ -147,6 +145,8 @@ var GridView = module.exports = Backbone.View.extend({
 			if ( !( (cellDim.x + (cellDim.width-1)) < xFrom ||
 					 cellDim.x > xFrom+gridXVisible ) 
 				) {
+				
+				// show, set position and size in % to make responsive
 				cv.show();
 				cv.$el.css({
 					position: 'absolute',
@@ -155,6 +155,8 @@ var GridView = module.exports = Backbone.View.extend({
 					width: 	(cw*cellDim.width)+'%',
 					height: (ch*cellDim.height)+'%'
 				});
+
+				// add media-query style classes to cells
 				cv.$el.attr( 'class', cv.$el.attr('class').replace(/cell-(width|height)-[0-9]+/ig,'') );
 				cv.$el.addClass( 'cell-width-'+ (parseInt(((w/gridXVisible)*cellDim.width) /50)*50) ).
 					   addClass( 'cell-height-'+(parseInt(((h/gridYVisible)*cellDim.height)/50)*50) );
@@ -195,27 +197,6 @@ var GridView = module.exports = Backbone.View.extend({
 
 		cellWidth = cw;
 		cellHeight = ch;
-	},
-
-	toggleSetSelector : function () {
-
-		if ( this.$elParent.css('display') === 'block' ) {
-			app.getSlider().hide();
-			setSelectorView.show();
-			this.$elParent.hide();
-		} else {
-			setSelectorView.hide();
-			app.getSlider().show();
-			this.$elParent.show();
-		}
-	},
-
-	toggleSetEditor : function () {
-
-	},
-
-	toggleLink : function () {
-
 	},
 
 	show : function () {

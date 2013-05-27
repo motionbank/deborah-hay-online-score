@@ -42,7 +42,8 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 			}
 			img.onerror = function () {
 				self.$el.css({
-					'background-image': 'none'
+					'background-image': 'url("http://' + config.cloudFront.fileHost + 
+							config.cloudFront.baseUrl + '/cells/poster/full/missing.jpg")'
 				});
 			}
 			img.src = imgSrc;

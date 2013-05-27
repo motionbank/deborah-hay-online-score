@@ -1,5 +1,6 @@
 
 var CellModel = null;
+var app = null, config = null;
 
 var CellView = module.exports = Backbone.View.extend({
 
@@ -18,36 +19,29 @@ var CellView = module.exports = Backbone.View.extend({
 	respondToSceneChange : false,
 	respondToRecordingChange : false,
 
-	gridView : null,
-	config : null,
-
 	$h1Title : null, 
 	$container : null,
 
-	initialize : function ( opts, gv ) {
+	initialize : function ( opts, mainApp ) {
 
-		var self = this;
+		app = mainApp;
 
-		this.gridView = gv;
-		this.config = this.gridView.getApp().getConfig();
+		config = app.getConfig();
 
 		CellModel = CellModel || require('js/models/cell-model');
 
 		this.cell = new CellModel( opts );
-		this.gridView.$el.append( this.render() );
 
 		this.respondToRecordingChange = this.cell.get('per-recording') === 'true' ? true : false;
 		this.respondToSceneChange = this.cell.get('per-scene') === 'false' ? false : true;
 
-		var app = this.gridView.getApp();
-
 		app.on( 'change:scene', function bbChangeScene (){
-			self.sceneChanged.apply(self,arguments);
-		});
+			this.sceneChanged.apply(this,arguments);
+		}, this);
 
 		app.on( 'change:recording', function bbChangeRecording (){
-			self.recordingChanged.apply(self, arguments);
-		});
+			this.recordingChanged.apply(this, arguments);
+		}, this);
 
 		this.hide();
 	},
@@ -72,13 +66,16 @@ var CellView = module.exports = Backbone.View.extend({
 		}
 
 		var self = this;
+		var app = this.getApp();
 
-		if ( this.cell.get('type') !== 'title' ) {
+		if ( 'title,text,visualization'.split(',').indexOf(this.cell.get('type')) === -1 ) {
+
 			this.$el.click(function(evt){
 				if ( self.isActive ) return;
-				self.gridView.setClicked( self );
 				evt.preventDefault();
-				self.gridView.deactivateAll();
+
+				app.trigger('grid:deactivate-all');
+				app.trigger('grid:activate',self.cid);
 				self.activate();
 			});
 		}
@@ -87,27 +84,38 @@ var CellView = module.exports = Backbone.View.extend({
 	},
 
 	show : function () {
+
 		if ( this.isVisible ) return;
 
 		this.$el.show();
 		this.isVisible = true;
 
-		var scene = this.gridView.getApp().getScene();
+		var self = this;
+		var scene = app.getScene();
 		var cellType = this.cell.get('type');
 
 		if ( this.respondToSceneChange && scene ) { 
-			this.sceneChanged( scene ); 
+
+			this.sceneChanged( scene );
+
 		} else if ( cellType !== 'title' && cellType !== 'text' ) {
+
 			var imgSrc = this.cell.get('poster');
 
 			if ( this.$el.css('background-image') === 'none' && imgSrc ) {
-				imgSrc = 'http://' + this.config.cloudFront.fileHost + this.config.cloudFront.baseUrl + '/cells/poster/full/' + imgSrc;
+				imgSrc = 'http://' + config.cloudFront.fileHost + config.cloudFront.baseUrl + '/cells/poster/full/' + imgSrc;
 				var img = new Image();
-				img.onload = (function(cellView){return function domImgLoaded (){
-					cellView.$el.css({
-						backgroundImage:'url("'+imgSrc/*+'?'+(new Date()).getTime()*/+'")'
+				img.onload = function () {
+					self.$el.css({
+						backgroundImage:'url("'+imgSrc+'")'
 					});
-				}})(this);
+				};
+				img.onerror = function () {
+					self.$el.css({
+						'background-image': 'url("http://' + config.cloudFront.fileHost + 
+								config.cloudFront.baseUrl + '/cells/poster/full/missing.jpg")'
+					});
+				};
 				img.src = imgSrc;
 			}
 		}
@@ -119,14 +127,13 @@ var CellView = module.exports = Backbone.View.extend({
 	},
 
 	activate : function () {
-		
 	},
 
 	deactivate : function () {
 		this.$el.removeClass( 'active' );
 		this.isActive = false;
 
-		this.sceneChanged( this.gridView.getApp().getScene() );
+		this.sceneChanged( app.getScene() );
 
 		this.$container.html('');
 	},
@@ -138,5 +145,13 @@ var CellView = module.exports = Backbone.View.extend({
 		if ( this.isVisible && !this.isActive ) {
 			//console.log( 'scene changed: ' + newScene );
 		}
+	},
+
+	getApp : function () {
+		return app;
+	},
+
+	getConfig : function () {
+		return config;
 	}
 });

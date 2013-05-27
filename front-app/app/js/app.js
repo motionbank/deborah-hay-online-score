@@ -17,14 +17,15 @@ var App = module.exports = (function(){
 	var appState = null;
 	var appStarted = false;
 
-	var router = null, slider = null, setView = null;
+	var router = null, slider = null, gridView = null;
 
 	var pm = null, pmCache = null;
 
 	var messenger = null;
 
 	var currentScene = 'fred + ginger';
-	var currentPerformance = 'D02T03';
+	var currentPerformance = ('D02T03,D04T03,D06T03'.split(',')[parseInt(Math.random()*3)]);
+	var currentSet = false;
 
 	var sets = {};
 
@@ -142,11 +143,21 @@ var App = module.exports = (function(){
 		router = new (require('js/router'))();
 
 		router.on('all',function(){
-			if ( !appStarted ) app.startApp();
+			if ( !appStarted ) {
+				app.startApp();
+			}
  			app.trigger.apply(app,arguments);
 		});
 
-		setView = new (require('js/views/set-view'))( {}, app );
+		router.on('route:changeset',function(set){
+			currentSet = set;
+		});
+
+		router.on('route:selectset',function(set){
+			slider.hide();
+		});
+
+		gridView = new (require('js/views/set-view'))( {}, app );
 
 		initializer.add( function initAppApi (next){
 			jQuery.ajax({
@@ -161,7 +172,6 @@ var App = module.exports = (function(){
 							throw( 'Duplicate path!', set.path, set.id, sets[set.path].id );
 						}
 					});
-					//setView.loadSet('overview');
 					next();
 				},
 				error:function (err) {
@@ -169,15 +179,6 @@ var App = module.exports = (function(){
 				}
 			});
 		}, this);
-
-		jQuery( '#link-to-set-item a' ).click(function jqClickGetLink (evt){
-			evt.preventDefault();
-			setView.toggleLink();
-		});
-		jQuery( '#edit-set-item a' ).click(function jqClickEditSet (evt){
-			evt.preventDefault();
-			setView.toggleSetEditor();
-		});
 
 		appState = new (require('js/models/appstate'))({id:1});
 	}
@@ -204,7 +205,7 @@ var App = module.exports = (function(){
 			return config;
 		},
 		sizeChanged : function () {
-			setView.sizeChanged();
+			gridView.sizeChanged();
 		},
 		startApp : function () {
 

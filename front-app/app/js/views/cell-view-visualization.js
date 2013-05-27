@@ -14,11 +14,11 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 		if ( newScene && this.isVisible && !this.isActive ) {
 
 			var self = this;
-			var config = this.config;
+			var config = this.getApp().getConfig();
 
 			var scene = newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-');
-			var imgSrc = 'http://' + this.config.cloudFront.fileHost + 
-							this.config.cloudFront.baseUrl + 
+			var imgSrc = 'http://' + config.cloudFront.fileHost + 
+							config.cloudFront.baseUrl + 
 								'/cells/visualization/full/'+this.cell.get('base-path');
 
 			var pathPieces = [];

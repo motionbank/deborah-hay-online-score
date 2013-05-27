@@ -17,19 +17,6 @@ jQuery(function(){
 		next();
 	});
 
-	initializer.add( function initActivateLink (next){
-		/* called from "enter" link on tool/splash screen */
-		jQuery('#link-enter-app').click(function(){
-			app.startApp();
-			return false;
-		});
-		initializer.add( 'last', function initRandomSliderPosition (next) {
-			
-			next();
-		});
-		next();
-	});
-
 	initializer.add( 'later', function initBBHistoryStart (next){
 		Backbone.history.start();
 		next();

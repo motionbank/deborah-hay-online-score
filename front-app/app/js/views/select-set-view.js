@@ -15,13 +15,18 @@ var SelectSetView = module.exports = Backbone.View.extend({
 		app.on( 'route:selectset', function () {
 			this.show();
 		}, this);
+
+		app.on( 'route:changeset', function () {
+			this.hide();
+		}, this);
 	},
 
 	render : function () {
 
-		var $sets = jQuery('#sets');
+		var $sets = jQuery('#set-list');
 		var sets = app.getSets();
 		var self = this;
+		var containers = [];
 
 		_.map(sets,function(set,path){
 			var $setContainer = jQuery( '<div class="set left" />' );
@@ -31,11 +36,9 @@ var SelectSetView = module.exports = Backbone.View.extend({
 																	'/sets/poster/medium/'+set.poster+'" />'+
 									'</a>' );
 			$setContainer.append( $setLink );
-			$setLink.click(function jqClickSet (evt){
-				self.hide();
-			});
-			$sets.append( $setContainer );
+			containers.push( $setContainer );
 		});
+		$sets.append( containers );
 
 		rendered = true;
 	},

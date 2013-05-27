@@ -1,5 +1,7 @@
 
 var CellView = require('js/views/cell-view');
+var __super = CellView.prototype;
+
 var CellViewText = module.exports = CellView.extend({
 
 	// instance variables
@@ -11,18 +13,20 @@ var CellViewText = module.exports = CellView.extend({
 	initialize: function () {
 
 		// call initialize on super!
-		CellView.prototype.initialize.apply(this,arguments);
-
-		this.activate();
+		__super.initialize.apply(this,arguments);
 	},
 
-	activate : function () {
+	render : function () {
+
+		__super.render.apply(this,arguments);
+
 		this.$el.addClass( 'active' );
 		this.isActive = true;
 
 		var self = this;
-		var app = self.gridView.getApp();
-		self.postmessenger = app.getPostMessenger();
+		var config = this.getApp().getConfig();
+
+		self.postmessenger = this.getApp().getPostMessenger();
 		
 		this.iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
 									 'src="'+this.cell.get('content-url')+'" '+
@@ -30,12 +34,14 @@ var CellViewText = module.exports = CellView.extend({
 		this.iframe.load(function(){
 			
 			self.iframeWindow = document.getElementById('iframe-'+self.cid).contentWindow;
-			self.postmessenger.send( 'connect', self.gridView.getApp().getConfig(), self.iframeWindow );
+			self.postmessenger.send( 'connect', config, self.iframeWindow );
 		
 		});
 
 		this.$container.empty();
 		this.$container.append( this.iframe );
+
+		return this.$el;
 	},
 
 	deactivate : function () {

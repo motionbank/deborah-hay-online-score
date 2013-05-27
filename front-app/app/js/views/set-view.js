@@ -4,7 +4,6 @@ var categories = [];
 
 var views = {};
 
-var currentCollection = [];
 var currentSet = null;
 
 var cellBorderHandle = 5;
@@ -15,7 +14,7 @@ var lastRatio = 0.0;
 var app = null, config = null, setSelectorView = null;
 $mainTitleLink = null;
 
-var clickedCell = null;
+var clickedCellCid = null;
 
 var GridView = module.exports = Backbone.View.extend({
 
@@ -41,8 +40,13 @@ var GridView = module.exports = Backbone.View.extend({
 		}, this);
 
 		app.on( 'route:selectset', function () {
+			this.deactivateAll();
 			this.$elParent.hide();
 		}, this);
+
+		app.on( 'grid:activate-next-by-attr', this.activateNextByAttr, this );
+		app.on( 'grid:deactivate-all', this.deactivateAll, this );
+		app.on( 'grid:activate', this.setClicked, this );
 
 		setSelectorView = new (require('js/views/select-set-view'))({}, self, app);
 
@@ -91,14 +95,16 @@ var GridView = module.exports = Backbone.View.extend({
 
 		views.CellView = views.CellView || require('js/views/cell-view');
 
-		this.$el.html(''); // TODO: more sane way of cleaning up?
+		this.$el.empty(); // TODO: more sane way of cleaning up?
 
 		$mainTitleLink.html( currentSet.title );
 		$mainTitleLink.attr( 'href', '#set/'+currentSet.path );
 
 		cellViews = {};
 		cellViewsArr = [];
-		clickedCell = null;
+		clickedCellCid = null;
+
+		var renderedCells = [];
 
 		for ( var i = 0; i < currentSet.cells.length; i++ ) {
 
@@ -108,13 +114,16 @@ var GridView = module.exports = Backbone.View.extend({
 				views[opts.type] = views[opts.type] || require('js/views/cell-view-'+opts.type);
 			} catch (e) { /* ignore */ }
 
-			var cv = new ( views[opts.type] || views.CellView )( opts, this );
+			var cv = new ( views[opts.type] || views.CellView )( opts, app );
+			renderedCells.push( cv.render() );
 
 			cellViews[opts.type] = cellViews[opts.type] || [];
 			cellViews[opts.type].push( cv );
 
 			cellViewsArr.push( cv );
 		}
+
+		this.$el.append( renderedCells );
 
 		this.updateVisibleCells();
 	},
@@ -216,11 +225,11 @@ var GridView = module.exports = Backbone.View.extend({
 		}
 	},
 
-	setClicked : function ( cell ) {
-		clickedCell = cell.cid;
+	setClicked : function ( cell_cid ) {
+		clickedCellCid = cell_cid;
 	},
 
-	playNextByAttr : function ( key, value ) {
+	activateNextByAttr : function ( key, value ) {
 		for ( var i = 0; i < cellViewsArr.length; i++ ) {
 			var cell = cellViewsArr[i];
 			if ( cell.cell.get(key) === value ) {
@@ -230,22 +239,22 @@ var GridView = module.exports = Backbone.View.extend({
 		}
 	},
 
-	playNext : function ( prevCellView ) {
+	// playNext : function ( prevCellView ) {
 
-		var i = cellViewsArr.indexOf( prevCellView );
-		if ( i === -1 ) return;
-		var n = i+1;
-		n %= cellViewsArr.length;
-		if ( cellViewsArr[n].cid === clickedCell ) return;
-		while ( cellViewsArr[n].isVisible === false 
-				|| cellViewsArr[n].$el.hasClass('type-context') !== true ) {
-			n++;
-			n %= cellViewsArr.length;
-			if ( n === i ) return;
-			if ( cellViewsArr[n].cid === clickedCell ) return;
-		}
-		cellViewsArr[n].activate();
-	},
+	// 	var i = cellViewsArr.indexOf( prevCellView );
+	// 	if ( i === -1 ) return;
+	// 	var n = i+1;
+	// 	n %= cellViewsArr.length;
+	// 	if ( cellViewsArr[n].cid === clickedCellCid ) return;
+	// 	while ( cellViewsArr[n].isVisible === false 
+	// 			|| cellViewsArr[n].$el.hasClass('type-context') !== true ) {
+	// 		n++;
+	// 		n %= cellViewsArr.length;
+	// 		if ( n === i ) return;
+	// 		if ( cellViewsArr[n].cid === clickedCellCid ) return;
+	// 	}
+	// 	cellViewsArr[n].activate();
+	// },
 
 	getApp : function () {
 		return app;

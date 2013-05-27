@@ -1,5 +1,8 @@
 
-var CellView = module.exports = require('js/views/cell-view').extend({
+var CellView = require('js/views/cell-view');
+var __super = CellView.prototype;
+
+var CellViewRecording = module.exports = require('js/views/cell-view').extend({
 
 	respondToSceneChange : true,
 
@@ -7,32 +10,35 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 	messenger : null,
 
 	activate : function () {
+
 		this.$el.addClass( 'active' );
 		this.isActive = true;
 
 		var self = this;
-		var app = self.gridView.getApp();
+		var app = this.getApp();
+		var config = app.getConfig();
 
-		var iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
+		this.iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
 									 'src="'+this.cell.get('content-url')+'?v='+this.cell.get('file-name')+'&id='+this.cell.get('videoId')+'" '+
 									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
-		iframe.load(function(){
+		this.iframe.load(function(){
 
 			self.iFrameWindow = document.getElementById('iframe-'+self.cid).contentWindow;
 
 			app.trigger('change:recording', self.cell.get('recording'));
 
 			messenger = app.getPostMessenger();
-			messenger.send( 'connect', app.getConfig(), self.iFrameWindow );
+			messenger.send( 'connect', config, self.iFrameWindow );
 		});
+
 		this.$container.empty();
-		this.$container.append(iframe);
+		this.$container.append( this.iframe );
 	},
 
 	sceneChanged : function (newScene) {
 		if ( this.isVisible ) {
 			if ( !this.isActive ) {
-				var config = this.config;
+				var config = this.getApp().getConfig();
 				var imgSrc = 'http://' + config.cloudFront.fileHost + 
 								config.cloudFront.baseUrl + '/cells/recording/full/' +
 								this.cell.get('file-name')+'-'+newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-')+'.png';

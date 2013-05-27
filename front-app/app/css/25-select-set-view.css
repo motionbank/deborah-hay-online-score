@@ -19,7 +19,7 @@
 	padding-left: 18px;
 }
 
-#select-set-view #sets {
+#select-set-view #set-list {
 	display: block;
 	overflow-y: scroll;
 	width: 100%;
@@ -27,16 +27,16 @@
 	padding-top: 30px;
 }
 
-#select-set-view #sets .set {
+#select-set-view #set-list .set {
 	padding: 18px;
 	padding-top: 16px;
 }
 
-#select-set-view #sets .set:hover {
+#select-set-view #set-list .set:hover {
 	background-color: white;
 }
 
-#select-set-view #sets .set .title {
+#select-set-view #set-list .set .title {
 	letter-spacing: 0.2em;
 	margin-bottom: 1em;
 }

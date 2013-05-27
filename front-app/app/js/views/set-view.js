@@ -36,7 +36,6 @@ var GridView = module.exports = Backbone.View.extend({
 
 		app.on( 'route:changeset', function bbRouteChangeSetCB (nextSetName){
 			this.loadSet(nextSetName);
-			this.show();
 		}, this);
 
 		app.on( 'route:selectset', function () {
@@ -88,7 +87,9 @@ var GridView = module.exports = Backbone.View.extend({
 			return;
 		}
 
-		_.each( cellViewsArr, function(cv, i){ cv.deactivate(); cv.hide(); });
+		this.show();
+
+		this.deactivateAll();
 
 		currentSet = set;
 		this.updateGridDimensions();
@@ -175,16 +176,7 @@ var GridView = module.exports = Backbone.View.extend({
 			}
 		});
 
-		if ( currentSet.cells.length <= (gridXVisible * gridYVisible) ) {
-
-			app.getSlider().hide();
-
-		} else {
-
-			app.getSlider().setSize( ((gridXVisible * gridYVisible) * 1.0) / currentSet.cells.length );
-			app.getSlider().setPosition( lastRatio, false );
-			app.getSlider().show();
-		}
+		this.checkSlider();
 	},
 
 	updateGridDimensions : function () {
@@ -207,6 +199,22 @@ var GridView = module.exports = Backbone.View.extend({
 
 		cellWidth = cw;
 		cellHeight = ch;
+
+		this.checkSlider();
+	},
+
+	checkSlider : function () {
+
+		if ( currentSet.grid_cols <= gridXVisible ) {
+
+			app.getSlider().hide();
+
+		} else {
+
+			app.getSlider().setSize( gridXVisible / (currentSet.grid_cols * 1.0) );
+			app.getSlider().setPosition( lastRatio, false );
+			app.getSlider().show();
+		}
 	},
 
 	show : function () {

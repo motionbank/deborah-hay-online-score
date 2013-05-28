@@ -126,6 +126,7 @@
 
 #grid-view article.cell.type-title .info {
 	display: block;
+	padding: 0em;
 /*	top: 0em;
 	left: 0em;
 	right: 0em;
@@ -134,7 +135,8 @@
 
 #grid-view article.cell.type-title .info-wrapper,
 #grid-view article.cell.type-text .info-wrapper {
-	display: none;
+	background-color: rgba(0,0,0,0);
+	display: block;
 }
 
 #grid-view article.cell .content {

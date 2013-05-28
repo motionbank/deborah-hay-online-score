@@ -1,7 +1,8 @@
 
 var app 		= null, 
 	rendered 	= false, 
-	config 		= null;
+	config 		= null,
+	$mainTitleLink = null;
 
 var SelectSetView = module.exports = Backbone.View.extend({
 
@@ -19,6 +20,8 @@ var SelectSetView = module.exports = Backbone.View.extend({
 		app.on( 'route:changeset', function () {
 			this.hide();
 		}, this);
+
+		$mainTitleLink = jQuery('#main-title a');
 	},
 
 	render : function () {
@@ -47,6 +50,10 @@ var SelectSetView = module.exports = Backbone.View.extend({
 		if ( !rendered ) {
 			this.render();
 		}
+
+		$mainTitleLink.html('Sets curated by Motion Bank');
+		$mainTitleLink.attr('href','#sets');
+		
 		this.$el.show();
 	},
 

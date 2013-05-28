@@ -1488,14 +1488,16 @@ app.get( pathBase + '/vimeo/video/:id/import', idNumeric, vimeoAuthed, function 
        		var field_opts = {name:'vimeo-id',value:video.id};
 			req.models.fields.find(field_opts,function(err,fields){
 				if ( noError(req,res,err) ) {
+					var video_title 		= video.title.split('---')[0].replace(/^[\s]*/ig,'').replace(/[\s]*$/ig,''),
+						video_description 	= video.description.split('---')[0].replace(/^[\s]*/ig,'').replace(/[\s]*$/ig,'');
 					if ( !fields || fields.length == 0 ) {
 						req.models.fields.create([field_opts],function(err, fields){
 							if ( noError(req,res,err) ) {
 								// if this field was not here assume we need new cell
 								req.models.cells.create([{
-									type: 'context',
-									title: video.title,
-									description: video.description
+									type: 		 'context',
+									title: 		 video_title,
+									description: video_description
 								}],function(err,cells){
 									if ( noError(req,res,err) ) {
 										var cell = cells[0];
@@ -1508,9 +1510,9 @@ app.get( pathBase + '/vimeo/video/:id/import', idNumeric, vimeoAuthed, function 
 					} else { // field exists ... find cell and attach
 						fields[0].getCell(function(err,cells){
 
-							var cell = cells[0];
-							cell.title = video.title;
-							cell.description = video.description;
+							var cell 			= cells[0];
+							cell.title 			= video_title;
+							cell.description 	= video_description;
 							cell.save(function(err){
 								if (noError(req,res,err)) {
 									var imgUrl = video.thumbnails.thumbnail;

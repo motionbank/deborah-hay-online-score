@@ -1,7 +1,17 @@
+Design
+==========================
+- start page, logo position, background, info?
+- grid
+- cells: info, hover
+- text cell
+- flowplayer
+- set overview
+- slider
+
 
 General content
 ==========================
-- front page ... questions usage undecided, backgrounds
+- front page ... backgrounds
 - final title? .. where does it go?
 - make about / team / ... a set linked to from logo?
 - generative logo

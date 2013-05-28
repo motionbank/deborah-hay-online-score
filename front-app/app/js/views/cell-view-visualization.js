@@ -4,7 +4,7 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 	respondToSceneChange : true,
 
 	recordingChanged : function ( newRecording ) {
-		this.currentRecording = newRecording;
+		
 		this.sceneChanged( this.currentScene );
 	},
 

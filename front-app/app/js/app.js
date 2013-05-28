@@ -192,6 +192,9 @@ var App = module.exports = (function(){
 		getScene : function () {
 			return currentScene;
 		},
+		getPerformance : function () {
+			return currentPerformance;
+		},
 		getSet : function (setUrl) {
 			return sets[setUrl];
 		},

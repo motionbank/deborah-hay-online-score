@@ -109,6 +109,8 @@
 	-moz-background-size : cover;
 	-o-background-size : cover;
 	background-size : cover;
+
+	background-color: #e3e3e3;
 }
 
 #grid-view article.cell.type-visualization {

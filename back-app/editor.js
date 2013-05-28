@@ -1488,7 +1488,7 @@ app.get( pathBase + '/vimeo/video/:id/import', idNumeric, vimeoAuthed, function 
        		var field_opts = {name:'vimeo-id',value:video.id};
 			req.models.fields.find(field_opts,function(err,fields){
 				if ( noError(req,res,err) ) {
-					var video_title 		= video.title; //.split('---')[1].replace(/^[\s]*/ig,'').replace(/[\s]*$/ig,''),
+					var video_title 		= video.title, //.split('---')[1].replace(/^[\s]*/ig,'').replace(/[\s]*$/ig,''),
 						video_description 	= video.description.split('---')[0].replace(/^[\s]*/ig,'').replace(/[\s]*$/ig,'');
 					if ( !fields || fields.length == 0 ) {
 						req.models.fields.create([field_opts],function(err, fields){

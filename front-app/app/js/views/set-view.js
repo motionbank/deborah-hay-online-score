@@ -15,6 +15,7 @@ var app = null, config = null, setSelectorView = null;
 $mainTitleLink = null;
 
 var clickedCellCid = null;
+var showCellInfo = false;
 
 var GridView = module.exports = Backbone.View.extend({
 
@@ -31,8 +32,8 @@ var GridView = module.exports = Backbone.View.extend({
 		this.$elParent = this.$el.parent();
 		
 		app.on( 'change:slider', function bbChangeSliderCB (val) {
-			self.setPosition( val );
-		});
+			this.setPosition( val );
+		}, this);
 
 		app.on( 'route:changeset', function bbRouteChangeSetCB (nextSetName){
 			this.loadSet(nextSetName);
@@ -57,6 +58,16 @@ var GridView = module.exports = Backbone.View.extend({
 		touchEventManager.on('swipeleft', function (event) {
 			event.stopPropagation();
 			app.trigger('change:position','>>');
+		});
+
+		jQuery('#link-to-set-item').click(function(evt){
+			evt.preventDefault();
+			showCellInfo = !showCellInfo;
+			if ( showCellInfo ) {
+				jQuery('.cell').addClass('with-info');
+			} else {
+				jQuery('.cell').removeClass('with-info');
+			}
 		});
 	},
 
@@ -176,6 +187,11 @@ var GridView = module.exports = Backbone.View.extend({
 					   addClass( 'cell-height-'+(parseInt(((h/gridYVisible)*cellDim.height)/50)*50) );
 			} else {
 				cv.hide();
+			}
+			if ( showCellInfo ) {
+				cv.$el.addClass('with-info');
+			} else {
+				cv.$el.removeClass('with-info');
 			}
 		});
 

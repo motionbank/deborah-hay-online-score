@@ -61,7 +61,7 @@ jQuery(function(){
 		var $s = jQuery(s), marker = $s.data('title');
 		scenesByMarker[marker] = $s;
 		$s.hide();
-		$tab = jQuery( '<div class="tab">' + ( i+1 ) + '</div>' );
+		$tab = jQuery( '<div class="tab" title="'+$s.data('title')+'">' + ( i+1 ) + '</div>' );
 		$tab.css({
 			height: (100.0/$scenes.length)+'%'
 		});

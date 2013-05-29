@@ -19,6 +19,10 @@ body {
 	line-height: 1.6;
 }
 
+.scene p {
+  margin-top: 0px;
+}
+
 #score-nav-tabs {
   position: fixed;
   right: 0;
@@ -29,7 +33,6 @@ body {
 }
 
 #score-nav-tabs > * {
-
   text-align: center;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -53,3 +56,36 @@ body {
 #score-nav-tabs > *:hover {
   background: #eee;
 }
+
+@media screen and (max-height: 350px) {
+
+  .scene {
+    padding-right: 32px;
+  }
+
+  #score-nav-tabs {
+    width: 15px;
+  }
+
+  #score-nav-tabs .tab {
+    color: transparent;
+  }
+}
+
+@media screen and (max-height: 450px) {
+
+  .scene {
+    font-size: 80%;
+  }
+
+  #score-nav-tabs .tab {
+    font-size: 75%;
+  }
+}
+
+/*@media screen and (max-height: 500px) {
+
+  #score-nav-tabs .tab {
+    font-size: 85%;
+  }
+}*/

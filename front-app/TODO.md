@@ -54,6 +54,7 @@ All tiles
 - slider: indicate where playing tile is in set
 - make sure content is visible
 - handle space visible if cells are smaller than total window ... "offgrid", how does Google maps handle that?
+- allow to pin information
 
 
 Vimeo tiles

@@ -60,13 +60,26 @@ var GridView = module.exports = Backbone.View.extend({
 			app.trigger('change:position','>>');
 		});
 
-		jQuery('#link-to-set-item').click(function(evt){
+		jQuery('#show-cell-infos-item').click(function(evt){
 			evt.preventDefault();
 			showCellInfo = !showCellInfo;
 			if ( showCellInfo ) {
 				jQuery('.cell').addClass('with-info');
 			} else {
 				jQuery('.cell').removeClass('with-info');
+			}
+		});
+
+		jQuery('#toggle-set-selector-item').click(function(evt){
+			var selectorVisible = setSelectorView.$el.css('display') === 'block';
+			var $item = jQuery(this);
+			var $link = jQuery('a',$item);
+			if ( selectorVisible ) {
+				$item.attr('title',$link.data('title-set'));
+				$link.attr('href','#set/' + ((currentSet && currentSet.path)||'overview'));
+			} else {
+				$item.attr('title',$link.data('title-selector'));
+				$link.attr('href','#sets');
 			}
 		});
 	},

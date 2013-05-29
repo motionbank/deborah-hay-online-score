@@ -107,8 +107,9 @@
 
 				<nav id="secondary-menu" class="right menu">
                     <ul>
-                        <li id="change-set-item"><a href="#sets" title="Click to change the current set"><img src="imgs/icons/change.png"/></a></li>
-                        <li id="link-to-set-item"><a href="#" title="Click to share this page"><img src="imgs/icons/link.png"/></a></li>
+                        <li id="toggle-set-selector-item"><a href="#sets" title="" data-title-set="Click to go back to the last set you looked at" data-title-selector="Click to show the set selector" ><img src="imgs/icons/change.png"/></a></li>
+                        <li id="show-cell-infos-item"><a href="#" title="Click to toggle cell infos"><img src="imgs/icons/info.png"/></a></li>
+                        <!-- <li id="link-to-set-item"><a href="#" title="Click to share this page"><img src="imgs/icons/link.png"/></a></li> -->
                         <!-- <li id="edit-set-item"><a href="#" title="Click to edit this set"><img src="imgs/icons/edit.png"/></a></li> -->
                     </ul>
                 </nav>
@@ -128,9 +129,7 @@
             <section id="grid-view-container"><div id="grid-view">
             </div></section>
             <section id="select-set-view" style="display:none">
-            	<h1>Sets curated by Motion Bank</h1>
-            	<div id="set-list">
-            	</div>
+            	<div id="set-list"></div>
             </section>
 
             <footer class="element-hidden">

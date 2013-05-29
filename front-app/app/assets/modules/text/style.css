@@ -4,18 +4,30 @@ body {
 
 	background-color: white;
   overflow: hidden;
+  padding: 0px; margin: 0px;
+}
+
+#title {
+  padding: 1em;
+  border-bottom: 1px solid #999;
+  font-size: 80%;
+  text-transform: uppercase;
 }
 
 #main {
-	position: absolute; 
-	left: 0px; 
-	right: 0px; 
-	bottom: 0px; 
-	top: 0px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
 }
 
+h3 { display: none; }
+.title { font-weight: bold }
+
 .scene {
-	padding: 18px 50px 18px 18px;
+	padding: 1em;
+  padding-right: 50px;
 	line-height: 1.6;
 }
 
@@ -24,10 +36,10 @@ body {
 }
 
 #score-nav-tabs {
-  position: fixed;
-  right: 0;
-  top: 0;
-  height: 100%;
+  position: absolute;
+  right: 0px;
+  top: 0em;
+  bottom: 0px;
   width: 30px;
   border-left: 1px solid #999;
 }

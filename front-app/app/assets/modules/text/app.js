@@ -56,6 +56,9 @@ jQuery(function(){
 	}
 
 	$scenes = jQuery('.scene');
+	$scoreTabsContainer = jQuery('#score-nav-tabs');
+	var tabsContainerHeight = $scoreTabsContainer.height();
+	var tabHeight = null;
   
 	$scenes.each(function (i,s) {
 		var $s = jQuery(s), marker = $s.data('title');

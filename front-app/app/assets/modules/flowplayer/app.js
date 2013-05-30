@@ -47,9 +47,9 @@ jQuery(function(){
 
 		for ( var i = 0; i < formats.length; i++ ) {
 			if ( formats[i].ext !== 'flash' ) {
-				$videoPlayer.append( '<source src="http://'+config.cloudFront.fileHost+'/piecemaker/'+videoFileName+formats[i].ext+'" type="'+formats[i].type+'">' );
+				$videoPlayer.append( '<source src="http://'+config.cloudFront.fileHost+'/dh/piecemaker/'+videoFileName+formats[i].ext+'" type="'+formats[i].type+'">' );
 			} else {
-				$videoPlayer.append( '<source src="mp4:piecemaker/'+videoFileName+'" type="'+formats[i].type+'">' );
+				$videoPlayer.append( '<source src="mp4:dh/piecemaker/'+videoFileName+'" type="'+formats[i].type+'">' );
 			}
 		}
 

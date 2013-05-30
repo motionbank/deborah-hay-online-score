@@ -103,6 +103,10 @@ var App = module.exports = (function(){
 			app.trigger('change:scene',currentScene);
 		});
 
+		app.on('change:recording',function(rec){
+			currentPerformance = rec;
+		});
+
 		messenger.on( 'get-config', function msgrGetScene (req,resp){
 			resp.send('set-config',config);
 		});

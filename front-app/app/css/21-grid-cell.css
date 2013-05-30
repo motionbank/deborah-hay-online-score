@@ -113,12 +113,12 @@
 	background-color: #e3e3e3;
 }
 
-#grid-view article.cell.type-visualization {
+/*#grid-view article.cell.type-visualization {
 	-webkit-background-size : contain;
 	-moz-background-size : contain;
 	-o-background-size : contain;
 	background-size : contain;
-}
+}*/
 
 #grid-view article.cell.type-title {
 	background-image: none;

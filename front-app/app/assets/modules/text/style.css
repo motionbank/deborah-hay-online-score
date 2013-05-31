@@ -27,8 +27,11 @@ h3 { display: none; }
 
 .scene {
 	padding: 1em;
-  padding-right: 50px;
 	line-height: 1.6;
+}
+
+#scenes {
+  margin-right: 50px;
 }
 
 .scene p {
@@ -71,8 +74,8 @@ h3 { display: none; }
 
 @media screen and (max-height: 350px) {
 
-  .scene {
-    padding-right: 32px;
+  #scenes {
+    margin-right: 32px;
   }
 
   #score-nav-tabs {
@@ -86,7 +89,7 @@ h3 { display: none; }
 
 @media screen and (max-height: 450px) {
 
-  .scene {
+  #scenes {
     font-size: 80%;
   }
 

@@ -22,8 +22,8 @@
 
 	<div class="poster-container">
 		<div class="poster-img-container">
-			<img data-base="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/" 
-			     src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/small/<%= cell.poster %>" />
+			<img data-base="http://<%= config.media.host %><%= config.media.basePath %>/cells/" 
+			     src="http://<%= config.media.host %><%= config.media.basePath %>/cells/poster/small/<%= cell.poster %>" />
 		</div>
 		<label for="title">Poster image</label>
 			<input type="file" name="poster" value="" />

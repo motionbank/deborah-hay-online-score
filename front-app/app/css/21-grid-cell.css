@@ -21,13 +21,13 @@
 #grid-view article.cell .info .description {
 }
 
-#grid-view article.cell .info-wrapper {
+/*#grid-view article.cell .info-wrapper {
 	position: absolute;
 	top: 0px; left: 0px;
 	right: 0px; bottom: 0px;
 	background-color: rgba(0,0,0,0.5);
 	display: none;
-}
+}*/
 
 #grid-view article.cell:hover .info-wrapper {
 	display: block;
@@ -110,15 +110,15 @@
 	-o-background-size : cover;
 	background-size : cover;
 
-	background-color: #e3e3e3;
+	background-color: #EDEDED; /* Use this for all cell content bg's as well! */
 }
 
-/*#grid-view article.cell.type-visualization {
+#grid-view article.cell.type-visualization {
 	-webkit-background-size : contain;
 	-moz-background-size : contain;
 	-o-background-size : contain;
 	background-size : contain;
-}*/
+}
 
 #grid-view article.cell.type-title {
 	background-image: none;

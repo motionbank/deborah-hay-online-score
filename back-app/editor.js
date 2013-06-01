@@ -16,7 +16,8 @@ var config		= require('./config/config'),
 	pathBase 	= '/admin',
 	viewOpts 	= {
 		title: '<3',
-		messages: []
+		messages: [],
+		config: config
 	},
 	noop 		= function(){},
 	idNumeric 	= noop,

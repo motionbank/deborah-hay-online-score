@@ -19,7 +19,7 @@
 		 data-id="<%= cell.id %>" 
 		 data-poster="<%= cell.poster || 'missing.jpg' %>" id="cell-<%= cell.id %>">
 		<div class="poster">
-			<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/small/<%= cell.poster %>"/>
+			<img src="http://<%= config.media.host %><%= config.media.basePath %>/cells/poster/small/<%= cell.poster %>"/>
 		</div>
 		<div class="title"><a href="/admin/cells/<%= cell.id %>"><%= cell.title %></a></div>
 		<div class="type"><%= cell.type %></div>

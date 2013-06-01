@@ -60,6 +60,11 @@ All tiles
 - cancel loading of images when scene is changed in between
 
 
+Viz cells
+==========================
+- visualizations: crop content to (content + padding) so viz can adjust best to "cover" mode
+
+
 Vimeo tiles
 ==========================
 - auto-playing, focus set-window on them

@@ -11,9 +11,9 @@
 		<br />
 
 		<div class="poster">
-			<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/full/<%= set.poster %>" style="max-height:300px" />
-			<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/medium/<%= set.poster %>" />
-			<img src="http://d35vpnmjdsiejq.cloudfront.net/dh/app/sets/poster/small/<%= set.poster %>" />
+			<img src="http://<%= config.media.host %><%= config.media.basePath %>/sets/poster/full/<%= set.poster %>" style="max-height:300px" />
+			<img src="http://<%= config.media.host %><%= config.media.basePath %>/sets/poster/medium/<%= set.poster %>" />
+			<img src="http://<%= config.media.host %><%= config.media.basePath %>/sets/poster/small/<%= set.poster %>" />
 		</div>
 		<br/>
 

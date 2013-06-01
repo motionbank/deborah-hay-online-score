@@ -47,6 +47,7 @@ General UX
 - animate switch set -> selector -> set
 - a global indicator that show where you are in the recordings / time / performer dimensions
 - favicon / apple icon / ...
+- check all title="" attribs .. language and accessibility
 
 
 All tiles

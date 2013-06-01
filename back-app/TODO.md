@@ -8,6 +8,7 @@ Layout editor
 - UNDO ?!
 - list view: see which items are already in set
 - select and remove multiple cells
+- dragging a cell away leaves old location still "tainted"
 [- switch the whole thing to use backbone.js ... jQuery().data() gets out of hand]
 	x remove columns / rows
 	  (empty right/bottom edges are removed, still needs update on page)

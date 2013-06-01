@@ -15,6 +15,7 @@ General content
 - final title? .. where does it go?
 - make about / team / ... a set linked to from logo?
 - generative logo
+- flowplayer font
 	x select default content / recording / scene when entering
 
 
@@ -55,6 +56,7 @@ All tiles
 - make sure content is visible
 - handle space visible if cells are smaller than total window ... "offgrid", how does Google maps handle that?
 - allow to pin information
+- cancel loading of images when scene is changed in between
 
 
 Vimeo tiles

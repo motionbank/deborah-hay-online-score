@@ -40,6 +40,7 @@ Cells
 - preview / test cells ad hoc
 - test paths (in fields) on S3 / Vimeo / webserver
 - allow for input field to become textarea to be able to enter longer texts
+- a "set info" cell that will just repeat the title / description of the set it's in
 	x upload previews directly to S3
 
 

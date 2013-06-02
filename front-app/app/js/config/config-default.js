@@ -6,7 +6,7 @@ module.exports = {
 	runningLocal : true,
 	cloudFront : {
 		baseUrl : '/dh/app',
-		fileHost : 'd35vpnmjdsiejq.cloudfront.net',
+		fileHost : 'motionbank-media.s3.amazonaws.com', // d35vpnmjdsiejq.cloudfront.net
 		streamer : 's12vlv7g59gljg.cloudfront.net'
 	},
 	pieceMaker : {

@@ -3,26 +3,28 @@
 	<head>
 		<meta charset="utf-8">
 		<title>TODO: Motion Bank - score text module</title>
+
 		<link src="../../stylesheets/app.css"></script>
 		<link href="style.css" rel="stylesheet" type="text/css"  />
-	</head>
-	<body>
-		<!-- TODO: redirect if not played withing score site -->
-		<noscript>TODO</noscript>
 
 		<!-- TODO: only load jQuery? -->
 		<script src="../../../../vendor/scripts/jquery-2.0.0.js"></script>
 		<script src="../../javascripts/vendor.js"></script>
 
 		<script src="app.js"></script>
-		<section id="main">
-		
-			<div id="title">Ros Warby insights</div>
-		
-			<div id="score-nav-tabs"></div>
 
-			<div id="scenes">
-
+	</head>
+	<body>
+		<!-- TODO: redirect if not played withing score site -->
+		<noscript>TODO</noscript>
+		
+		<table cellpadding="0" cellspacing="0" border="0">
+			<tr>
+				<td colspan="2" id="title-container">Ros Warby insights</td>
+			</tr>
+			<tr>
+				<td id="scenes-container">
+					<div id="scenes">
 				<div class="scene" data-title="off"></div>
 				<div class="scene" data-title="off"></div>
 				<div class="scene" data-title="off"></div>
@@ -151,6 +153,9 @@
 
 			</div>
 
-		</section>
+				</td>
+				<td id="tabs-container"><div id="score-nav-tabs"></div></td>
+			</tr>
+		</table>
 	</body>
 </html>

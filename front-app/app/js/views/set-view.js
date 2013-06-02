@@ -114,19 +114,16 @@ var GridView = module.exports = Backbone.View.extend({
 			return;
 		}
 
+		currentSet = set;
 		this.show();
 
 		this.deactivateAll();
 
-		currentSet = set;
 		this.updateGridDimensions();
 
 		views.CellView = views.CellView || require('js/views/cell-view');
 
 		this.$el.empty(); // TODO: more sane way of cleaning up?
-
-		$mainTitleLink.html( currentSet.title );
-		$mainTitleLink.attr( 'href', '#set/'+currentSet.path );
 
 		cellViews = {};
 		cellViewsArr = [];
@@ -250,6 +247,12 @@ var GridView = module.exports = Backbone.View.extend({
 	},
 
 	show : function () {
+
+		if ( currentSet ) {
+			$mainTitleLink.html( currentSet.title );
+			$mainTitleLink.attr( 'href', '#set/'+currentSet.path );
+		}
+
 		this.$elParent.show();
 		if ( cellData.cells && cellData.cells.length > (gridXVisible * gridYVisible) ) { // if returning to same as before
 			app.getSlider().show();

@@ -1,3 +1,4 @@
+
 Design fixes
 ==========================
 - flowplayer font
@@ -6,6 +7,22 @@ Design fixes
 - text cell: table?
 - flowplayer: loading, align to top
 - set overview page
+	X title does not change back when in set view previous set is clicked again (go back)
+
+
+Missing content
+==========================
+- final Amin animation & PM markers
+- Jeanine & Amin interview
+- dataptations --> Vimeo
+- recording setup
+- PieceMaker cell
+
+
+Missing sets
+==========================
+- team, imprint
+- help set
 
 
 Design to do
@@ -18,7 +35,7 @@ General content
 ==========================
 - make about / team / ... a set linked to from logo?
 - help page
-- overlays do not jump to f+g
+	X overlays do not jump to f+g (first marker on 00:00 ??)
 
 
 General UX

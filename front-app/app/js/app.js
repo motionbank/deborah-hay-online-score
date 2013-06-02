@@ -138,6 +138,8 @@ var App = module.exports = (function(){
 		- next in line (line-id)
 		*/
 
+		gridView = new (require('js/views/set-view'))( {}, app );
+
 		slider = new (require('js/slider'))( app );
 
 		slider.on('all',function(){
@@ -160,8 +162,6 @@ var App = module.exports = (function(){
 		router.on('route:selectset',function(set){
 			slider.hide();
 		});
-
-		gridView = new (require('js/views/set-view'))( {}, app );
 
 		initializer.add( function initAppApi (next){
 			jQuery.ajax({

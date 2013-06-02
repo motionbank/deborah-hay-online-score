@@ -4,9 +4,9 @@ Design fixes
 - flowplayer font
 - grid behind cell (no empty cells needed then)
 - cells: info, hover
-- text cell: table?
 - flowplayer: loading, align to top
 - set overview page
+	X text cell: table?
 	X title does not change back when in set view previous set is clicked again (go back)
 
 

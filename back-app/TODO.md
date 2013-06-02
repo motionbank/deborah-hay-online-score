@@ -43,6 +43,7 @@ Cells
 - allow for input field to become textarea to be able to enter longer texts
 - a "set info" cell that will just repeat the title / description of the set it's in
 - allow for choosing one poster image from uploaded images for cells that have image content mainly
+- recording cells do not show poster image
 	x upload previews directly to S3
 
 

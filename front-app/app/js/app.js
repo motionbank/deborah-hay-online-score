@@ -27,7 +27,7 @@ var App = module.exports = (function(){
 	var currentPerformance = ('D02T03,D04T03,D06T03'.split(',')[parseInt(Math.random()*3)]);
 	var currentSet = false;
 
-	var sets = {};
+	var sets = {}, setsById = {};
 
 	/*
 	 +	static private helpers
@@ -213,10 +213,11 @@ var App = module.exports = (function(){
 				url: 'http://' + config.apiHost + '/users/1/sets',
 				dataType: 'json',
 				success: function jqAjaxSuccessUserSets (userWithSets) {
-					sets = {};
+					sets = {}; setsById = {};
 					_.each(userWithSets.sets,function(set){
 						if ( !sets[set.path] ) {
 							sets[set.path] = set;
+							setsById['id-'+set.id] = set;
 						} else {
 							throw( 'Duplicate path!', set.path, set.id, sets[set.path].id );
 						}
@@ -244,8 +245,11 @@ var App = module.exports = (function(){
 		getPerformance : function () {
 			return currentPerformance;
 		},
-		getSet : function (setUrl) {
+		getSet : function ( setUrl ) {
 			return sets[setUrl];
+		},
+		getSetById : function ( setId ) {
+			return setsById['id-'+setId];
 		},
 		getSets : function () {
 			return sets;
@@ -258,6 +262,9 @@ var App = module.exports = (function(){
 		},
 		sizeChanged : function () {
 			gridView.sizeChanged();
+		},
+		navigate : function () {
+			router.navigate.apply( router, arguments ); // pass on
 		}
 	}
 	return App;

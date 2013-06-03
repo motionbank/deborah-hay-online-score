@@ -2,6 +2,10 @@
 General
 =================
 
+***
+	CORS exception in app
+***
+
 
 Layout editor
 ==================

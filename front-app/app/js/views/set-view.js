@@ -80,7 +80,7 @@ var GridView = module.exports = Backbone.View.extend({
 				$link.attr('href','#set/' + ((currentSet && currentSet.path)||'overview'));
 			} else {
 				$item.attr('title',$link.data('title-selector'));
-				$link.attr('href','#sets');
+				$link.attr('href','#set/sets');
 			}
 		});
 	},

@@ -64,7 +64,8 @@ table {
 #score-nav-tabs,
 #tabs-container {
   position: relative;
-  width: 50px;
+  font-size: 90%;
+  width: 25px;
 }
 
 #score-nav-tabs {
@@ -120,6 +121,11 @@ table {
 
   #scenes {
     font-size: 80%;
+  }
+
+  #tabs-container,
+  #score-nav-tabs {
+    width: 20px;
   }
 
   #score-nav-tabs .tab {

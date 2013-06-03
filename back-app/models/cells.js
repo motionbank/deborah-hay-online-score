@@ -1,7 +1,7 @@
 module.exports = function (db, models) {
 
-	var cellTypes = ['text','title','recording','visualization',
-					 'media','context','adaptation','resources'];
+	var cellTypes = ['text', 'title', 'recording', 'visualization',
+					 'media', 'context', 'adaptation', 'resources', 'set-link'];
 
 	var model = db.define('cells',{
 		type: {

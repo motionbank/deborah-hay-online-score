@@ -22,7 +22,7 @@
 
 #cover {
 	float: left;
-	padding-top: 15%;
+	padding-top: 15em;
 	padding-left: 15%;
 
 	color: white;
@@ -30,9 +30,9 @@
 }
 
 #cover h1 {
-	font-size: 240%;
+	font-size: 400%;
 	letter-spacing: 0.15em;
-	font-weight: 100;
+	font-weight: 300;
 }
 
 #cover p {
@@ -40,4 +40,30 @@
 	letter-spacing: 0.15em;
 	line-height: 1.8em;
 	margin-top: 1.8em;
+}
+
+@media only screen and (max-width : 1024px) {
+	#cover {
+		padding-top: 10em;
+		padding-left: 9em;
+	}
+	#cover h1 {
+		font-size: 270%;
+	}
+	#cover p {
+		font-size: 90%;
+	}
+}
+
+@media only screen and (max-width : 480px) {
+	#cover {
+		padding-top: 7em;
+		padding-left: 6em;
+	}
+	#cover h1 {
+		font-size: 200%;
+	}
+	#cover p {
+		font-size: 70%;
+	}
 }

@@ -12,6 +12,7 @@ Layout editor
 - UNDO ?!
 - list view: see which items are already in set
 - select and remove multiple cells
+- connection settings could offer already available attributes per type "set-id" / "title" / ..
 - dragging a cell away leaves old location still "tainted"
 [- switch the whole thing to use backbone.js ... jQuery().data() gets out of hand]
 	x remove columns / rows

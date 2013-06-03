@@ -9,12 +9,15 @@
 }
 
 #grid-view article.cell h1.title {
+	margin-bottom: 0px;
+	overflow: hidden;
+}
+
+#grid-view article.cell h1.title {
 	text-transform: uppercase;
 	font-size: 1.4em;
 	font-weight: 300;
 	letter-spacing: 0.1em;
-	margin-bottom: 0.5em;
-	overflow: hidden;
 	line-height: 1.3;
 }
 
@@ -34,6 +37,9 @@
 }
 
 #grid-view article.cell .info {
+
+	font-size: 90%;
+	
 	position: absolute;
 	top: 3em; left: 3em;
 	right: 3em; bottom: 3em;
@@ -179,6 +185,13 @@
 	color: black;
 }
 
+
+#grid-view article.cell.type-recording:hover,
+#grid-view article.cell.type-context:hover,
+#grid-view article.cell.type-set-link:hover {
+	cursor: pointer;
+}
+
 #grid-view article.cell.type-set-link .info,
 #grid-view article.cell.with-info .info {
 	display: block;
@@ -192,10 +205,6 @@
 #grid-view article.cell:hover .info .description {
 	display: block;
 	padding-top: 0.5em;
-}
-
-#grid-view article.cell h1.title {
-	margin-bottom: 0px;
 }
 
 #grid-view .cell {

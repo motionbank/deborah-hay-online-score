@@ -3,6 +3,7 @@
 
 	position: relative;
 
+	display: block;
 	height: 58px;
 
 	background-color: rgb(238, 238, 238); /* make this the stop color of the start page gradient bottom */
@@ -80,19 +81,4 @@
 #secondary-menu {
 	float: right;
 	padding-right: 18px;
-}
-
-#slider {
-	position: absolute;
-	bottom: 0px;
-}
-
-#slider a {
-	display: block;
-	background-color: rgba(0,0,0,0.1);
-	width: 100px;
-	height: 8px;
-}
-#slider a:hover {
-	background-color: rgba(0,0,0,0.2);
 }

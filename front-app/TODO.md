@@ -1,22 +1,26 @@
 
 Design fixes
 ==========================
-- flowplayer font
-- grid behind cell (no empty cells needed then)
 - cells: info, hover
 - flowplayer: loading, align to top
 - set overview page
+- slider sticky at top on start
+	* grid behind cell (no empty cells needed then)
+	* handle space visible if cells are smaller than total window 
+		... "offgrid", how does Google maps handle that?
+		half way done, needs fixing
+	X flowplayer font
 	X text cell: table?
 	X title does not change back when in set view previous set is clicked again (go back)
 
 
 Missing content
 ==========================
-- final Amin animation & PM markers
-- Jeanine & Amin interview
-- dataptations --> Vimeo
-- recording setup
-- PieceMaker cell
+- final Amin animation & PM markers (S3, PM)
+- Jeanine & Amin interview (Vimeo)
+- dataptations (Vimeo)
+- recording setup (html cell / new cell type?)
+- PieceMaker cell (html cell)
 
 
 Missing sets
@@ -31,30 +35,20 @@ Design to do
 - help icon
 
 
-General content
-==========================
-- make about / team / ... a set linked to from logo?
-- help page
-	X overlays do not jump to f+g (first marker on 00:00 ??)
-
-
 General UX
 ==========================
 - show keyboard shortcuts (-> help page?)
-- keyboard shortcuts jump 1 column too far
-- animate switch set -> selector -> set
-- a global indicator that show where you are in the recordings / time / performer dimensions
+- ?? keyboard shortcuts jump 1 column too far
 - favicon / apple icon / ...
 - check all title="" attribs .. language and accessibility
 - missing: dim cells that are not "in range"
+- animate switch set -> selector -> set
 
 
 All tiles
 ==========================
 - indicate which "is playing"
-- slider: indicate where playing tile is in set?
 - make sure playing content is visible
-- handle space visible if cells are smaller than total window ... "offgrid", how does Google maps handle that?
 - allow to pin information overlay
 - cancel loading of images when scene is changed in between
 
@@ -101,7 +95,9 @@ Mobile devices
 
 General UX
 ==========================
+- slider: indicate where playing tile is in set?
 - show left / right as transition
+- a global indicator that show where you are in the recordings / time / performer dimensions
 
 
 Content

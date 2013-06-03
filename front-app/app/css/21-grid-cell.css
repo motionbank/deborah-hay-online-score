@@ -193,10 +193,6 @@
 	background-color: white;
 }
 
-#grid-view {
-	background-color: #eeeeee;
-}
-
 #grid-view article.cell.type-text.with-info .info,
 #grid-view article.cell.type-text .info {
 	display: none;

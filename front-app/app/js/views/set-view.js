@@ -12,7 +12,7 @@ var cellWidth, cellHeight;
 var lastRatio = 0.0;
 
 var app = null, config = null, setSelectorView = null;
-$mainTitleLink = null;
+$mainTitleLink = null, $backgroundGrid = null;
 
 var clickedCellCid = null;
 var showCellInfo = false;
@@ -28,6 +28,7 @@ var GridView = module.exports = Backbone.View.extend({
 		config = app.getConfig();
 
 		$mainTitleLink = jQuery('#main-title a');
+		$backgroundGrid = jQuery('#background-grid');
 
 		this.$elParent = this.$el.parent();
 		
@@ -228,6 +229,29 @@ var GridView = module.exports = Backbone.View.extend({
 
 		cellWidth = cw;
 		cellHeight = ch;
+
+		$backgroundGrid.empty();
+		var rows = [];
+		for ( var iy = 0; iy < gridYVisible; iy++ ) {
+			var cols = [];
+			for ( var ix = 0; ix < gridXVisible; ix++ ) {
+				var col = jQuery('<td></td>');
+				col.css({
+					width: (100.0/gridXVisible)+'%'
+				});
+				if ( ix == gridXVisible-1 ) {
+					col.addClass('lastcol');
+				}
+				cols.push(col);
+			}
+			var row = jQuery('<tr></tr>');
+			if ( iy == gridYVisible-1 ) {
+				row.addClass('lastrow');
+			}
+			row.append(cols);
+			rows.push( row );
+		}
+		$backgroundGrid.append(rows);
 
 		this.checkSlider();
 	},

@@ -1,38 +1,44 @@
 #grid-view-container {
-	margin-top: -58px;
-	padding-top: 58px;
+
+	background-color: #ededed;
+
 	height: 100%;
 	width: 100%;
-
-	display: none;
 }
 
 #grid-view {
+
 	position: relative;
+
 	width: 100%;
 	height: 100%;
-
-	background-color: #eeeeee;
 }
 
 #background-grid {
-	display: none;
+
 }
 
 #background-grid {
+
 	float: left;
 	width: 100%;
 	height: 100%;
+
+	border-collapse: separate;
 }
 
 #background-grid td {
-	border-right: 1px solid #888;
-	border-bottom: 1px solid #888;
-	background-color: #eeeeee;
+
+	border-right: 1px solid #888888;
+	border-bottom: 1px solid #888888;
 }
 
-#background-grid .lastrow td,
-#background-grid td.lastcol {
-	border-right: 0px solid transparent;
+#background-grid .lastrow td {
+
 	border-bottom: 0px solid transparent;
+}
+
+#background-grid td.lastcol {
+
+	border-right: 0px solid transparent;
 }

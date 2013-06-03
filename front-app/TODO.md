@@ -4,7 +4,13 @@ Design fixes
 - cells: info, hover
 - flowplayer: loading, align to top
 - set overview page
-- slider sticky at top on start
+- slider color for dark bg
+- kick start app too direct (animation)
+- app start animation as blocks
+- update icons for dark bg
+- cover text positioning
+- text cell on FF not working
+- grid table on Cr/Sf jumpy
 	* grid behind cell (no empty cells needed then)
 	* handle space visible if cells are smaller than total window 
 		... "offgrid", how does Google maps handle that?
@@ -108,5 +114,11 @@ General UX
 
 
 Content
-====================================
+==========================
 - generative logo
+
+
+Cell ideas
+==========================
+- hover one cell highlights related other cells (to emphasize relations)
+

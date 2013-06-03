@@ -73,7 +73,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
     
     <!-- TODO: check if all these variants are really needed? -->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,700' rel='stylesheet' type='text/css'>
 
 </head>
 
@@ -83,6 +83,18 @@
     <script src="javascripts/app.js" defer onload="require('init');"></script>
     
     <div id="background-image"></div>
+    <!-- TODO: check when this is run in regard to loading / drawing / ... cycles -->
+    <script type="text/javascript">
+    	(function(){
+    		var bgImg = document.getElementById("background-image");
+    		bgImg.setAttribute('style','background-image:url('+
+    		'http://motionbank-media.s3.amazonaws.com/dh/app/imgs/backs/background-'+
+    		parseInt(Math.random()*6+1)+
+    		'.jpg'+
+    		')')
+    	})();
+    </script>
+
     <div id="logo"><a href="http://motionbank.org/"><img src="imgs/logo-white.png"/></a></div>
     
     <nostript>
@@ -95,7 +107,7 @@
 
             <header id="main-menu-container">
 
-            	<div class="contents">
+            	<div class="content">
 
 					<nav id="secondary-menu" class="right menu">
 	                    <ul>
@@ -122,15 +134,28 @@
 	            </div>
 
             </header>
+    
+    		<div id="cover">
 
-            <section id="grid-view-container">
-            	<table collspacing="0" cellspacing="0" border="0" id="background-grid"></table>
-            	<div id="grid-view"></div>
-            </section>
+    			<h1>USING THE SKY</h1>
+    			<p>An exploration of Deborah Hay's solo <br/>
+    			No Time To Fly by Motion Bank</p>
+    			<p><a href="#set/overview">Enter the pre-release (beta 1)</a></p>
 
-            <section id="select-set-view" style="display:none">
-            	<div id="set-list"></div>
-            </section>
+    		</div>
+
+            <div id="content" style="display:none">
+
+	            <section id="grid-view-container">
+	            	<table collspacing="0" cellspacing="0" border="0" id="background-grid"></table>
+	            	<div id="grid-view"></div>
+	            </section>
+
+	            <section id="select-set-view" style="display:none">
+	            	<div id="set-list"></div>
+	            </section>
+
+        	</div>
 
             <footer class="element-hidden">
                 <!-- TODO: inprint, copyrights, sitemap, partners & sponsors, ... -->

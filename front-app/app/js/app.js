@@ -146,13 +146,58 @@ var App = module.exports = (function(){
 			app.trigger.apply(app,arguments);
 		});
 
+		var startApp = function ( next ) {
+
+			if ( appStarted ) return;
+			
+			var $menuContainer = jQuery('#main-menu-container');
+
+			var dur = 1200;
+
+			jQuery( '#content' ).
+				css({
+					opacity: 0
+				}).
+				show().
+				animate({
+					opacity: 1
+				},{
+					duration: dur, 
+					query: false,
+					complete: function () {
+						setTimeout(function(){
+							jQuery( '#main-title a' ).html('...');
+							jQuery( '.content', $menuContainer ).show();
+							next();
+						}, dur/2);
+					}
+				});
+
+			jQuery( '#cover' ).
+				animate({
+					opacity: 0
+				},{
+					duration: (2*dur)/3, 
+					query: false,
+					complete : function () {
+						jQuery( this ).hide();
+					}
+				});
+
+			appStarted = true;
+		};
+
 		router = new (require('js/router'))();
 
 		router.on('all',function(){
 			if ( !appStarted ) {
-				app.startApp();
+				var cb = (function(app,args){return function () {
+					app.trigger.apply( app, args );
+				}})(app, arguments);
+				startApp( cb );
+			} else {
+				app.trigger.apply(app,arguments);
 			}
- 			app.trigger.apply(app,arguments);
 		});
 
 		router.on('route:changeset',function(set){
@@ -213,41 +258,6 @@ var App = module.exports = (function(){
 		},
 		sizeChanged : function () {
 			gridView.sizeChanged();
-		},
-		startApp : function () {
-
-			if ( appStarted ) return;
-			
-			// slides away the start screen ...
-
-			var $toolContainer = jQuery('#tool-container');
-			var $logo = jQuery('#logo');
-
-			var tcHeight = $toolContainer.outerHeight();
-			var dur = 550;
-
-			$toolContainer.animate({
-				marginTop: (-tcHeight)+'px'
-			},{
-				duration: dur, query: false,
-				complete: function enterAppAnimateSlideComplete (){
-					// setTimeout(function enterAppAnimateSlider (){
-					// 	$mainMenuSliderLink.animate({height:'8px'},{duration:100});
-					// },200);
-					$toolContainer.hide();
-				}
-			});
-
-			jQuery('img',$logo).animate({
-				opacity: '0'
-			},{
-				duration: dur, query: false,
-				start: function enterAppAnimateLogoStart () {
-					$logo.css({backgroundImage:'url(imgs/logo-dark.png)'});
-				}
-			});
-
-			appStarted = true;
 		}
 	}
 	return App;

@@ -174,31 +174,48 @@ var GridView = module.exports = Backbone.View.extend({
 		var xFrom = Math.round( lastRatio * (gridWidth-gridXVisible) );
 		var cw = 100.0/gridXVisible;
 		var ch = 100.0/gridYVisible;
+		var absCw = (1.0*w)/gridXVisible,
+			absCh = (1.0*h)/gridYVisible;
 
 		_.each( cellViewsArr, function(cv, i){ 
+
 			var cellDim = cv.cell.get('extra');
+
+			cv.$el.removeClass('lastcol').removeClass('lastrow');
+
 			// ... not too far left or right
 			if ( !( (cellDim.x + (cellDim.width-1)) < xFrom ||
 					 cellDim.x > xFrom+gridXVisible ) 
 				) {
 				
+				var left  = cw * (cellDim.x - xFrom);
+				var width = cw *  cellDim.width;
+
 				// show, set position and size in % to make responsive
 				cv.show();
 				cv.$el.css({
 					position: 'absolute',
-					left: 	(cw*(cellDim.x-xFrom))+'%',
+					left: 	left+'%',
 					top: 	(ch*cellDim.y)+'%',
-					width: 	(cw*cellDim.width)+'%',
+					width: 	width+'%',
 					height: (ch*cellDim.height)+'%'
 				});
 
 				// add media-query style classes to cells
 				cv.$el.attr( 'class', cv.$el.attr('class').replace(/cell-(width|height)-[0-9]+/ig,'') );
-				cv.$el.addClass( 'cell-width-'+ (parseInt(((w/gridXVisible)*cellDim.width) /50)*50) ).
-					   addClass( 'cell-height-'+(parseInt(((h/gridYVisible)*cellDim.height)/50)*50) );
+				cv.$el.addClass( 'cell-width-'+ (parseInt((absCw*cellDim.width) /50)*50) ).
+					   addClass( 'cell-height-'+(parseInt((absCh*cellDim.height)/50)*50) );
+
+				if ( (cellDim.x-xFrom) + cellDim.width >= gridXVisible ) {
+					cv.$el.addClass('lastcol');
+				}
+				if ( cellDim.y+cellDim.height >= gridYVisible ) {
+					cv.$el.addClass('lastrow');
+				}
 			} else {
 				cv.hide();
 			}
+
 			if ( showCellInfo ) {
 				cv.$el.addClass('with-info');
 			} else {

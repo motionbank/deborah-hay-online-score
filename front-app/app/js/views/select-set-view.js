@@ -47,6 +47,7 @@ var SelectSetView = module.exports = Backbone.View.extend({
 	},
 
 	show : function () {
+		
 		if ( !rendered ) {
 			this.render();
 		}

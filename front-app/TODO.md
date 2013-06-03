@@ -35,6 +35,13 @@ Design to do
 - help icon
 
 
+SEO / Tracking
+==========================
+- implement SPA analytics .. (backbone plugin?)
+- add Google Analytics
+- sitemap?
+
+
 General UX
 ==========================
 - show keyboard shortcuts (-> help page?)

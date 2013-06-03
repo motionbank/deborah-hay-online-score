@@ -1,12 +1,10 @@
 <!doctype html>
-
 <!--[if lt IE 7 ]> <html class="ie ie6 ie-lt10 ie-lt9 ie-lt8 ie-lt7 no-js" lang="en"> <![endif]-->
 <!--[if IE 7 ]>    <html class="ie ie7 ie-lt10 ie-lt9 ie-lt8 no-js" lang="en"> <![endif]-->
 <!--[if IE 8 ]>    <html class="ie ie8 ie-lt10 ie-lt9 no-js" lang="en"> <![endif]-->
 <!--[if IE 9 ]>    <html class="ie ie9 ie-lt10 no-js" lang="en"> <![endif]-->
 <!--[if gt IE 9]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <!-- the "no-js" class is for Modernizr. --> 
-
 <head id="scores-motionbank-org" data-template-set="html5-reset"><!-- https://github.com/murtaugh/HTML5-Reset -->
 
 	<meta charset="utf-8">
@@ -14,7 +12,7 @@
 	<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	
-	<title>TODO: title? Motion Bank - Deborah Hay - No Time To Fly</title>
+	<!-- TODO --><title>USING THE SKY - An exploration of Deborah Hay's solo No Time To Fly by Motion Bank</title>
 	
 	<meta name="title" content="TODO" />
 	<meta name="description" content="TODO" />
@@ -84,6 +82,7 @@
     <script src="javascripts/vendor.js" defer></script>
     <script src="javascripts/app.js" defer onload="require('init');"></script>
     
+    <div id="background-image"></div>
     <div id="logo"><a href="http://motionbank.org/"><img src="imgs/logo-white.png"/></a></div>
     
     <nostript>
@@ -91,38 +90,36 @@
     </nostript>
 
     <div id="main-wrapper">
-        
-        <div id="tool-container">
-            <section id="tool">
-            	<h1>USING THE SKY</h1>
-            	<p>
-            		<a href="#set/overview" id="link-enter-app" title="Enter the online score to Deborah Hay's solo No Time To Fly">&darr;</a>
-            	</p>
-            </section>
-        </div>
 
-        <section id="app">
+		<section id="app">
 
             <header id="main-menu-container">
 
-				<nav id="secondary-menu" class="right menu">
-                    <ul>
-                        <li id="toggle-set-selector-item"><a href="#sets" title="" data-title-set="Click to go back to the last set you looked at" data-title-selector="Click to show the set selector" ><img src="imgs/icons/change.png"/></a></li>
-                        <li id="show-cell-infos-item"><a href="#" title="Click to toggle cell infos"><img src="imgs/icons/info.png"/></a></li>
-                        <!-- <li id="link-to-set-item"><a href="#" title="Click to share this page"><img src="imgs/icons/link.png"/></a></li> -->
-                        <!-- <li id="edit-set-item"><a href="#" title="Click to edit this set"><img src="imgs/icons/edit.png"/></a></li> -->
-                    </ul>
-                </nav>
+            	<div class="contents">
 
-                <h1 id="main-title"><a href="#"></a></h1>
+					<nav id="secondary-menu" class="right menu">
+	                    <ul>
+	                        <li id="toggle-set-selector-item"><a href="#sets" title="" data-title-set="Click to go back to the last set you looked at" data-title-selector="Click to show the set selector" ><img src="imgs/icons/change.png"/></a></li>
+	                        <li id="show-cell-infos-item"><a href="#" title="Click to toggle cell infos"><img src="imgs/icons/info.png"/></a></li>
+	                        <!-- <li id="link-to-set-item"><a href="#" title="Click to share this page"><img src="imgs/icons/link.png"/></a></li> -->
+	                        <!-- <li id="edit-set-item"><a href="#" title="Click to edit this set"><img src="imgs/icons/edit.png"/></a></li> -->
+	                    </ul>
+	                </nav>
 
-                <nav id="main-menu" class="menu element-hidden">
-                    <ul>
-                        <li><a href="#">TODO: make an accessible / SEO menu available here</a></li>
-                    </ul>
-                </nav>
+	                <h1 id="main-title">
+	                	<a href="#">USING THE SKY - An exploration of Deborah Hay's solo No Time To Fly by Motion Bank</a>
+	                </h1>
 
-                <div id="slider"><a href="#" title="Change to scroll tiles"></a></div>
+	                <nav id="main-menu" class="menu element-hidden">
+	                    <ul>
+	                        <li><a href="http://motionbank.org/">Motion Bank main website</a></li>
+	                    	<!-- TODO: make an accessible / SEO menu available here -->
+	                    </ul>
+	                </nav>
+
+	                <div id="slider"><a href="#" title="Drag me! ... to navigate the current set"></a></div>
+
+	            </div>
 
             </header>
 
@@ -130,6 +127,7 @@
             	<table collspacing="0" cellspacing="0" border="0" id="background-grid"></table>
             	<div id="grid-view"></div>
             </section>
+
             <section id="select-set-view" style="display:none">
             	<div id="set-list"></div>
             </section>
@@ -139,6 +137,7 @@
             </footer>
 
         </section>
+
     </div>
 
 <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.

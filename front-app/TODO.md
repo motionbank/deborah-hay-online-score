@@ -3,18 +3,13 @@ Design fixes
 ==========================
 - cells: info, hover
 - flowplayer: loading, align to top
-- set overview page
-- slider color for dark bg
-- kick start app too direct (animation)
-- app start animation as blocks
-- update icons for dark bg
-- cover text positioning
 - text cell on FF not working
-- grid table on Cr/Sf jumpy
-	* grid behind cell (no empty cells needed then)
-	* handle space visible if cells are smaller than total window 
-		... "offgrid", how does Google maps handle that?
-		half way done, needs fixing
+* slider color for dark bg
+* cover text positioning
+* grid table on Cr/Sf jumpy
+* grid behind cell (no empty cells needed then)
+	X update icons for dark bg
+	X set overview page
 	X flowplayer font
 	X text cell: table?
 	X title does not change back when in set view previous set is clicked again (go back)
@@ -22,11 +17,11 @@ Design fixes
 
 Missing content
 ==========================
-- final Amin animation & PM markers (S3, PM)
-- Jeanine & Amin interview (Vimeo)
+- final Amin animation & PM markers & poster frames (S3, PM)
 - dataptations (Vimeo)
 - recording setup (html cell / new cell type?)
 - PieceMaker cell (html cell)
+* Jeanine & Amin interview (Vimeo)
 
 
 Missing sets
@@ -37,8 +32,8 @@ Missing sets
 
 Design to do
 ==========================
-- start page, logo position, background, info?
 - help icon
+	X start page, logo position, background, info?
 
 
 SEO / Tracking
@@ -51,11 +46,11 @@ SEO / Tracking
 General UX
 ==========================
 - show keyboard shortcuts (-> help page?)
-- ?? keyboard shortcuts jump 1 column too far
 - favicon / apple icon / ...
 - check all title="" attribs .. language and accessibility
 - missing: dim cells that are not "in range"
-- animate switch set -> selector -> set
+	?? keyboard shortcuts jump 1 column too far
+	X animate switch set -> selector -> set
 
 
 All tiles
@@ -81,11 +76,12 @@ Flowplayer tiles
 - buy to get rid of logo ($95, one domain): http://flowplayer.org/download/
 - fetch current scene on deactivate for poster image
 - show loading preview
-- ?? HTML5 video not scaled right
-- ?? sometimes the scene does not get loaded (if it is a late scene) ... or it does change twice, just after it loaded?
 - full screen button missing
 - store volume settings globally?
-- ?? ignore own messages
+- css animation of timeline is wonky
+?? HTML5 video not scaled right
+?? sometimes the scene does not get loaded (if it is a late scene) ... or it does change twice, just after it loaded?
+?? ignore own messages
 
 
 Content
@@ -93,6 +89,9 @@ Content
 - optimize content for cell sizes
 - compress static content
 - missing.jpg needs replacement (per cell type? -> recording empty studio)
+
+
+---------------------------------------- These are for later ... much later --------------------------------
 
 
 Mobile devices
@@ -104,13 +103,18 @@ Mobile devices
 - MoBa logo pixelated on Nx7
 
 
----------------------------------------- These are for later ... much later --------------------------------
-
 General UX
 ==========================
 - slider: indicate where playing tile is in set?
 - show left / right as transition
 - a global indicator that show where you are in the recordings / time / performer dimensions
+
+
+Design and such
+==========================
+- kick start app too direct (animation)
+- app start animation as blocks
+- handle space visible if cells are smaller than total window ... "offgrid", how does Google maps handle that? .. add tools?
 
 
 Content

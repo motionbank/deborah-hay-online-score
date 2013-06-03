@@ -47,9 +47,12 @@ jQuery(function(){
 
 		for ( var i = 0; i < formats.length; i++ ) {
 			if ( formats[i].ext !== 'flash' ) {
-				$videoPlayer.append( '<source src="http://'+config.cloudFront.fileHost+'/dh/piecemaker/'+videoFileName+formats[i].ext+'" type="'+formats[i].type+'">' );
+				$videoPlayer.append( '<source src="http://'+config.cloudFront.fileHost+
+										'/dh/piecemaker/'+videoFileName+formats[i].ext+'" '+
+										'type="'+formats[i].type+'">' );
 			} else {
-				$videoPlayer.append( '<source src="mp4:dh/piecemaker/'+videoFileName+'" type="'+formats[i].type+'">' );
+				$videoPlayer.append( '<source src="mp4:dh/piecemaker/'+videoFileName+'" '+
+										'type="'+formats[i].type+'">' );
 			}
 		}
 
@@ -95,6 +98,10 @@ jQuery(function(){
 					}
 				}
 			});
+
+			fPlayer.bind('finish',function(evt){
+				messenger.send( 'flowplayer:finish', null, parentWindow );
+			});
 		});
 
 		var $videoContainer = jQuery('#video-container').flowplayer(opts);
@@ -120,7 +127,8 @@ jQuery(function(){
 			}
 			jQuery('#video-container').css({
 				left: ((dw-vw) / 2) + 'px',
-				top: ((dh-vh) / 2) + 'px',
+					//top: ((dh-vh) / 2) + 'px',
+				top: '0px',
 				width: vw + 'px',
 				height: vh + 'px'
 			});
@@ -143,7 +151,8 @@ jQuery(function(){
 				for ( var i = 0; i < sceneEvents.length; i++ ) {
 					if ( sceneEvents[i].title === newScene ) {
 						// if ( fPlayer.seekable ) {
-							fPlayer.seek( (sceneEvents[i].happened_at_float - currentVideo.happened_at_float) / 1000.0, function () {
+							fPlayer.seek( (sceneEvents[i].happened_at_float - currentVideo.happened_at_float) / 1000.0, 
+										  function () {
 								currentScene = sceneEvents[i];
 								fPlayer.resume();
 							});

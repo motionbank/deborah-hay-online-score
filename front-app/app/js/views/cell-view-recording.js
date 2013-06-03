@@ -29,6 +29,13 @@ var CellViewRecording = module.exports = require('js/views/cell-view').extend({
 
 			messenger = app.getPostMessenger();
 			messenger.send( 'connect', config, self.iFrameWindow );
+
+			messenger.on( 'flowplayer:finish', function(req, resp){
+				app.trigger( 'grid:activate-next-by-attr', 
+							 self.cell.get('play-next-key'), 
+							 self.cell.get('play-next-value') );
+				self.deactivate();
+			});
 		});
 
 		this.$container.empty();

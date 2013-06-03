@@ -208,6 +208,7 @@ var App = module.exports = (function(){
 			slider.hide();
 		});
 
+		var apiRetrys = 0;
 		initializer.add( function initAppApi (next){
 			jQuery.ajax({
 				url: 'http://' + config.apiHost + '/users/1/sets',
@@ -225,7 +226,14 @@ var App = module.exports = (function(){
 					next();
 				},
 				error:function (err) {
-					throw(err);
+					if ( apiRetrys < 3 ) {
+						setTimeout( function initAppApiRetry () {
+							initAppApi( next );
+						}, 200 );
+						apiRetrys++;
+					} else {
+						throw(err);
+					}
 				}
 			});
 		}, this);

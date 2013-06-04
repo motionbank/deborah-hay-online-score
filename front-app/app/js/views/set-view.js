@@ -157,6 +157,7 @@ var GridView = module.exports = Backbone.View.extend({
 			} catch (e) { /* ignore */ }
 
 			if ( opts.title ) {
+				opts['title_org'] = opts.title;
 				opts.title = opts.title.replace(/[\s]*---.+$/,'');
 			}
 

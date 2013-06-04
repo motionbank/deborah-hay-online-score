@@ -101,17 +101,31 @@ var GridView = module.exports = Backbone.View.extend({
 
 		if ( !set.cells ) {
 			var self = this;
-			jQuery.ajax({
-				url: 'http://' + config.apiHost + '/sets/' + set.id,
-				dataType:'json',
-				success:function(data){
-					set.cells = data.cells;
-					self.loadSet( set.path );
-				},
-				error:function(err){
-					throw(err);
+			(function(){
+				var apiRetrys = 0;
+				var callApi = function () {
+					jQuery.ajax({
+						url: 'http://' + config.apiHost + '/sets/' + set.id,
+						dataType:'json',
+						success:function(data){
+							set.cells = data.cells;
+							self.loadSet( set.path );
+						},
+						error:function(err){
+							if ( apiRetrys < 5 ) {
+								setTimeout( function initAppApiRetry () {
+									console.log( 'Retry (@2) ' + apiRetrys );
+									callApi( next );
+								}, 200 + (apiRetrys * 200) );
+								apiRetrys++;
+							} else {
+								throw(err);
+							}
+						}
+					});
 				}
-			});
+				callApi();
+			})();
 			return;
 		}
 

@@ -226,10 +226,11 @@ var App = module.exports = (function(){
 					next();
 				},
 				error:function (err) {
-					if ( apiRetrys < 3 ) {
+					if ( apiRetrys < 5 ) {
 						setTimeout( function initAppApiRetry () {
+							console.log( 'Retry (@1) ' + apiRetrys );
 							initAppApi( next );
-						}, 200 );
+						}, 200 + (apiRetrys * 200) );
 						apiRetrys++;
 					} else {
 						throw(err);

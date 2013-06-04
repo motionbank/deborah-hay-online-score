@@ -1,4 +1,9 @@
 
+General
+==========================
+- REMOVE console.log's
+
+
 Design fixes
 ==========================
 - cells: info, hover

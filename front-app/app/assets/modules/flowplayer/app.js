@@ -65,7 +65,8 @@ jQuery(function(){
 			// 	{ type: 'flash', src: 'mp4:'+videoFolder,		  		   suffix: 'mp4'  }
 			// ],
 			rtmp: "rtmp://"+config.cloudFront.streamer+"/cfx/st",
-	  		swf: "http://releases.flowplayer.org/5.3.2/flowplayer.swf",
+			//swf: "http://releases.flowplayer.org/5.3.2/flowplayer.swf",
+	  		swf: "flowplayer-5.3.2/flowplayer.swf",
 	  		engine: 'flash'
 		};
 		//console.log( opts );
@@ -133,6 +134,8 @@ jQuery(function(){
 				height: vh + 'px'
 			});
 		}
+
+		setPlayerSize();
 
 		var videoLoaded = function ( video ) {
 			currentVideo = video;

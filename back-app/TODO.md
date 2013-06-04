@@ -1,10 +1,8 @@
 
 General
 =================
-
-***
-	CORS exception in app
-***
+- REMOVE throw() in error for backend
+* CORS exception in app? 
 
 
 Layout editor

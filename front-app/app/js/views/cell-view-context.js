@@ -13,6 +13,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 	},
 
 	activate : function () {
+
 		this.$el.addClass( 'active' );
 		this.isActive = true;
 
@@ -75,11 +76,13 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 				});
 
 				messenger.on( 'fauxmeo:finish', function(req, resp){
+					if ( req.message.source === win ) {
 						console.log('Fauxmeo has finished');
 						app.trigger( 'grid:activate-next-by-attr',
 									 self.cell.get('play-next-key'),
 									 self.cell.get('play-next-value') );
 						self.deactivate();
+					}
 				});
 
 				messenger.send( 'connect', config, win );

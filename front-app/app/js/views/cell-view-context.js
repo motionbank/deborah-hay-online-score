@@ -82,6 +82,8 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 									 self.cell.get('play-next-key'),
 									 self.cell.get('play-next-value') );
 						self.deactivate();
+					} else {
+						console.log( win, req.message.source );
 					}
 				});
 

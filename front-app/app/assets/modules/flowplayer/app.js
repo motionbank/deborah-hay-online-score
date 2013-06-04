@@ -44,15 +44,15 @@ jQuery(function(){
 		var $videoContainer = jQuery('#video-container');
 		$videoContainer.html('');
 
-		var $videoPlayer = jQuery('<video class="flowplayer" id="video-player" />');
+		var $videoPlayer = jQuery('<video class="flowplayer" id="video-player" autoplay />');
 
 		for ( var i = 0; i < formats.length; i++ ) {
 			if ( formats[i].ext !== 'flash' ) {
 				$videoPlayer.append( '<source src="http://'+config.cloudFront.fileHost+
-										'/dh/piecemaker/'+videoFileName+formats[i].ext+'" '+
+										config.pieceMaker.basePath+'/'+videoFileName+formats[i].ext+'" '+
 										'type="'+formats[i].type+'">' );
-			} else {
-				$videoPlayer.append( '<source src="mp4:dh/piecemaker/'+videoFileName+'" '+
+			} else if ( !config.islocal ) {
+				$videoPlayer.append( '<source src="mp4:'+(config.pieceMaker.basePath.replace(/^\//,''))+'/'+videoFileName+'" '+
 										'type="'+formats[i].type+'">' );
 			}
 		}
@@ -60,16 +60,13 @@ jQuery(function(){
 		$videoContainer.append( $videoPlayer );
 
 		var opts = {
-			// sources: [
-			// 	{ type: 'mp4',   src: videoFolder,  					   suffix: 'mp4'  },
-			// 	{ type: 'ogg',   src: videoFolder.replace('.mp4','.ogv'),  suffix: 'ogv'  },
-			// 	{ type: 'flash', src: 'mp4:'+videoFolder,		  		   suffix: 'mp4'  }
-			// ],
-			rtmp: "rtmp://"+config.cloudFront.streamer+"/cfx/st",
 			//swf: "http://releases.flowplayer.org/5.3.2/flowplayer.swf",
 	  		swf: "flowplayer-5.3.2/flowplayer.swf",
 	  		engine: 'flash'
 		};
+		if ( !config.islocal ) {
+			opts['rtmp'] = "rtmp://"+config.cloudFront.streamer+"/cfx/st";
+		}
 		//console.log( opts );
 
 		var fPlayer = null;

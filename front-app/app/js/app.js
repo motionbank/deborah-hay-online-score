@@ -263,9 +263,6 @@ var App = module.exports = (function(){
 		getSets : function () {
 			return sets;
 		},
-		isLocal : function () {
-			return config.runningLocal;
-		},
 		getConfig : function () {
 			return config;
 		},

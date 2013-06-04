@@ -49,7 +49,9 @@ jQuery(function(){
 
 			if ( formats[i].ext !== 'flash' ) {
 
-				$videoPlayer.append( '<source src="http://piecemaker.local/video/fauxmeo/'+vimeoId+formats[i].ext+'" '+
+				$videoPlayer.append( '<source src="http://' + config.fauxmeo.host + 
+										config.fauxmeo.basePath + '/' + 
+										vimeoId+formats[i].ext+'" '+
 										'type="'+formats[i].type+'">' );
 			} else {
 

@@ -44,7 +44,7 @@ jQuery(function(){
 		var $videoContainer = jQuery('#video-container');
 		$videoContainer.html('');
 
-		var $videoPlayer = jQuery('<video class="flowplayer" id="video-player" />');
+		var $videoPlayer = jQuery('<video class="flowplayer" id="video-player" autoplay />');
 
 		for ( var i = 0; i < formats.length; i++ ) {
 

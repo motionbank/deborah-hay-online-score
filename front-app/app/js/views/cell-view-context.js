@@ -45,7 +45,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 			console.log( self.cid );
 
 			var win = document.getElementById('iframe-'+self.cid).contentWindow;
-			var messenger = app.getPostMessenger();
+			var messenger = new PostMessenger(window);
 
 			if ( !config.islocal ) {
 
@@ -80,15 +80,15 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 				});
 
 				messenger.on( 'fauxmeo:finish', function(req, resp){
-					if ( req.message.source === win ) {
 						console.log('Fauxmeo has finished');
+					if ( req.message.source === win ) {
+						console.log( 'Triggered ...', self.cid );
 						app.trigger( 'grid:activate-next-by-attr',
 									 self.cell.get('play-next-key'),
 									 self.cell.get('play-next-value') );
 						self.deactivate();
 					} else {
-						console.log( 'Not triggered ...' );
-						console.log( self.cid );
+						console.log( 'Not triggered ...', self.cid );
 					}
 				});
 

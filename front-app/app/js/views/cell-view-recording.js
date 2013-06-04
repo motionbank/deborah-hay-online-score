@@ -49,9 +49,11 @@ var CellViewRecording = module.exports = require('js/views/cell-view').extend({
 	},
 
 	sceneChanged : function (newScene) {
+		var app = this.getApp();
+
 		if ( this.isVisible ) {
 			if ( !this.isActive ) {
-				var config = this.getApp().getConfig();
+				var config = app.getConfig();
 				var imgSrc = 'http://' + config.cloudFront.fileHost + 
 								config.cloudFront.baseUrl + '/cells/recording/full/' +
 								this.cell.get('file-name')+'-'+newScene.replace(/[^-a-z0-9]/gi,'-').replace(/-+/ig,'-')+'.png';
@@ -70,7 +72,7 @@ var CellViewRecording = module.exports = require('js/views/cell-view').extend({
 				}
 				img.src = imgSrc;
 			} else {
-				messenger.send( 'set-scene', newScene, this.iFrameWindow );
+				app.getPostMessenger().send( 'set-scene', newScene, this.iFrameWindow );
 			}
 		}
 	}

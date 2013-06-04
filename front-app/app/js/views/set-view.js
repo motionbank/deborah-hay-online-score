@@ -17,6 +17,8 @@ $mainTitleLink = null, $backgroundGrid = null;
 var clickedCellCid = null;
 var showCellInfo = false;
 
+var autoPlayTid = -1;
+
 var GridView = module.exports = Backbone.View.extend({
 
 	el : '#grid-view',
@@ -153,6 +155,10 @@ var GridView = module.exports = Backbone.View.extend({
 			try {
 				views[opts.type] = views[opts.type] || require('js/views/cell-view-'+opts.type);
 			} catch (e) { /* ignore */ }
+
+			if ( opts.title ) {
+				opts.title = opts.title.replace(/[\s]*---.+$/,'');
+			}
 
 			var cv = new ( views[opts.type] || views.CellView )( opts, app );
 			renderedCells.push( cv.render() );
@@ -321,6 +327,8 @@ var GridView = module.exports = Backbone.View.extend({
 				cellViewsArr[i].deactivate();
 			}
 		}
+
+		clearTimeout( autoPlayTid );
 	},
 
 	setClicked : function ( cell_cid ) {
@@ -328,10 +336,38 @@ var GridView = module.exports = Backbone.View.extend({
 	},
 
 	activateNextByAttr : function ( key, value ) {
+
+		if ( !key || !value ) return;
+
+		//console.log( key, value );
+		var self = this;
+
+		clearTimeout( autoPlayTid );
+
 		for ( var i = 0; i < cellViewsArr.length; i++ ) {
 			var cell = cellViewsArr[i];
 			if ( cell.cell.get(key) === value ) {
 				cell.activate();
+
+				var cellDim = cell.cell.get('extra');
+				var r = (cellDim.x - gridXVisible / 2.0) / currentSet.grid_cols;
+				if ( r < 0 ) r = 0;
+				if ( r > 1 ) r = 1;
+				app.getSlider().setPosition( r, false );
+				this.setPosition( r );
+
+				if ( true /* app.getConfig().islocal */ ) {
+					autoPlayTid = setTimeout(function(){
+						var cellm 	= cell.cell,
+							key 	= cellm.get('play-next-key'),
+							value 	= cellm.get('play-next-value');
+						if ( key && value ) {
+							cell.deactivate();
+							self.activateNextByAttr( key, value );
+						}
+					}, 1000 * 60 * 4 );
+				}
+
 				return;
 			}
 		}

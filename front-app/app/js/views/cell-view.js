@@ -32,8 +32,8 @@ var CellView = module.exports = Backbone.View.extend({
 
 		this.cell = new CellModel( opts );
 
-		this.respondToRecordingChange = this.cell.get('per-recording') === 'true' ? true : false;
-		this.respondToSceneChange = this.cell.get('per-scene') === 'false' ? false : true;
+		this.respondToRecordingChange 	= this.cell.get('per-recording') === 'true' ? true : false;
+		this.respondToSceneChange 		= this.cell.get('per-scene') === 'false' ? false : true;
 
 		app.on( 'change:scene', function bbChangeScene (){
 			this.sceneChanged.apply(this,arguments);

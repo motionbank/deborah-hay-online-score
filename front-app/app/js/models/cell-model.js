@@ -15,7 +15,15 @@ var CellModel = module.exports = Backbone.Model.extend({
 		var self = this;
 		_.map( opts.fields, function (f) {
 			// if ( self.get( f.name ) === undefined ) {
+
+				// TODO!
+			if ( f.name == 'play-next' ) {
+				self.set( 'play-next-key', 'vimeo-id' );
+				self.set( 'play-next-value', f.value );
+			} else {
 				self.set( f.name, f.value );
+			}
+
 			// } else {
 			// 	console.log( 'Possible cell field conflict: ', opts, f );
 			// }

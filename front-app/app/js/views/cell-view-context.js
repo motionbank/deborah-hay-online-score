@@ -47,7 +47,9 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 
 				app.on( 'vimeo:finish', function(req, resp){
 					if ( req.message.source === win ) {
-						app.trigger('grid:activate-next-by-attr','vimeo-id',self.cell.get('play-next'));
+						app.trigger( 'grid:activate-next-by-attr', 
+									 self.cell.get('play-next-key'),
+									 self.cell.get('play-next-value') );
 						self.deactivate();
 					}
 				});

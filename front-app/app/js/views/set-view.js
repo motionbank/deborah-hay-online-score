@@ -340,7 +340,8 @@ var GridView = module.exports = Backbone.View.extend({
 
 		if ( !key || !value ) return;
 
-		//console.log( key, value );
+		console.log( key, value );
+		
 		var self = this;
 
 		clearTimeout( autoPlayTid );

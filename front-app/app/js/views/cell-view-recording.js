@@ -2,6 +2,8 @@
 var CellView = require('js/views/cell-view');
 var __super = CellView.prototype;
 
+var currentlyPlaying = null;
+
 var CellViewRecording = module.exports = require('js/views/cell-view').extend({
 
 	respondToSceneChange : true,
@@ -17,6 +19,8 @@ var CellViewRecording = module.exports = require('js/views/cell-view').extend({
 		var self = this;
 		var app = this.getApp();
 		var config = app.getConfig();
+
+		currentlyPlaying = this;
 
 		this.iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
 									 'src="'+this.cell.get('content-url')+'?'+
@@ -38,8 +42,10 @@ var CellViewRecording = module.exports = require('js/views/cell-view').extend({
 
 			messenger.on( 'flowplayer:finish', function(req, resp){
 				app.trigger( 'grid:activate-next-by-attr', 
-							 self.cell.get('play-next-key'), 
-							 self.cell.get('play-next-value') );
+							 currentlyPlaying.cell.get('play-next-key'), 
+							 currentlyPlaying.cell.get('play-next-value') ); // TODO! why are these not all called?
+
+				currentlyPlaying = null;
 				self.deactivate();
 			});
 		});

@@ -352,7 +352,7 @@ var GridView = module.exports = Backbone.View.extend({
 				cell.activate();
 
 				var cellDim = cell.cell.get('extra');
-				var r = (cellDim.x - gridXVisible / 2.0) / currentSet.grid_cols; // TODO: something is wrong here
+				var r = (cellDim.x - cellDim.width / 2.0 - gridXVisible / 2.0) / currentSet.grid_cols; // TODO: something is wrong here
 				if ( r < 0 ) r = 0;
 				if ( r > 1 ) r = 1;
 				app.getSlider().setPosition( r, false );

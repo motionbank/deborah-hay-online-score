@@ -178,29 +178,36 @@ var PostMessenger = module.exports = (function(win){
 		 *
 		 */
 		connect : function () {
-			this.win.addEventListener( 'message', (function connectIIFE (pm){return function connectCurry (msg){
-				if ( pm.connected ) {
-					(function connectHandleReceiveMessage ( winMessage ) {
-						if ( this.allowedOrigins.indexOf( winMessage.origin ) !== -1 ) {
-							var didMatch = false;
-							for ( var i = 0, k = this.matchers.length; i < k; i++ ) {
-								didMatch = didMatch || this.matchers[i].handle( winMessage );
-							}
-							if ( !didMatch ) {
-								console.log( 'Did not match and was ignored: ' );
-								try { console.log( winMessage.data, winMessage.origin ); } catch ( e ) {}
-								console.log( this.matchers );
-							}
-						} else {
-							console.log( 'Origin did not match: ', winMessage.origin, this.allowedOrigins );
+			this.connectIffy = (function connectIIFE (pm){
+					return function connectCurry (msg){
+						if ( pm.connected ) {
+							(function connectHandleReceiveMessage ( winMessage ) {
+								if ( this.allowedOrigins.indexOf( winMessage.origin ) !== -1 ) {
+									var didMatch = false;
+									for ( var i = 0, k = this.matchers.length; i < k; i++ ) {
+										didMatch = didMatch || this.matchers[i].handle( winMessage );
+									}
+									if ( !didMatch ) {
+										console.log( 'Did not match and was ignored: ' );
+										try { console.log( winMessage.data, winMessage.origin ); } catch ( e ) {}
+										console.log( this.matchers );
+									}
+								} else {
+									console.log( 'Origin did not match: ', winMessage.origin, this.allowedOrigins );
+								}
+							}).apply(pm,[msg]);
 						}
-					}).apply(pm,[msg]);
-				}
-			}})(this) );
+					}
+				})(this);
+			this.win.addEventListener( 
+				'message', 
+				this.connectIffy
+			);
 			this.connected = true;
 		},
 		disconnect : function () {
 			this.connected = false;
+			this.win.removeEventListener( this.connectIffy );
 		},
 		/**
 		 *	myMessenger.add( otherWindow );

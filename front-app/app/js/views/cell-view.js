@@ -130,6 +130,7 @@ var CellView = module.exports = Backbone.View.extend({
 	},
 
 	deactivate : function () {
+	
 		this.$el.removeClass( 'active' );
 		this.isActive = false;
 

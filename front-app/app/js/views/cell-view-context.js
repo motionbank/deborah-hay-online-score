@@ -7,7 +7,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 	initialize: function () {
 
 		// call initialize on super!
-		CellView.prototype.initialize.apply(this,arguments);
+		__super.initialize.apply(this,arguments);
 
 		this.respondToSceneChange = this.respondToRecordingChange = false;
 	},
@@ -44,7 +44,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 			console.log( 'iframe loaded for ..', self.cid );
 
 			var win = document.getElementById('iframe-'+self.cid).contentWindow;
-			var messenger = new PostMessenger(window);
+			var messenger = self.messenger = new PostMessenger(window);
 
 			if ( !config.islocal ) {
 
@@ -85,7 +85,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 									 self.cell.get('play-next-key'),
 									 self.cell.get('play-next-value') );
 						self.deactivate();
-						//messenger.disconnect();
+						messenger.disconnect();
 					} else {
 						console.log( 'Not triggered ...', self.cid );
 					}
@@ -97,5 +97,13 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 
 		this.$container.empty();
 		this.$container.append( this.iframe );
+	},
+	deactivate : function () {
+		
+		__super.deactivate.apply(this,arguments);
+		
+		if ( this.messenger ) {
+			this.messenger.disconnect();
+		}
 	}
 });

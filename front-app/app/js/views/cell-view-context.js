@@ -41,8 +41,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 
 		this.iframe.load( function () {
 
-			console.log( 'iframe loaded for ..' );
-			console.log( self.cid );
+			console.log( 'iframe loaded for ..', self.cid );
 
 			var win = document.getElementById('iframe-'+self.cid).contentWindow;
 			var messenger = new PostMessenger(window);
@@ -75,8 +74,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 			} else {
 
 				messenger.on( 'fauxmeo:ready', function(req, resp){
-					console.log('Fauxmeo is ready');
-					console.log( self.cid );
+					console.log('Fauxmeo is ready', self.cid );
 				});
 
 				messenger.on( 'fauxmeo:finish', function(req, resp){

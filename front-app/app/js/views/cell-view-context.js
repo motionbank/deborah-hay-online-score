@@ -72,7 +72,8 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 			} else {
 
 				messenger.on( 'fauxmeo:ready', function(req, resp){
-					//console.log('Fauxmeo is ready');
+					console.log('Fauxmeo is ready');
+					console.log( self.cid );
 				});
 
 				messenger.on( 'fauxmeo:finish', function(req, resp){
@@ -83,7 +84,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 									 self.cell.get('play-next-value') );
 						self.deactivate();
 					} else {
-						console.log( self.cid, win, req.message.source, document.getElementById('iframe-'+self.cid).contentWindow );
+						console.log( self.cid );
 					}
 				});
 

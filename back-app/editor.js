@@ -1489,7 +1489,14 @@ app.get( pathBase + '/vimeo/video/:id/import', idNumeric, vimeoAuthed, function 
        		var field_opts = {name:'vimeo-id',value:video.id};
 			req.models.fields.find(field_opts,function(err,fields){
 				if ( noError(req,res,err) ) {
-					var video_title 		= video.title, //.split('---')[1].replace(/^[\s]*/ig,'').replace(/[\s]*$/ig,''),
+
+					var vimeoTitlePieces = video.title.split('---');
+					var videoFileName;
+					if ( vimeoTitlePieces[1] && vimeoTitlePieces[1].match(/\.mp4/) ) {
+						videoFileName = vimeoTitlePieces[1].replace(/^[\s]*|[\s]*$/ig,'');
+					}
+
+					var video_title 		= video.title, //.split('---')[0].replace(/^[\s]*/ig,'').replace(/[\s]*$/ig,''),
 						video_description 	= video.description.split('---')[0].replace(/^[\s]*/ig,'').replace(/[\s]*$/ig,'');
 					if ( !fields || fields.length == 0 ) {
 						req.models.fields.create([field_opts],function(err, fields){
@@ -1522,7 +1529,7 @@ app.get( pathBase + '/vimeo/video/:id/import', idNumeric, vimeoAuthed, function 
 									var imgName = imgUrlOpts.pathname.split('/').pop();
 
 									if ( imgName === ('vimeo-'+video.id+'_'+imgName) ) { // img already poster
-										next();
+										if ( next ) next(); // TODO: next?
 									} else {
 										attachVimeoPoster( req, res, cell, video, afterImport );
 									}

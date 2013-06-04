@@ -17,6 +17,7 @@ jQuery(function(){
 	// var currentScene = null;
 
 	var vimeoId = window.location.search.split('vimeo-id=')[1].split('&')[0];
+	var vimeoFile = window.location.search.split('vimeo-file=')[1].split('&')[0];
 
 	var messenger = new PostMessenger(window);
 
@@ -51,7 +52,7 @@ jQuery(function(){
 
 				$videoPlayer.append( '<source src="http://' + config.fauxmeo.host + 
 										config.fauxmeo.basePath + '/' + 
-										vimeoId+formats[i].ext+'" '+
+										vimeoFile+formats[i].ext+'" '+
 										'type="'+formats[i].type+'">' );
 			} else {
 

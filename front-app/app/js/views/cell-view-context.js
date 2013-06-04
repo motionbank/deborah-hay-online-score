@@ -22,8 +22,14 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 
 		if ( config.islocal ) {
 
+			var vimeoFileName = this.cell.get('title').split('---')[1];
+			vimeoFileName = vimeoFileName.replace(/^[\s]*/g,'').replace(/[\s]*$/g,'');
+			if ( vimeoFileName.indexOf('.mp4') !== -1 ) vimeoFileName = vimeoFileName.replace('.mp4','');
+
 			this.iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
-									 'src="modules/flowplayer/fauxmeo.html?vimeo-id='+this.cell.get('vimeo-id')+'" '+
+									 'src="modules/flowplayer/fauxmeo.html?'+
+									 	'vimeo-id='+this.cell.get('vimeo-id')+'&'+
+									 	'vimeo-file='+vimeoFileName+'" '+
 									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
 		} else {
 

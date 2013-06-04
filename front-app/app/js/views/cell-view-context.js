@@ -85,7 +85,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 									 self.cell.get('play-next-key'),
 									 self.cell.get('play-next-value') );
 						self.deactivate();
-						messenger.disconnect();
+						//messenger.disconnect();
 					} else {
 						console.log( 'Not triggered ...', self.cid );
 					}

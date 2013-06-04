@@ -115,7 +115,7 @@ var GridView = module.exports = Backbone.View.extend({
 							if ( apiRetrys < 5 ) {
 								setTimeout( function initAppApiRetry () {
 									console.log( 'Retry (@2) ' + apiRetrys );
-									callApi( next );
+									callApi();
 								}, 200 + (apiRetrys * 200) );
 								apiRetrys++;
 							} else {

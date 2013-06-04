@@ -12,6 +12,7 @@ Layout editor
 - select and remove multiple cells
 - connection settings could offer already available attributes per type "set-id" / "title" / ..
 - dragging a cell away leaves old location still "tainted"
+- clone a set or version control
 [- switch the whole thing to use backbone.js ... jQuery().data() gets out of hand]
 	x remove columns / rows
 	  (empty right/bottom edges are removed, still needs update on page)

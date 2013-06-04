@@ -13,11 +13,10 @@ jQuery(function(){
 		{ext: 'flash', type: 'video/flash'},
 	];
 	
-	var sceneEvents = [];
-	var currentScene = null;
+	// var sceneEvents = [];
+	// var currentScene = null;
 
-	var videoFileName = window.location.search.split('v=')[1].split('&')[0];
-	var videoId 	  = window.location.search.split('id=')[1].split('&')[0];
+	var vimeoId = window.location.search.split('vimeo-id=')[1].split('&')[0];
 
 	var messenger = new PostMessenger(window);
 
@@ -28,7 +27,7 @@ jQuery(function(){
 		parentWindowOrigin = req.message.origin;
 
 		config = req.data;
-		api = new PieceMakerApi( this, config.pieceMaker.apiKey, 'http://' + config.pieceMaker.host );
+		// api = new PieceMakerApi( this, config.pieceMaker.apiKey, 'http://' + config.pieceMaker.host );
 
 		initFully();
 
@@ -47,13 +46,15 @@ jQuery(function(){
 		var $videoPlayer = jQuery('<video class="flowplayer" id="video-player" />');
 
 		for ( var i = 0; i < formats.length; i++ ) {
+
 			if ( formats[i].ext !== 'flash' ) {
-				$videoPlayer.append( '<source src="http://'+config.cloudFront.fileHost+
-										'/dh/piecemaker/'+videoFileName+formats[i].ext+'" '+
+
+				$videoPlayer.append( '<source src="http://piecemaker.local/video/fauxmeo/'+vimeoId+formats[i].ext+'" '+
 										'type="'+formats[i].type+'">' );
 			} else {
-				$videoPlayer.append( '<source src="mp4:dh/piecemaker/'+videoFileName+'" '+
-										'type="'+formats[i].type+'">' );
+
+				// $videoPlayer.append( '<source src="mp4:dh/vimeo/'+vimeoId+'" '+
+				// 						'type="'+formats[i].type+'">' );
 			}
 		}
 
@@ -65,10 +66,10 @@ jQuery(function(){
 			// 	{ type: 'ogg',   src: videoFolder.replace('.mp4','.ogv'),  suffix: 'ogv'  },
 			// 	{ type: 'flash', src: 'mp4:'+videoFolder,		  		   suffix: 'mp4'  }
 			// ],
-			rtmp: "rtmp://"+config.cloudFront.streamer+"/cfx/st",
+			//rtmp: "rtmp://"+config.cloudFront.streamer+"/cfx/st",
 			//swf: "http://releases.flowplayer.org/5.3.2/flowplayer.swf",
-	  		swf: "flowplayer-5.3.2/flowplayer.swf",
-	  		engine: 'flash'
+	  		//swf: "flowplayer-5.3.2/flowplayer.swf",
+	  		engine: 'html5'
 		};
 		//console.log( opts );
 
@@ -81,28 +82,30 @@ jQuery(function(){
 			fPlayer = fp; // store it in function context
 
 			fPlayer.bind('ready',function(){
-				fPlayer.pause();
+				//fPlayer.pause();
 				setPlayerSize();
-				api.loadVideo( videoId, videoLoaded );
+				//api.loadVideo( videoId, videoLoaded );
+
+				messenger.send( 'fauxmeo:ready', null, parentWindow );
 			});
 
-			fPlayer.bind('progress',function(evt){
-				var now = fPlayer.video.time * 1000 + currentVideo.happened_at_float;
-				var lastScene = currentScene;
-				for ( var i = 0; i < sceneEvents.length-1; i++ ) {
-					if ( sceneEvents[i+1].happened_at_float > now ) {
-						if ( fPlayer.seeking || !fPlayer.playing ) return;
-						if ( lastScene !== sceneEvents[i] ) {
-							currentScene = sceneEvents[i];
-							messenger.send( 'set-scene', currentScene.title, parentWindow );
-						}
-						return;
-					}
-				}
-			});
+			// fPlayer.bind('progress',function(evt){
+			// 	var now = fPlayer.video.time * 1000 + currentVideo.happened_at_float;
+			// 	var lastScene = currentScene;
+			// 	for ( var i = 0; i < sceneEvents.length-1; i++ ) {
+			// 		if ( sceneEvents[i+1].happened_at_float > now ) {
+			// 			if ( fPlayer.seeking || !fPlayer.playing ) return;
+			// 			if ( lastScene !== sceneEvents[i] ) {
+			// 				currentScene = sceneEvents[i];
+			// 				messenger.send( 'set-scene', currentScene.title, parentWindow );
+			// 			}
+			// 			return;
+			// 		}
+			// 	}
+			// });
 
 			fPlayer.bind('finish',function(evt){
-				messenger.send( 'flowplayer:finish', null, parentWindow );
+				messenger.send( 'fauxmeo:finish', null, parentWindow );
 			});
 		});
 
@@ -140,43 +143,43 @@ jQuery(function(){
 
 		setPlayerSize();
 
-		var videoLoaded = function ( video ) {
+		// var videoLoaded = function ( video ) {
 			
-			currentVideo = video;
-			api.loadEventsByTypeForVideo( currentVideo.id, 'scene', eventsLoaded );
-		}
+		// 	currentVideo = video;
+		// 	api.loadEventsByTypeForVideo( currentVideo.id, 'scene', eventsLoaded );
+		// }
 
-		var eventsLoaded = function ( events ) {
+		// var eventsLoaded = function ( events ) {
 
-			sceneEvents = events.events;
-			messenger.send( 'get-scene', null, parentWindow );
-		}
+		// 	sceneEvents = events.events;
+		// 	messenger.send( 'get-scene', null, parentWindow );
+		// }
 
-		var setToScene = function ( newScene ) {
+		// var setToScene = function ( newScene ) {
 
-			if ( !currentScene || currentScene.title !== newScene ) { // block own calls after initial get-scene
+		// 	if ( !currentScene || currentScene.title !== newScene ) { // block own calls after initial get-scene
 
-				for ( var i = 0; i < sceneEvents.length; i++ ) {
-					if ( sceneEvents[i].title === newScene ) {
-						// if ( fPlayer.seekable ) {
-							fPlayer.seek( (sceneEvents[i].happened_at_float - currentVideo.happened_at_float) / 1000.0, 
-										  function () {
-								currentScene = sceneEvents[i];
-								fPlayer.resume();
-							});
-						// } else {
-						// 	console.log( "setToScene, playing" );
-						// 	fPlayer.play(0);
-						// }
-						return;
-					}
-				}
-				// not found ... play from start i guess ... no better wait it out
-				// fPlayer.seek(0, function () {
-				// 	fPlayer.resume();
-				// });
-				fPlayer.pause();
-			}
-		}
+		// 		for ( var i = 0; i < sceneEvents.length; i++ ) {
+		// 			if ( sceneEvents[i].title === newScene ) {
+		// 				// if ( fPlayer.seekable ) {
+		// 					fPlayer.seek( (sceneEvents[i].happened_at_float - currentVideo.happened_at_float) / 1000.0, 
+		// 								  function () {
+		// 						currentScene = sceneEvents[i];
+		// 						fPlayer.resume();
+		// 					});
+		// 				// } else {
+		// 				// 	console.log( "setToScene, playing" );
+		// 				// 	fPlayer.play(0);
+		// 				// }
+		// 				return;
+		// 			}
+		// 		}
+		// 		// not found ... play from start i guess ... no better wait it out
+		// 		// fPlayer.seek(0, function () {
+		// 		// 	fPlayer.resume();
+		// 		// });
+		// 		fPlayer.pause();
+		// 	}
+		// }
 	};
 });

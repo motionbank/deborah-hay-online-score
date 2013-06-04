@@ -2,6 +2,7 @@
 General
 ==========================
 - REMOVE console.log's
+- make sure postmessanger and PM lib are no longer in dev mode
 
 
 Design fixes
@@ -78,6 +79,7 @@ Vimeo tiles
 
 Flowplayer tiles
 ==========================
+- ### we are mixing fp versions, move to 5.4.2 ###
 - buy to get rid of logo ($95, one domain): http://flowplayer.org/download/
 - fetch current scene on deactivate for poster image
 - show loading preview

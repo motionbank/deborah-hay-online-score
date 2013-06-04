@@ -41,6 +41,9 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 
 		this.iframe.load( function () {
 
+			console.log( 'iframe loaded for ..' );
+			console.log( self.cid );
+
 			var win = document.getElementById('iframe-'+self.cid).contentWindow;
 			var messenger = app.getPostMessenger();
 
@@ -84,6 +87,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 									 self.cell.get('play-next-value') );
 						self.deactivate();
 					} else {
+						console.log( 'Not triggered ...' );
 						console.log( self.cid );
 					}
 				});

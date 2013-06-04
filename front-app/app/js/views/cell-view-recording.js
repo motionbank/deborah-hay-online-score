@@ -19,13 +19,19 @@ var CellViewRecording = module.exports = require('js/views/cell-view').extend({
 		var config = app.getConfig();
 
 		this.iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
-									 'src="'+this.cell.get('content-url')+'?v='+this.cell.get('file-name')+'&id='+this.cell.get('videoId')+'" '+
+									 'src="'+this.cell.get('content-url')+'?'+
+									 	'v='+this.cell.get('file-name')+'&'+
+									 	'id='+this.cell.get('videoId')+'" '+
 									 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
+
 		this.iframe.load(function(){
 
 			self.iFrameWindow = document.getElementById('iframe-'+self.cid).contentWindow;
 
-			app.trigger('change:recording', self.cell.get('recording'));
+			// TODO: potantially problematic as you'd see some old / unrelated material
+			if ( self.cell.get('recording') ) {
+				app.trigger('change:recording', self.cell.get('recording'));
+			}
 
 			messenger = app.getPostMessenger();
 			messenger.send( 'connect', config, self.iFrameWindow );

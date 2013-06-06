@@ -45,7 +45,7 @@
 								data-width="<%= cell.extra.width || 1 %>" 
 								data-height="<%= cell.extra.height || 1 %>"
 								<% if ( cell.poster ) { %>
-									style="background-image:url('http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells/poster/small/<%= cell.poster %>')"
+									style="background-image:url('http://<%= config.cloudFront.host %><%= config.cloudfront.basePath %>/cells/poster/small/<%= cell.poster %>')"
 								<% } %>	><div class="resize-handle ui-resizable-handle ui-resizable-se"></div></div>
 						<% } else { %>
 							<div class="grid-cell z-behind"

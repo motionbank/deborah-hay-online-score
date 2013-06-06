@@ -1,9 +1,15 @@
 TAKO
 ==========================
-- flowplayer font
 - missing image (joy sorrow again)
 - wrong background in general heatmap
-
+- missing videos: AMIN, DATAPTATIONS
+- finish sets
+- thumbs for sets
+- finish sets: use of space, movement character
+- cell titles!
+- add "file-name" attribute check to fauxmeo
+	X flowplayer font
+	X change title of front page
 
 General
 ==========================

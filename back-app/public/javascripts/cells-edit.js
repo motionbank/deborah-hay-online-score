@@ -61,8 +61,8 @@ jQuery(function(){
 					success : function ( data ) {
 						var cell = data.cell;
 						jQuery( '.title a', $cell ).text( cell.title );
-						var img = jQuery( '.poster img', $cell );
-						img.attr( 'src', img.data('base') + (cell.poster || 'missing.jpg') );
+						// var img = jQuery( '.poster img', $cell );
+						// img.attr( 'src', img.data('poster') + (cell.poster || 'missing.jpg') );
 						$cellEdit.hide();
 					},
 					error : function (err) {

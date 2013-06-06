@@ -23,9 +23,13 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 
 		if ( config.islocal ) {
 
-			var vimeoFileName = this.cell.get('title_org').split('---')[1];
-			vimeoFileName = vimeoFileName.replace(/^[\s]*/g,'').replace(/[\s]*$/g,'');
-			if ( vimeoFileName.indexOf('.mp4') !== -1 ) vimeoFileName = vimeoFileName.replace('.mp4','');
+			var vimeoFileName = this.cell.get('vimeo-file');
+
+			if ( !vimeoFileName ) {
+				this.cell.get('title_org').split('---')[1];
+				vimeoFileName = vimeoFileName.replace(/^[\s]*/g,'').replace(/[\s]*$/g,'');
+				if ( vimeoFileName.indexOf('.mp4') !== -1 ) vimeoFileName = vimeoFileName.replace('.mp4','');
+			}
 
 			this.iframe = jQuery( '<iframe id="iframe-'+this.cid+'" '+
 									 'src="modules/flowplayer/fauxmeo.html?'+

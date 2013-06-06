@@ -1,3 +1,9 @@
+TAKO
+==========================
+- flowplayer font
+- missing image (joy sorrow again)
+- wrong background in general heatmap
+
 
 General
 ==========================

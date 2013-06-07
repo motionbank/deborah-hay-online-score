@@ -24,17 +24,23 @@ var CellView = module.exports = require('js/views/cell-view').extend({
 
 			var pathPieces = [];
 
-			if ( this.respondToRecordingChange ) {
+			if ( this.respondToRecordingChange === true ) {
 				pathPieces.push( app.getPerformance() );
 			}
 
-			if ( this.respondToSceneChange ) {
+			if ( this.respondToSceneChange === true ) {
 				pathPieces.push( scene );
 			}
 
 			imgSrc += pathPieces.join('_');
 
 			imgSrc += '.png';
+
+			if ( this.cell.get('fixed-image') ) {
+				imgSrc = 'http://' + config.cloudFront.fileHost + 
+								config.cloudFront.baseUrl + 
+									'/cells/visualization/full/' + this.cell.get('fixed-image');
+			}
 
 			var img = new Image();
 			img.onload = function () {

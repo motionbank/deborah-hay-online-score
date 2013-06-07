@@ -35,13 +35,17 @@ var CellView = module.exports = Backbone.View.extend({
 		this.respondToRecordingChange 	= this.cell.get('per-recording') === 'true' ? true : false;
 		this.respondToSceneChange 		= this.cell.get('per-scene') === 'false' ? false : true;
 
-		app.on( 'change:scene', function bbChangeScene (){
-			this.sceneChanged.apply(this,arguments);
-		}, this);
+		//if ( this.respondToSceneChange ) {
+			app.on( 'change:scene', function bbChangeScene (){
+				this.sceneChanged.apply(this,arguments);
+			}, this);
+		//}
 
-		app.on( 'change:recording', function bbChangeRecording (){
-			this.recordingChanged.apply(this, arguments);
-		}, this);
+		//if ( this.respondToRecordingChange ) {
+			app.on( 'change:recording', function bbChangeRecording (){
+				this.recordingChanged.apply(this, arguments);
+			}, this);
+		//}
 
 		this.hide();
 	},

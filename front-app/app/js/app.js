@@ -23,7 +23,7 @@ var App = module.exports = (function(){
 
 	var messenger = null;
 
-	var currentScene = 'fred + ginger';
+	var currentScene = 'curved path';
 	var currentPerformance = ('D02T03,D04T03,D06T03'.split(',')[parseInt(Math.random()*3)]);
 	var currentSet = false;
 

@@ -27,6 +27,8 @@ var CellModel = module.exports = Backbone.Model.extend({
 			// } else {
 			// 	console.log( 'Possible cell field conflict: ', opts, f );
 			// }
+
+			//console.log( f );
 		});
 	}
 

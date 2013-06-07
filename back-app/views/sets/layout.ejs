@@ -15,7 +15,8 @@
 						<% for ( var i = 0; i < types.length; i++ ) { %>
 							'<%= types[i] %>',
 						<% } %>
-					]
+					],
+					config : <%-: config | stringify %>
 				}
 			})();
 		</script>

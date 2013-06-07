@@ -32,6 +32,7 @@ Sets
 - hidden / private sets?
 - set categories?
 - generate thumbnail for set?
+- saving a set that has cells hanging over at right or bottom not handled (they stand out)
 	x easy way to interlink context (vimeo) cells (drag-n-drop)
 	x edit aspect size
 	x can not drag grid cell to "add-xy" and make more rows / cols

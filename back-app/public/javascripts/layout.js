@@ -28,7 +28,9 @@ jQuery(function(){
 		connections 	= layoutEditor.connections,
 		cellHeight 		= -1,
 		cellWidth 		= -1,
-		cfBase 			= 'http://d35vpnmjdsiejq.cloudfront.net/dh/app/cells';
+		cfBase 			= 'http://'+layoutEditor.config.media.host+
+							layoutEditor.config.media.basePath+
+								'/cells';
 
 	var resetGridWidth = function () {
 

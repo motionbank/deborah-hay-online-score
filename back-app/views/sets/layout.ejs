@@ -85,7 +85,7 @@
 				<fieldset class="fields">
 					<label for="fields">Fields</label>
 					[% for ( var i = 0; i < fields.length; i++ ) { %]
-						[% var f = fields[i]; %]
+						[% var f = fields[i]; f.name = f.name.replace(/"/g, "&quot;"); f.value = f.value.replace(/"/g, "&quot;"); %]
 						<input type="text" name="field_keys" value="[%= f.name %]" /><input type="text" name="field_values" value="[%= f.value %]" /><br/>
 					[% } %]
 					<input type="text" name="field_keys" value="" /><input type="text" name="field_values" value="" /><br/>

@@ -14,6 +14,7 @@ Layout editor
 - dragging a cell away leaves old location still "tainted"
 - clone a set or version control
 [- switch the whole thing to use backbone.js ... jQuery().data() gets out of hand]
+	x set fields template: need to escape content
 	x remove columns / rows
 	  (empty right/bottom edges are removed, still needs update on page)
 	x hover cell should highlight in list

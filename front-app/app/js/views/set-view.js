@@ -116,7 +116,7 @@ var GridView = module.exports = Backbone.View.extend({
 						error:function(err){
 							if ( apiRetrys < 5 ) {
 								setTimeout( function initAppApiRetry () {
-									console.log( 'Retry (@2) ' + apiRetrys );
+									if ( config && config.debug ) console.log( 'Retry (@2) ' + apiRetrys );
 									callApi();
 								}, 200 + (apiRetrys * 200) );
 								apiRetrys++;
@@ -339,8 +339,6 @@ var GridView = module.exports = Backbone.View.extend({
 	activateNextByAttr : function ( key, value ) {
 
 		if ( !key || !value ) return;
-
-		console.log( key, value );
 		
 		var self = this;
 

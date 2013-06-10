@@ -47,7 +47,8 @@ jQuery(function(){
 				}
 
 			} else {
-				console.log( 'Unable to find scene: ' + newScene );
+				// TODO: how to handle this?
+				//console.log( 'Unable to find scene: ' + newScene );
 			}
 		} else {
 			// TODO, what to display if we can not make sense of the scene?

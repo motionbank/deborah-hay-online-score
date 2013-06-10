@@ -1,4 +1,5 @@
 module.exports = {
+	debug : false,
 	islocal : false,
 	host : 'scores.motionbank.org',
 	apiHost : 'deborah-hay-app.eu01.aws.af.cm',

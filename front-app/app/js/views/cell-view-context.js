@@ -45,8 +45,6 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 
 		this.iframe.load( function () {
 
-			console.log( 'iframe loaded for ..', self.cid );
-
 			var win = document.getElementById('iframe-'+self.cid).contentWindow;
 			var messenger = self.messenger = new PostMessenger(window);
 
@@ -78,20 +76,17 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 			} else {
 
 				messenger.on( 'fauxmeo:ready', function(req, resp){
-					console.log('Fauxmeo is ready', self.cid );
+
 				});
 
 				messenger.on( 'fauxmeo:finish', function(req, resp){
-						console.log('Fauxmeo has finished');
 					if ( req.message.source === win ) {
-						console.log( 'Triggered ...', self.cid );
 						app.trigger( 'grid:activate-next-by-attr',
 									 self.cell.get('play-next-key'),
 									 self.cell.get('play-next-value') );
 						self.deactivate();
 						messenger.disconnect();
 					} else {
-						console.log( 'Not triggered ...', self.cid );
 					}
 				});
 

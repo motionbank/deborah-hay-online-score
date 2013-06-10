@@ -35,7 +35,7 @@ var App = module.exports = (function(){
 	 L + + + + + + + + + + + + + + + + + + + + + + + + + + */
 
 	var debug = function () {
-		if ( true ) {
+		if ( config && config.debug ) {
 			for ( var i = 0; i < arguments.length; i++ ) {
 				console.log( arguments[i] );
 			}
@@ -85,13 +85,14 @@ var App = module.exports = (function(){
 						});
 					}, 
 					function ( err ) {
-						console.log( err );
+						// TODO, handle this
+						if ( config && config.debug ) console.log( err );
 				});
 			}
 		});
 
 		messenger.on( 'log', function msgrSetScene (req,resp){
-			console.log(req.data);
+			if ( config && config.debug ) console.log(req.data);
 		});
 
 		messenger.on( 'get-scene', function msgrGetScene (req,resp){
@@ -228,7 +229,7 @@ var App = module.exports = (function(){
 				error:function (err) {
 					if ( apiRetrys < 5 ) {
 						setTimeout( function initAppApiRetry () {
-							console.log( 'Retry (@1) ' + apiRetrys );
+							if ( config && config.debug ) console.log( 'Retry (@1) ' + apiRetrys );
 							initAppApi( next );
 						}, 200 + (apiRetrys * 200) );
 						apiRetrys++;

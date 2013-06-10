@@ -26,7 +26,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 			var vimeoFileName = this.cell.get('vimeo-file');
 
 			if ( !vimeoFileName ) {
-				this.cell.get('title_org').split('---')[1];
+				vimeoFileName = this.cell.get('title_org').split('---')[1];
 				vimeoFileName = vimeoFileName.replace(/^[\s]*/g,'').replace(/[\s]*$/g,'');
 				if ( vimeoFileName.indexOf('.mp4') !== -1 ) vimeoFileName = vimeoFileName.replace('.mp4','');
 			}

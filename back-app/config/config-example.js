@@ -1,4 +1,5 @@
 module.exports = {
+	debug: false,
 	db: {
 		database : "your database name",
 		protocol : "mysql",

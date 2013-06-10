@@ -47,7 +47,7 @@ paramIdIsNumber = function ( req, res, next ) {
 reqLoadUser = function (req, res, next) {
 	req.models.users.get(1,function(err,user1){
 		if (err) {
-			throw(err);
+			console.log(err);
 		} else {
 			req.user = user1;
 			next();
@@ -114,7 +114,7 @@ app.post( '/users', reqAcceptsJson, niy, function ( req, res ) {
 app.get( '/users', reqAcceptsJson, function ( req, res ) {
 	req.models.users.find(function(err,users){
 		if ( err ) {
-			throw(err);
+			console.log(err);
 		} else {
 			users = _.map(users,function(u,i){
 				return u.publicProfile();
@@ -127,7 +127,7 @@ app.get( '/users', reqAcceptsJson, function ( req, res ) {
 app.get( '/users/:id', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 	req.models.users.get(req.params['id'], function(err,user){
 		if ( err ) {
-			throw(err);
+			console.log(err);
 		} else {
 			user = user.publicProfile();
 			res.json(user);
@@ -138,7 +138,7 @@ app.get( '/users/:id', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 app.get( '/users/:id/sets', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 	req.models.users.get(req.params['id'], function(err,user){
 		if (err) {
-			throw(err);
+			console.log(err);
 		} else {
 			user.getSets(function(err, sets){
 				if (err) {
@@ -153,11 +153,11 @@ app.get( '/users/:id/sets', reqAcceptsJson, paramIdIsNumber, function ( req, res
 	});
 });
 
-app.put( '/users/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
-});
+// app.put( '/users/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
+// });
 
-app.delete( '/users/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
-});
+// app.delete( '/users/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
+// });
 
 /*
  +	CRUD sets
@@ -214,7 +214,7 @@ app.post( '/sets/:id/cells', reqAcceptsJson, niy, reqLoadUser, paramIdIsNumber, 
 app.get( '/sets', reqAcceptsJson, function ( req, res ) {
 	req.models.sets.find(function(err,sets){
 		if ( err ) {
-			throw(err);
+			console.log(err);
 		} else {
 			res.json(sets);
 		}
@@ -224,23 +224,23 @@ app.get( '/sets', reqAcceptsJson, function ( req, res ) {
 app.get( '/sets/:id', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 	req.models.sets.get(req.params['id'],function(err,set){
 		if ( err ) {
-			throw(err);
+			console.log(err);
 		} else {
 			set.getCreator(function(err,creator){
 				if ( err ) {
-					throw(err);
+					console.log(err);
 				} else {
 					set.creator = creator && creator.publicProfile();
 					set.getCells(function(err,cells){
 						if ( err ) {
-							throw(err);
+							console.log(err);
 						} else {
 							var cbs = [];
 							_.each(cells,function(c){
 								cbs.push(function(next){
 									c.getFields(function(err,fields){
 										if ( err ) {
-											throw(err);
+											console.log(err);
 										} else {
 											var setFields = [];
 											_.each(fields,function(f){
@@ -276,11 +276,11 @@ app.get( '/sets/:id', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 	});
 });
 
-app.put( '/sets/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
-});
+// app.put( '/sets/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
+// });
 
-app.delete( '/sets/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
-});
+// app.delete( '/sets/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
+// });
 
 /*
  +	CRUD cells
@@ -307,7 +307,7 @@ app.post( '/cells', reqAcceptsJson, reqLoadUser, function ( req, res ) {
 app.get( '/cells', reqAcceptsJson, function ( req, res ) {
 	req.models.cells.find(['type','title'],function(err,cells){
 		if ( err ) {
-			throw( err );
+			console.log( err );
 		} else {
 			res.json(cells);
 		}
@@ -328,12 +328,12 @@ app.get( '/cells/:id', reqAcceptsJson, paramIdIsNumber, function ( req, res ) {
 	});
 });
 
-app.put( '/cells/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
-});
+// app.put( '/cells/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
+// });
 
 // curl -X DELETE http://localhost:5555/cells/1
-app.delete( '/cells/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
-});
+// app.delete( '/cells/:id', reqAcceptsJson, niy, paramIdIsNumber, function ( req, res ) {
+// });
 
 /*
  +	other routes

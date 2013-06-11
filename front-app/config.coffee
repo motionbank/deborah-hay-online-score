@@ -16,6 +16,7 @@ exports.config =
           'vendor/scripts/underscore.js'
           'vendor/scripts/backbone.js'
           'vendor/scripts/backbone.localStorage.js'
+          'vendor/scripts/backbone.analytics.js'
           'vendor/scripts/PieceMakerLib.js'
           'vendor/scripts/postmessenger.js'
         ]

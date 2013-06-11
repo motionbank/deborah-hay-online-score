@@ -85,6 +85,12 @@ table {
   right: 0px;
 }
 
+#tabs-wrapper,
+#scenes-wrapper {
+  height: 100%;
+  position: relative;
+}
+
 #scenes-container {
   position: relative;
   height: 100%;

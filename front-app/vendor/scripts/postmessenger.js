@@ -236,10 +236,14 @@ var PostMessenger = module.exports = (function(win){
 			message[opts.dataAlias] = opts.data;
 
 			if ( opts.receiver ) {
-				opts.receiver.postMessage( JSON.stringify(message), opts.receiverOrigin );
+				var msg = JSON.stringify(message);
+				if ( 'postMessage' in opts.receiver && opts.receiver.postMessage ) {
+					opts.receiver.postMessage( msg, opts.receiverOrigin );
+				}
 			} else if ( this.receivers.length > 0 ) {
+				var msg = JSON.stringify(message);
 				for ( var i = 0, k = this.receivers.length; i < k; i++ ) {
-					this.receivers[0].postMessage( JSON.stringify(message), opts.receiverOrigin ); // TODO: same origin only?
+					this.receivers[0].postMessage( msg, opts.receiverOrigin ); // TODO: same origin only?
 				}
 			}
 		}

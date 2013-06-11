@@ -13,6 +13,7 @@ Layout editor
 - connection settings could offer already available attributes per type "set-id" / "title" / ..
 - dragging a cell away leaves old location still "tainted"
 - clone a set or version control
+- deleting cells will delete them everywhere not only layout
 [- switch the whole thing to use backbone.js ... jQuery().data() gets out of hand]
 	x set fields template: need to escape content
 	x remove columns / rows

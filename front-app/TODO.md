@@ -1,21 +1,19 @@
-TAKO
-==========================
-- missing image (joy sorrow again)
-- wrong background in general heatmap
-- missing videos: AMIN, DATAPTATIONS
-- thumbs for sets
-- finish sets: use of space, movement character
-- cell titles!
-- freeze a cell to a specific recording / person / scene
-	X add "file-name" attribute check to fauxmeo
-	X flowplayer font
-	X change title of front page
-
 General
 ==========================
 - REMOVE console.log's
 - make sure postmessanger and PM lib are no longer in dev mode
 - travel speed has old content
+- webmaster tools
+- meta data / facebook / preview image
+- missing image (joy sorrow again)
+- wrong background in general heatmap
+- missing videos: AMIN, DATAPTATIONS
+- thumbs for sets
+- cell titles!
+- freeze a cell to a specific recording / person / scene
+	X add "file-name" attribute check to fauxmeo
+	X flowplayer font
+	X change title of front page
 
 
 Design fixes

@@ -1,13 +1,4 @@
-body {
-	font-family: 'Open Sans', sans-serif;
-	font-size: 12px;
-
-	background-color: white;
-  overflow: hidden;
-  padding: 0px; margin: 0px;
-}
-
-@font-face {
+/*@font-face {
     font-family: 'Open Sans';
     src: url('../../open-sans/OpenSans-Light.ttf') format('truetype');
     font-weight: 300;
@@ -42,6 +33,15 @@ body {
     src: url('../../open-sans/OpenSans-Italic.ttf') format('truetype');
     font-weight: 400;
     font-style: italic;
+}*/
+
+body {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+
+	background-color: white;
+  overflow: hidden;
+  padding: 0px; margin: 0px;
 }
 
 #main {

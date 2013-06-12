@@ -13,3 +13,4 @@ config.js
 config/config.js
 config/config-local.js
 config-local.js
+config-*.js

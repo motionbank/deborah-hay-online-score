@@ -1,7 +1,10 @@
 Deborah Hay "No Time To Fly" online score
 =========================================
 
-This directory contains the files needed to build the (soon to be) online score for the Deborah Hay piece "No Time To Fly" as part of the Motion Bank research project. 
+This directory contains the files needed to build the (soon to be) online score for the Deborah Hay piece "No Time To Fly" as part of the Motion Bank research project.
+
+Please visit the live site "USING THE SKY" here:
+http://scores.motionbank.org/dh/
 
 
 ### Frontend (in front-app/)

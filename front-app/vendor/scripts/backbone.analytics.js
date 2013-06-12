@@ -10,12 +10,20 @@
         }
       });
 
-    if (!/^\//.test(fragment)) fragment = '/' + fragment;
+    if (!/^\//.test(fragment)) {
+      fragment = '/' + fragment;
+    }
+
+    fragment = window.location.pathname.replace(/\/$/,'') + fragment;
+
     if (window._gaq !== undefined) {
       window._gaq.push(['_trackPageview', fragment]);
     } else if ( 'ga' in window && window.ga !== undefined && typeof window.ga === 'function' ) {
       window.ga( 'send', 'pageview', {
-        'page' : fragment
+        'page' : fragment,
+        'hitCallback' : function() {
+          //console.log( "Tracked: ", fragment );
+        }
       });
     }
 

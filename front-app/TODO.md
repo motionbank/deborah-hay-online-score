@@ -53,6 +53,7 @@ Missing sets
 
 SEO / Tracking
 ==========================
+- render headless or generate other static page views for bots: http://backbonetutorials.com/seo-for-single-page-apps/
 - sitemap?
 - webmaster tools
 	X implement SPA analytics .. (backbone plugin?)

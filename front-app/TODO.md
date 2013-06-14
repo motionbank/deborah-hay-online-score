@@ -76,6 +76,7 @@ m missing.jpg needs replacement (per cell type? -> recording empty studio)
 - freeze a cell to a specific recording / person / scene
 - allow to pin information overlay
 - cancel loading of images when scene is changed in between
+  see: http://stackoverflow.com/questions/6929662/how-do-i-abort-image-img-load-requests-without-using-window-stop
 	X make sure playing content is visible
 
 

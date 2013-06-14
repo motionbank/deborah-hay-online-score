@@ -1,8 +1,10 @@
 
 #background-image {
 
-	background-image: url('http://motionbank-media.s3.amazonaws.com/dh/app/imgs/backs/background-1.jpg');
-
+	/*background-image: url('http://motionbank-media.s3.amazonaws.com/dh/app/imgs/backs/background-1.jpg');*/
+  background: -webkit-radial-gradient(45px 45px, cover, #666 0%, #222 100%);
+  background: -moz-radial-gradient(45px 45px, cover, #666 0%, #222 100%);
+  background: radial-gradient(45px 45px, cover, #666 0%, #222 100%);
 	background-size: cover;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;

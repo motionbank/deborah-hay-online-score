@@ -63,7 +63,7 @@ h3 {
 
 #title-container {
   padding: 1.5em;
-  border: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 
   text-transform: uppercase;
 }

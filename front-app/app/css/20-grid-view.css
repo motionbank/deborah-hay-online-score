@@ -1,6 +1,6 @@
 #grid-view-container {
 
-	background-color: #ededed;
+	/*background-color: rgba(80,80,80,0.8);*/
 
 	height: 100%;
 	width: 100%;
@@ -29,8 +29,8 @@
 
 #background-grid td {
 
-	border-right: 1px solid #888888;
-	border-bottom: 1px solid #888888;
+/*  border-right: 1px solid #888888;
+  border-bottom: 1px solid #888888;*/
 }
 
 #background-grid .lastrow td {

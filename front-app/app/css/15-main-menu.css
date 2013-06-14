@@ -22,6 +22,8 @@
 		color-stop(0.77, rgb(238, 238, 238)),
 		color-stop(0.11, rgb(210, 210, 210))
 	);*/
+	
+	/*background-color: rgba(80,80,80,0.8);*/
 
 	font-family: 'Open Sans';
 	font-weight: 300; /* book */

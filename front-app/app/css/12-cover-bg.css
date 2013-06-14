@@ -1,8 +1,10 @@
 
 #background-image {
 
-	background-image: url('http://motionbank-media.s3.amazonaws.com/dh/app/imgs/backs/background-1.jpg');
-
+	/*background-image: url('http://motionbank-media.s3.amazonaws.com/dh/app/imgs/backs/background-1.jpg');*/
+  background: -webkit-radial-gradient(45px 45px, cover, #666 0%, #222 100%);
+  background: -moz-radial-gradient(45px 45px, cover, #666 0%, #222 100%);
+  background: radial-gradient(45px 45px, cover, #666 0%, #222 100%);
 	background-size: cover;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
@@ -33,13 +35,19 @@
 	font-size: 400%;
 	letter-spacing: 0.15em;
 	font-weight: 300;
+	margin-left: -5px;
 }
 
 #cover p {
 	font-size: 120%;
-	letter-spacing: 0.15em;
-	line-height: 1.8em;
-	margin-top: 1.8em;
+	letter-spacing: 1px;
+	line-height: 1.4em;
+	margin-top: 1.4em;
+}
+
+#cover p small{
+  font-size: 100%;
+  color: rgba(255,255,255,0.5);
 }
 
 @media only screen and (max-width : 1024px) {

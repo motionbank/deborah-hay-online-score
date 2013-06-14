@@ -164,8 +164,8 @@
 /* --- TODO: clean that tmp stuff up below */
 
 #grid-view article.cell {
-	border-right: 1px solid #888888;
-	border-bottom: 1px solid #888888;
+/*  border-right: 1px solid #888888;
+  border-bottom: 1px solid #888888;*/
 }
 
 #grid-view article.cell.lastcol {

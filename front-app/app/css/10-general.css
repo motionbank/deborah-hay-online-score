@@ -7,7 +7,8 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	height: 100%;
 	overflow: hidden;
-
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased !important;
 	background-color: rgb(127,127,127);
 }
 

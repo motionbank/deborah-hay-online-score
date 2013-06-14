@@ -104,8 +104,14 @@ tbody {
   position: relative;
 }
 
-#scenes-container {
+#tabs-container {
+  font-size: 90%;
+  width: 25px;
   position: relative;
+  height: 100%;
+}
+
+#scenes-container {
   height: 100%;
   border-left: 1px solid white;
   border-bottom: 1px solid white;
@@ -119,17 +125,6 @@ tbody {
   bottom: 0px;
   right: 0px;
   overflow: auto;
-}
-
-
-#tabs-container {
-  position: relative;
-  font-size: 90%;
-  width: 25px;
-}
-
-#tabs-container {
-  
 }
 
 #score-nav-tabs {

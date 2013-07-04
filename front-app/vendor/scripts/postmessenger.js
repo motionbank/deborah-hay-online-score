@@ -2,6 +2,7 @@
 
 // TODO:
 // add WebWorkers? https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers
+// add WebSockets?
 
 if ( !(module && 'exports' in module) ) {
 	var module = {
@@ -14,6 +15,8 @@ if ( !window ) {
 }
 
 var PostMessenger = module.exports = (function(win){
+
+	var gPostMassengerId = (new Date()).getTime();
 
 	/*
 	 +	Utilities
@@ -30,6 +33,16 @@ var PostMessenger = module.exports = (function(win){
 
 	var debug = function () {
 		console.log( arguments );
+	}
+
+	var sendArgsToOpts = function ( nameOrOpts, data, receiver, receiverOrigin ) {
+		var opts = !(arguments.length === 1 && typeof nameOrOpts === 'object') ? {
+				name: nameOrOpts, 
+				data: data, 
+				receiver: receiver, 
+				receiverOrigin: receiverOrigin
+			} : nameOrOpts;
+		return opts;
 	}
 
 	/*
@@ -62,8 +75,21 @@ var PostMessenger = module.exports = (function(win){
 	 		var data = winMessage.dataParsed = JSON.parse( winMessage.data );
 	 		if ( this.nameAlias in data && 
 	 			  this.test( data[this.nameAlias] ) ) {
-	 			var response = new PostMessenger();
-	 			response.to( winMessage.source );
+	 			// var response = new PostMessenger();
+	 			// response.to( winMessage.source );
+	 			var matcher = this;
+	 			var response = {
+	 				send: function () {
+	 					var opts = sendArgsToOpts.apply(null, arguments);
+	 					opts.receiver = winMessage.source;
+	 					opts.receiverOrigin = winMessage.origin;
+	 					opts.nameAlias = opts.nameAlias || matcher.nameAlias;
+	 					opts.dataAlias = opts.dataAlias || matcher.dataAlias;
+	 					opts.callback = opts.context || matcher.context;
+
+	 					PostMessenger.prototype.send.apply(PostMessenger,[opts]);
+	 				}
+	 			}
 	 			this.callback.apply( this.context, [ new Request(this, winMessage), response ] );
 	 			return true;
 	 		}
@@ -95,6 +121,9 @@ var PostMessenger = module.exports = (function(win){
 	 *	Constructor
 	 */
 	var PostMessenger = function ( aWindow ) {
+
+		this.hash = btoa( 'PM' + (++gPostMassengerId) ) . toUpperCase();
+		console.log( 'new PostMessenger#' + this.hash );
 
 		this.allowedOrigins = [];
 		this.matchers = [];
@@ -171,43 +200,43 @@ var PostMessenger = module.exports = (function(win){
 
 			if ( !opts.context ) opts.context = null;
 
-			var m = new Matcher( opts.matcher, matcherFn, opts.callback, opts.context, opts.nameAlias, opts.dataAlias );
+			var m = new Matcher( 
+				opts.matcher, matcherFn, 
+				opts.callback, opts.context, 
+				opts.nameAlias, opts.dataAlias );
 			this.matchers.push(m);
+
+			return m;
 		},
 		/**
 		 *
 		 */
 		connect : function () {
-			this.connectIffy = (function connectIIFE (pm){
-					return function connectCurry (msg){
-						if ( pm.connected ) {
-							(function connectHandleReceiveMessage ( winMessage ) {
-								if ( this.allowedOrigins.indexOf( winMessage.origin ) !== -1 ) {
-									var didMatch = false;
-									for ( var i = 0, k = this.matchers.length; i < k; i++ ) {
-										didMatch = didMatch || this.matchers[i].handle( winMessage );
-									}
-									if ( !didMatch ) {
-										console.log( 'Did not match and was ignored: ' );
-										try { console.log( winMessage.data, winMessage.origin ); } catch ( e ) {}
-										console.log( this.matchers );
-									}
-								} else {
-									console.log( 'Origin did not match: ', winMessage.origin, this.allowedOrigins );
-								}
-							}).apply(pm,[msg]);
+			this.win.addEventListener( 'message', 
+									  (function connectIIFE (pm){
+									  	 return function connectCurry (msg){
+				if ( pm.connected ) {
+					(function connectHandleReceiveMessage ( winMessage ) {
+						if ( this.allowedOrigins.indexOf( winMessage.origin ) !== -1 ) {
+							var didMatch = false;
+							for ( var i = 0, k = this.matchers.length; i < k; i++ ) {
+								didMatch = didMatch || this.matchers[i].handle( winMessage );
+							}
+							if ( !didMatch ) {
+								console.log( 'Did not match and was ignored: ' );
+								try { console.log( winMessage.data, winMessage.origin ); } catch ( e ) {}
+								console.log( 'Matchers', this.matchers );
+							}
+						} else {
+							console.log( 'Origin did not match: ', winMessage.origin, this.allowedOrigins );
 						}
-					}
-				})(this);
-			this.win.addEventListener( 
-				'message', 
-				this.connectIffy
-			);
+					}).apply(pm,[msg]);
+				}
+			}})(this) );
 			this.connected = true;
 		},
 		disconnect : function () {
 			this.connected = false;
-			this.win.removeEventListener( this.connectIffy );
 		},
 		/**
 		 *	myMessenger.add( otherWindow );
@@ -215,18 +244,19 @@ var PostMessenger = module.exports = (function(win){
 		to : function ( receiver ) {
 			if ( receiver && typeof receiver === 'object' && 'postMessage' in receiver ) {
 				this.receivers.push( receiver );
+			} else {
+				debug( 'This receiver was ignored: ', receiver );
 			}
 		},
 		/**
 		 *	This should become : 
 		 *		- send( name, data, receiver, receiverOrigin )
-		 *		- send({ name: ..., data: ..., receiver: ..., receiverOrigin: ..., nameAlias: ..., dataAlias, ... })
+		 *		- send({ name: ..., data: ..., receiver: ..., receiverOrigin: ..., nameAlias: ..., dataAlias: ..., args: {...} })
 		 */
 		send : function ( nameOrOpts, data, receiver, receiverOrigin ) {
 
-			var opts = !(arguments.length === 1 && typeof nameOrOpts === 'object') ? {
-					name: nameOrOpts, data: data, receiver: receiver, receiverOrigin: receiverOrigin
-				} : nameOrOpts;
+			var opts = sendArgsToOpts.apply(null, arguments);
+
 			opts.receiverOrigin = opts.receiverOrigin || this.winOrigin;
 			opts.nameAlias = opts.nameAlias || 'name';
 			opts.dataAlias = opts.dataAlias || 'data';
@@ -234,6 +264,14 @@ var PostMessenger = module.exports = (function(win){
 			var message = {};
 			message[opts.nameAlias] = opts.name;
 			message[opts.dataAlias] = opts.data;
+
+			if ( opts.args && typeof opts.args === 'object' ) {
+				for ( var k in opts.args ) {
+					if ( !( k in message ) ) {
+						message[k] = opts.args[k];
+					}
+				}
+			}
 
 			if ( opts.receiver ) {
 				var msg = JSON.stringify(message);

@@ -11,6 +11,18 @@ var CellViewRecording = module.exports = require('js/views/cell-view').extend({
 	iFrameWindow : null,
 	messenger : null,
 
+	render: function () {
+
+		// call render on super!
+		var rendered = __super.render.apply(this,arguments);
+
+		if ( this.cell.get('auto-activate-on-start') ) {
+			this.activate();
+		}
+
+		return rendered;
+	},
+
 	activate : function () {
 
 		this.$el.addClass( 'active' );

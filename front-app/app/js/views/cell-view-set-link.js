@@ -18,7 +18,7 @@ var CellViewSetLink = module.exports = CellView.extend({
 			throw( 'Unable to find that set! ' + setId );
 		}
 
-		this.cell.set( 'title', 		set.title );
+		this.cell.set( 'title', 		'Set: ' + set.title );
 		this.cell.set( 'description', 	set.description );
 		this.cell.set( 'link', 			'#set/' + set.path );
 	},

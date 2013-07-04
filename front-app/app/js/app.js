@@ -91,7 +91,7 @@ var App = module.exports = (function(){
 			}
 		});
 
-		messenger.on( 'log', function msgrSetScene (req,resp){
+		messenger.on( 'log', function msgrLog (req,resp){
 			if ( config && config.debug ) console.log(req.data);
 		});
 
@@ -108,27 +108,27 @@ var App = module.exports = (function(){
 			currentPerformance = rec;
 		});
 
-		messenger.on( 'get-config', function msgrGetScene (req,resp){
+		messenger.on( 'get-config', function msgrGetConfig (req,resp){
 			resp.send('set-config',config);
 		});
 
 		messenger.accept( 'http://player.vimeo.com' );
 		
-		messenger.on({
-			matcher: 'finish', 
-			callback: function msgrVimeoFinish ( req, resp ) {
-				app.trigger('vimeo:finish', req, resp);
-			},
-			nameAlias: 'event'
-		});
+		// messenger.on({
+		// 	matcher: 'finish', 
+		// 	callback: function msgrVimeoFinish ( req, resp ) {
+		// 		app.trigger('vimeo:finish', req, resp);
+		// 	},
+		// 	nameAlias: 'event'
+		// });
 
-		messenger.on({
-			matcher: 'ready', 
-			callback: function msgrVimeoFinish ( req, resp ) {
-				app.trigger('vimeo:ready', req, resp);
-			},
-			nameAlias: 'event'
-		});
+		// messenger.on({
+		// 	matcher: 'ready', 
+		// 	callback: function msgrVimeoReady ( req, resp ) {
+		// 		app.trigger('vimeo:ready', req, resp);
+		// 	},
+		// 	nameAlias: 'event'
+		// });
 
 		/*
 		- getperformance ()

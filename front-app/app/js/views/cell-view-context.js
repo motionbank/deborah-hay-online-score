@@ -11,7 +11,7 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 
 		this.respondToSceneChange = this.respondToRecordingChange = false;
 	},
-
+	
 	activate : function () {
 
 		this.$el.addClass( 'active' );
@@ -19,7 +19,8 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 
 		var self 	= this,
 			app 	= this.getApp(),
-			config 	= app.getConfig();
+			config 	= app.getConfig(),
+			iframeWin = null;
 
 		if ( config.islocal ) {
 
@@ -42,67 +43,86 @@ var CellViewContext = module.exports = require('js/views/cell-view').extend({
 										 'src="http://player.vimeo.com/video/'+this.cell.get('vimeo-id')+'?api=1" '+
 										 'frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>' );
 		}
+		
+		var messenger = self.messenger = new PostMessenger(window);
+
+		if ( !config.islocal ) {
+
+			messenger.accept( 'http://player.vimeo.com' )
+
+			messenger.on({
+				matcher: 'finish', 
+				callback: function(req, resp){
+					console.log( messenger.hash + '-finish' );
+					app.trigger( 'grid:activate-next-by-attr', 
+								 self.cell.get('play-next-key'),
+								 self.cell.get('play-next-value') );
+					self.deactivate();
+				},
+				nameAlias: 'event'
+			});
+
+			messenger.on({
+				matcher: 'ready', 
+				callback: function( req, resp ){
+					console.log( messenger.hash + '-ready' );
+					resp.send({
+						name: 'play', data: '',
+						nameAlias: 'method'
+					});
+				},
+				nameAlias: 'event'
+			});
+
+		} else {
+
+			messenger.on( 'fauxmeo:ready', function(req, resp){
+
+			});
+
+			messenger.on( 'fauxmeo:finish', function(req, resp){
+				if ( req.message.source === iframeWin ) {
+					app.trigger( 'grid:activate-next-by-attr',
+								 self.cell.get('play-next-key'),
+								 self.cell.get('play-next-value') );
+					self.deactivate();
+					messenger.disconnect();
+				} else {
+				}
+			});
+
+		}
 
 		this.iframe.load( function () {
 
-			var win = document.getElementById('iframe-'+self.cid).contentWindow;
-			var messenger = self.messenger = new PostMessenger(window);
+			iframeWin = document.getElementById('iframe-'+self.cid).contentWindow;
 
 			if ( !config.islocal ) {
 
-				app.on( 'vimeo:finish', function(req, resp){
-					if ( req.message.source === win ) {
-						app.trigger( 'grid:activate-next-by-attr', 
-									 self.cell.get('play-next-key'),
-									 self.cell.get('play-next-value') );
-						self.deactivate();
-					}
-				});
-
-				app.on( 'vimeo:ready', function(req,resp){
-					messenger.send({
-						name: 'play', data: null, 
-						receiver: win, receiverOrigin: 'http://player.vimeo.com',
-						nameAlias: 'method', dataAlias: 'value'
-					});
-				});
-
 				messenger.send({
 					name: 'addEventListener', data: 'finish', 
-					receiver: win, receiverOrigin: 'http://player.vimeo.com',
+					receiver: iframeWin, receiverOrigin: 'http://player.vimeo.com',
 					nameAlias: 'method', dataAlias: 'value'
 				});
 
 			} else {
-
-				messenger.on( 'fauxmeo:ready', function(req, resp){
-
-				});
-
-				messenger.on( 'fauxmeo:finish', function(req, resp){
-					if ( req.message.source === win ) {
-						app.trigger( 'grid:activate-next-by-attr',
-									 self.cell.get('play-next-key'),
-									 self.cell.get('play-next-value') );
-						self.deactivate();
-						messenger.disconnect();
-					} else {
-					}
-				});
-
-				messenger.send( 'connect', config, win );
+				
+				messenger.send( 'connect', config, iframeWin );
+			
 			}
 		});
 
 		this.$container.empty();
 		this.$container.append( this.iframe );
 	},
+
 	deactivate : function () {
 		
 		__super.deactivate.apply(this,arguments);
 		
 		if ( this.messenger ) {
 			this.messenger.disconnect();
+			this.messenger = null;
 		}
 	}
 });

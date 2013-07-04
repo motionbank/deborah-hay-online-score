@@ -3,14 +3,12 @@ General
 - PM is still open for all
 - REMOVE console.log's
 - make sure postmessanger and PM lib are no longer in dev mode
+- 404, 403 for sets
+- messages
 
 
 Design
 ==========================
-m meta data / facebook / preview image
-m favicon / apple icon / win-8 icon
-m Check start page for: type, placing, backs
-m sets: check background coloring
 m check icons menu bar
 m left / right arrow icon
 - text cell on OP not working: text module not working, tabs 100% width
@@ -27,6 +25,10 @@ m left / right arrow icon
 	X title does not change back when in set view previous set is clicked again (go back)
 	X help icon
 	X start page, logo position, background, info?
+	X meta data / facebook / preview image
+	X favicon / apple icon / win-8 icon
+	X Check start page for: type, placing, backs
+	X sets: check background coloring
 
 
 Content
@@ -53,7 +55,8 @@ Missing sets
 
 SEO / Tracking
 ==========================
-- render headless or generate other static page views for bots: http://backbonetutorials.com/seo-for-single-page-apps/
+- render headless or generate other static page views for bots: 
+  http://backbonetutorials.com/seo-for-single-page-apps/
 - sitemap?
 - webmaster tools
 	X implement SPA analytics .. (backbone plugin?)
@@ -75,14 +78,14 @@ m indicate which "is playing"
 m missing.jpg needs replacement (per cell type? -> recording empty studio)
 - freeze a cell to a specific recording / person / scene
 - allow to pin information overlay
-- cancel loading of images when scene is changed in between
-  see: http://stackoverflow.com/questions/6929662/how-do-i-abort-image-img-load-requests-without-using-window-stop
+- cancel loading of images when scene is changed in between:
+  http://stackoverflow.com/questions/6929662/how-do-i-abort-image-img-load-requests-without-using-window-stop
 	X make sure playing content is visible
 
 
 Text cell
 ==========================
-m refine
+	X refine
 
 Viz cells
 ==========================
@@ -94,6 +97,10 @@ Vimeo tiles
 - clean titles & descriptions "---"
 	X auto-playing, focus the set window on them when they start
 
+YT cells type
+==========================
+- add a cell type for YT videos, API is here: 
+  https://developers.google.com/youtube/iframe_api_reference
 
 Flowplayer tiles
 ==========================
@@ -107,6 +114,7 @@ m make background have performer color?
 - show loading preview
 - store volume settings globally?
 - css animation of timeline is wonky
+- if a paused cell receives a scene change message will make it play
 ?? HTML5 video not scaled right
 ?? sometimes the scene does not get loaded (if it is a late scene) ... or it does change twice, just after it loaded?
 ?? ignore own messages

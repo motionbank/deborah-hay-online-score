@@ -14,7 +14,7 @@ jQuery(function(){
 	];
 	
 	var sceneEvents = [];
-	var currentScene = null;
+	var currentScene = null, currentVideo = null;
 
 	var videoFileName = window.location.search.split('v=')[1].split('&')[0];
 	var videoId 	  = window.location.search.split('id=')[1].split('&')[0];
@@ -84,6 +84,7 @@ jQuery(function(){
 			});
 
 			fPlayer.bind('progress',function(evt){
+				if ( !currentVideo ) return;
 				var now = fPlayer.video.time * 1000 + currentVideo.happened_at_float;
 				var lastScene = currentScene;
 				for ( var i = 0; i < sceneEvents.length-1; i++ ) {

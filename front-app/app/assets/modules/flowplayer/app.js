@@ -38,13 +38,14 @@ jQuery(function(){
 	var initFully = function () {
 
 		messenger.on('set-scene',function(req,resp){
+			console.log( 'received: set-scene' );
 			setToScene( req.data );
 		});
 
 		var $videoContainer = jQuery('#video-container');
 		$videoContainer.html('');
 
-		var $videoPlayer = jQuery('<video class="flowplayer" id="video-player" autoplay />');
+		var $videoPlayer = jQuery('<video class="flowplayer" id="video-player" />');
 
 		for ( var i = 0; i < formats.length; i++ ) {
 			if ( formats[i].ext !== 'flash' ) {
@@ -60,8 +61,7 @@ jQuery(function(){
 		$videoContainer.append( $videoPlayer );
 
 		var opts = {
-			//swf: "http://releases.flowplayer.org/5.3.2/flowplayer.swf",
-	  		swf: "flowplayer-5.3.2/flowplayer.swf",
+	  		swf: "flowplayer-5.4.3/flowplayer.swf",
 	  		engine: 'flash'
 		};
 		if ( !config.islocal ) {
@@ -78,13 +78,14 @@ jQuery(function(){
 			fPlayer = fp; // store it in function context
 
 			fPlayer.bind('ready',function(){
-				fPlayer.pause();
 				setPlayerSize();
+				fPlayer.pause();
 				api.loadVideo( videoId, videoLoaded );
 			});
 
 			fPlayer.bind('progress',function(evt){
 				if ( !currentVideo ) return;
+
 				var now = fPlayer.video.time * 1000 + currentVideo.happened_at_float;
 				var lastScene = currentScene;
 				for ( var i = 0; i < sceneEvents.length-1; i++ ) {
@@ -142,6 +143,8 @@ jQuery(function(){
 			
 			currentVideo = video;
 			api.loadEventsByTypeForVideo( currentVideo.id, 'scene', eventsLoaded );
+
+			fPlayer.play();
 		}
 
 		var eventsLoaded = function ( events ) {
@@ -157,10 +160,11 @@ jQuery(function(){
 				for ( var i = 0; i < sceneEvents.length; i++ ) {
 					if ( sceneEvents[i].title === newScene ) {
 						// if ( fPlayer.seekable ) {
-							fPlayer.seek( (sceneEvents[i].happened_at_float - currentVideo.happened_at_float) / 1000.0, 
-										  function () {
-								currentScene = sceneEvents[i];
-								fPlayer.resume();
+							var newSceneEvent = sceneEvents[i];
+							var seekTo = (sceneEvents[i].happened_at_float - currentVideo.happened_at_float) / 1000.0;
+							fPlayer.seek( seekTo, function () {
+								currentScene = newSceneEvent;
+								fPlayer.play();
 							});
 						// } else {
 						// 	console.log( "setToScene, playing" );

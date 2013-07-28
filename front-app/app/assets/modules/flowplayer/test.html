@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Flowplayer test</title>
+		<link rel="stylesheet" type="text/css" href="flowplayer-5.4.3/skin/minimalist.css" />
+
+		<script src="../../javascripts/vendor.js" type="text/javascript"></script>
+		<script src="flowplayer-5.4.3/flowplayer.min.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			jQuery(function(){
+
+				flowplayer(function( fp ){
+
+					fp.bind('ready',function(){
+						console.log( 'fp:ready' );
+						setTimeout( function (){
+							fp.resume();
+						}, 1000);
+					});
+
+					fp.bind('progress',function(){
+						console.log( 'fp:progress' );
+					});
+
+					fp.bind('finish',function(){
+						console.log( 'fp:finish' );
+					});
+				});
+
+				// add flowplayer to html using these options
+				jQuery("#flowplayer-container").flowplayer({
+				playlist: [
+					[
+						{   mp4: "http://d35vpnmjdsiejq.cloudfront.net/dh/piecemaker/D06T04_Janine_sync_AJA.mp4" },
+						{   ogg: "http://d35vpnmjdsiejq.cloudfront.net/dh/piecemaker/D06T04_Janine_sync_AJA.ogv" },
+						{  webm: "http://d35vpnmjdsiejq.cloudfront.net/dh/piecemaker/D06T04_Janine_sync_AJA.webm" },
+						{ flash: "mp4:dh/piecemaker/D06T04_Janine_sync_AJA" }
+					]
+				],
+				engine: 'flash',
+				swf: 'flowplayer-5.4.3/flowplayer.swf',
+				rtmp: 'rtmp://s12vlv7g59gljg.cloudfront.net/cfx/st'
+			   });
+			});
+		</script>
+	</head>
+	<body>
+		<div id="flowplayer-container" />
+	</body>
+</html>

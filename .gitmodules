@@ -1,0 +1,6 @@
+[submodule "front-app"]
+	path = front-app
+	url = git@github.com:motionbank/score-system-frontend.git
+[submodule "back-app"]
+	path = back-app
+	url = git@github.com:motionbank/score-system-backend.git
